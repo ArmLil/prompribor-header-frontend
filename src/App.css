@@ -30,3 +30,12 @@ label {
   -webkit-border-radius: 50%;
   border-radius: 50%;
 }
+
+.bodyPhone {
+  background: url(./images/bodyPhone.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height: 100vh;
+}

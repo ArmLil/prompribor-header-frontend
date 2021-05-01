@@ -26,7 +26,8 @@ class App extends Component {
     this.state = {
       showModeratorBoard: false,
       showAdminBoard: false,
-      currentUser: undefined
+      currentUser: undefined,
+      bodyPhone: "bodyPhone"
     };
 
     history.listen(location => {
@@ -41,7 +42,8 @@ class App extends Component {
       this.setState({
         currentUser: user,
         showModeratorBoard: !user.roleAdmin,
-        showAdminBoard: user.roleAdmin
+        showAdminBoard: user.roleAdmin,
+        bodyPhone: ""
       });
     }
   }
@@ -51,14 +53,21 @@ class App extends Component {
   }
 
   render() {
-    const { currentUser, showModeratorBoard, showAdminBoard } = this.state;
-
+    const {
+      currentUser,
+      showModeratorBoard,
+      showAdminBoard,
+      bodyPhone
+    } = this.state;
     return (
       <Router history={history}>
-        <div>
-          <nav className="navbar navbar-expand navbar-dark bg-dark">
+        <div className={bodyPhone}>
+          <nav
+            className="navbar navbar-expand navbar-dark "
+            style={{ backgroundColor: "#040406", opacity: "0.88" }}
+          >
             <Link to={"/"} className="navbar-brand">
-              bezKoder
+              СисМон-Нефтепровод
             </Link>
             <div className="navbar-nav mr-auto">
               <li className="nav-item">
@@ -101,7 +110,7 @@ class App extends Component {
                 </li>
                 <li className="nav-item">
                   <a href="/login" className="nav-link" onClick={this.logOut}>
-                    LogOut
+                    Выйти
                   </a>
                 </li>
               </div>
@@ -109,13 +118,13 @@ class App extends Component {
               <div className="navbar-nav ml-auto">
                 <li className="nav-item">
                   <Link to={"/login"} className="nav-link">
-                    Login
+                    Войти
                   </Link>
                 </li>
 
                 <li className="nav-item">
                   <Link to={"/register"} className="nav-link">
-                    Sign Up
+                    Регистрация
                   </Link>
                 </li>
               </div>

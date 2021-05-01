@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Redirect } from 'react-router-dom';
+import { Redirect } from "react-router-dom";
 
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
@@ -8,11 +8,11 @@ import CheckButton from "react-validation/build/button";
 import { connect } from "react-redux";
 import { login } from "../actions/auth";
 
-const required = (value) => {
+const required = value => {
   if (!value) {
     return (
-      <div className="alert alert-danger" role="alert">
-        This field is required!
+      <div className="alert alert-danger" role="alert" style={{ fontSize: 12 }}>
+        Поле обязательно для заполнения.
       </div>
     );
   }
@@ -28,19 +28,19 @@ class Login extends Component {
     this.state = {
       username: "",
       password: "",
-      loading: false,
+      loading: false
     };
   }
 
   onChangeUsername(e) {
     this.setState({
-      username: e.target.value,
+      username: e.target.value
     });
   }
 
   onChangePassword(e) {
     this.setState({
-      password: e.target.value,
+      password: e.target.value
     });
   }
 
@@ -48,7 +48,7 @@ class Login extends Component {
     e.preventDefault();
 
     this.setState({
-      loading: true,
+      loading: true
     });
 
     this.form.validateAll();
@@ -68,7 +68,7 @@ class Login extends Component {
         });
     } else {
       this.setState({
-        loading: false,
+        loading: false
       });
     }
   }
@@ -81,8 +81,11 @@ class Login extends Component {
     }
 
     return (
-      <div className="col-md-12">
-        <div className="card card-container">
+      <div className="col-md-12" style={{ opacity: "0.95" }}>
+        <div
+          className="card card-container"
+          style={{ overflowY: "scroll", maxHeight: "500px" }}
+        >
           <img
             src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
             alt="profile-img"
@@ -91,12 +94,12 @@ class Login extends Component {
 
           <Form
             onSubmit={this.handleLogin}
-            ref={(c) => {
+            ref={c => {
               this.form = c;
             }}
           >
             <div className="form-group">
-              <label htmlFor="username">Username</label>
+              <label htmlFor="username">Никнейм</label>
               <Input
                 type="text"
                 className="form-control"
@@ -108,7 +111,7 @@ class Login extends Component {
             </div>
 
             <div className="form-group">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">Пароль</label>
               <Input
                 type="password"
                 className="form-control"
@@ -127,20 +130,24 @@ class Login extends Component {
                 {this.state.loading && (
                   <span className="spinner-border spinner-border-sm"></span>
                 )}
-                <span>Login</span>
+                <span>Войти</span>
               </button>
             </div>
 
             {message && (
               <div className="form-group">
-                <div className="alert alert-danger" role="alert">
+                <div
+                  className="alert alert-danger"
+                  role="alert"
+                  style={{ fontSize: 12 }}
+                >
                   {message}
                 </div>
               </div>
             )}
             <CheckButton
               style={{ display: "none" }}
-              ref={(c) => {
+              ref={c => {
                 this.checkBtn = c;
               }}
             />
