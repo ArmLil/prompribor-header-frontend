@@ -9,26 +9,32 @@ class Profile extends Component {
     if (!currentUser) {
       return <Redirect to="/login" />;
     }
+    // <p>
+    //   <strong>Token:</strong> {currentUser.token.substring(0, 20)} ...{" "}
+    //   {currentUser.token.substr(currentUser.token.length - 20)}
+    // </p>
 
     return (
-      <div className="container">
-        <header className="jumbotron">
-          <h3>
-            <strong>{currentUser.username}</strong> Profile
-          </h3>
-        </header>
-        <p>
-          <strong>Token:</strong> {currentUser.token.substring(0, 20)} ...{" "}
-          {currentUser.token.substr(currentUser.token.length - 20)}
-        </p>
-        <p>
-          <strong>Id:</strong> {currentUser.id}
-        </p>
-        <p>
-          <strong>Email:</strong> {currentUser.email}
-        </p>
-        <strong>Authorities:</strong>
-        <p>{currentUser.roleAdmin ? "role: admin" : "role:user"}</p>
+      <div className="bodyPhone pt-3" style={{ height: "91vh" }}>
+        <div className="container ">
+          <header className="jumbotron container">
+            <h4 className="mb-4">
+              <strong>Профиль</strong>
+            </h4>
+            <h5 className="mb-5">
+              <strong>Никнейм: {currentUser.username}</strong>
+            </h5>
+            <p>
+              <strong>Id:</strong> {currentUser.id}
+            </p>
+            <p>
+              <strong>е-майл:</strong> {currentUser.email}
+            </p>
+            <strong>
+              {currentUser.roleAdmin ? "роль: админ" : "роль: гость"}
+            </strong>
+          </header>
+        </div>
       </div>
     );
   }

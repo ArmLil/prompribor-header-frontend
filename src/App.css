@@ -32,10 +32,15 @@ label {
 }
 
 .bodyPhone {
-  background: url(./images/bodyPhone.jpg) no-repeat center center fixed;
+  background: url(./images/bodyPhone.jpg) no-repeat top;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
   height: 100vh;
+}
+
+html,
+body {
+  height: 100%;
 }

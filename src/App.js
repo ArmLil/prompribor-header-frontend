@@ -8,6 +8,7 @@ import "./App.css";
 import Login from "./components/login.component";
 import Register from "./components/register.component";
 import Home from "./components/home.component";
+import Main from "./components/main.component";
 import Profile from "./components/profile.component";
 import BoardUser from "./components/board-user.component";
 import BoardModerator from "./components/board-moderator.component";
@@ -51,6 +52,29 @@ class App extends Component {
   logOut() {
     this.props.dispatch(logout());
   }
+  // {showModeratorBoard && (
+  //   <li className="nav-item">
+  //     <Link to={"/mod"} className="nav-link">
+  //       Moderator Board
+  //     </Link>
+  //   </li>
+  // )}
+  //
+  // {showAdminBoard && (
+  //   <li className="nav-item">
+  //     <Link to={"/admin"} className="nav-link">
+  //       Admin Board
+  //     </Link>
+  //   </li>
+  // )}
+  //
+  // {currentUser && (
+  //   <li className="nav-item">
+  //     <Link to={"/user"} className="nav-link">
+  //       User
+  //     </Link>
+  //   </li>
+  // )}
 
   render() {
     const {
@@ -70,32 +94,10 @@ class App extends Component {
               СисМон-Нефтепровод
             </Link>
             <div className="navbar-nav mr-auto">
-              <li className="nav-item">
-                <Link to={"/home"} className="nav-link">
-                  Home
-                </Link>
-              </li>
-
-              {showModeratorBoard && (
-                <li className="nav-item">
-                  <Link to={"/mod"} className="nav-link">
-                    Moderator Board
-                  </Link>
-                </li>
-              )}
-
-              {showAdminBoard && (
-                <li className="nav-item">
-                  <Link to={"/admin"} className="nav-link">
-                    Admin Board
-                  </Link>
-                </li>
-              )}
-
               {currentUser && (
                 <li className="nav-item">
-                  <Link to={"/user"} className="nav-link">
-                    User
+                  <Link to={"/main"} className="nav-link">
+                    Главный
                   </Link>
                 </li>
               )}
@@ -131,9 +133,10 @@ class App extends Component {
             )}
           </nav>
 
-          <div className="container mt-3">
+          <div>
             <Switch>
               <Route exact path={["/", "/home"]} component={Home} />
+              <Route exact path="/main" component={Main} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/profile" component={Profile} />

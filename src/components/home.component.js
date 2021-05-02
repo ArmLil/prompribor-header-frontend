@@ -32,11 +32,16 @@ export default class Home extends Component {
 
   render() {
     return (
-      <div className="container" style={{ opacity: "0.88" }}>
-        <header className="jumbotron">
-          <h3>{this.state.content}</h3>
-          <LoremIpsum p={2} />
-        </header>
+      <div className="bodyPhone pt-3" style={{ height: "91vh" }}>
+        <div className="container" style={{ opacity: "0.9" }}>
+          <header
+            className="jumbotron"
+            style={{ opacity: "0.88", overflowY: "scroll", height: "80vh" }}
+          >
+            <h3>{this.state.content}</h3>
+            <LoremIpsum p={2} />
+          </header>
+        </div>
       </div>
     );
   }
