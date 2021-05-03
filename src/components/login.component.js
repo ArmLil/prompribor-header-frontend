@@ -8,7 +8,7 @@ import CheckButton from "react-validation/build/button";
 import { connect } from "react-redux";
 import { login } from "../actions/auth";
 
-const required = value => {
+const required = (value) => {
   if (!value) {
     return (
       <div className="alert alert-danger" role="alert" style={{ fontSize: 12 }}>
@@ -28,19 +28,19 @@ class Login extends Component {
     this.state = {
       username: "",
       password: "",
-      loading: false
+      loading: false,
     };
   }
 
   onChangeUsername(e) {
     this.setState({
-      username: e.target.value
+      username: e.target.value,
     });
   }
 
   onChangePassword(e) {
     this.setState({
-      password: e.target.value
+      password: e.target.value,
     });
   }
 
@@ -48,7 +48,7 @@ class Login extends Component {
     e.preventDefault();
 
     this.setState({
-      loading: true
+      loading: true,
     });
 
     this.form.validateAll();
@@ -63,12 +63,12 @@ class Login extends Component {
         })
         .catch(() => {
           this.setState({
-            loading: false
+            loading: false,
           });
         });
     } else {
       this.setState({
-        loading: false
+        loading: false,
       });
     }
   }
@@ -94,7 +94,7 @@ class Login extends Component {
 
           <Form
             onSubmit={this.handleLogin}
-            ref={c => {
+            ref={(c) => {
               this.form = c;
             }}
           >
@@ -147,7 +147,7 @@ class Login extends Component {
             )}
             <CheckButton
               style={{ display: "none" }}
-              ref={c => {
+              ref={(c) => {
                 this.checkBtn = c;
               }}
             />
@@ -163,7 +163,7 @@ function mapStateToProps(state) {
   const { message } = state.message;
   return {
     isLoggedIn,
-    message
+    message,
   };
 }
 

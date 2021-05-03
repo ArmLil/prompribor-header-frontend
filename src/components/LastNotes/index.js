@@ -10,39 +10,34 @@ import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 450
+    minWidth: 450,
   },
   cell: {
     width: 1,
     borderLeft: "solid #E6E4E7 2px",
     borderRight: "solid #E6E4E7 2px",
-    borderBottom: "solid #E6E4E7 2px"
+    borderBottom: "solid #E6E4E7 2px",
   },
   headerCell: {
     width: 1,
     borderLeft: "solid #D79E45 2px",
-    borderRight: "solid #D79E45 2px"
+    borderRight: "solid #D79E45 2px",
   },
   head: {
     backgroundColor: "",
     color: "#F7F6F4",
-    border: "solid #D79E45 2px"
-  }
+    border: "solid #D79E45 2px",
+  },
 });
 
-function createData(
-  name: string,
-  note: number,
-  worning: number,
-  state: number
-) {
-  return { name, note, worning, state };
+function createData(name: string, note: number, state: number) {
+  return { name, note, state };
 }
 
 const rows = [
   createData("Москва", 159, 6.0, 24, 4.0),
   createData("Иваново", 237, 9.0, 37, 4.3),
-  createData("Санкт-Петербург", 262, 16.0, 24, 6.0)
+  createData("Санкт-Петербург", 262, 16.0, 24, 6.0),
 ];
 
 export default function DenseTable() {
@@ -59,15 +54,12 @@ export default function DenseTable() {
               Уведомление
             </TableCell>
             <TableCell align="right" className={classes.headerCell}>
-              Предупреждение
-            </TableCell>
-            <TableCell align="right" className={classes.headerCell}>
               Состояние
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
+          {rows.map((row) => (
             <TableRow hover key={row.name}>
               <TableCell component="th" scope="row" className={classes.cell}>
                 {row.name}

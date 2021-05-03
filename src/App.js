@@ -28,10 +28,10 @@ class App extends Component {
       showModeratorBoard: false,
       showAdminBoard: false,
       currentUser: undefined,
-      bodyPhone: "bodyPhone"
+      bodyPhone: "bodyPhone",
     };
 
-    history.listen(location => {
+    history.listen((location) => {
       props.dispatch(clearMessage()); // clear message when changing location
     });
   }
@@ -44,7 +44,7 @@ class App extends Component {
         currentUser: user,
         showModeratorBoard: !user.roleAdmin,
         showAdminBoard: user.roleAdmin,
-        bodyPhone: ""
+        bodyPhone: "",
       });
     }
   }
@@ -81,7 +81,7 @@ class App extends Component {
       currentUser,
       showModeratorBoard,
       showAdminBoard,
-      bodyPhone
+      bodyPhone,
     } = this.state;
     return (
       <Router history={history}>
@@ -154,7 +154,7 @@ class App extends Component {
 function mapStateToProps(state) {
   const { user } = state.auth;
   return {
-    user
+    user,
   };
 }
 

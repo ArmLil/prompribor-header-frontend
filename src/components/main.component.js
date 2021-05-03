@@ -3,23 +3,33 @@ import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import LastNotes from "./LastNotes";
+import Map from "./Map";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      flexGrow: 1
+      flexGrow: 1,
     },
     paper: {
       padding: theme.spacing(3),
       textAlign: "center",
-      color: theme.palette.text.secondary
+      color: theme.palette.text.secondary,
     },
     map: {
       padding: theme.spacing(2),
       textAlign: "center",
       color: theme.palette.text.secondary,
-      height: 500
-    }
+      height: 500,
+    },
+    frame: {
+      width: "400",
+      height: "300",
+      frameborder: "0",
+      style: "border:0;",
+      allowfullscreen: "",
+      ariaHidden: "false",
+      tabindex: "0",
+    },
   })
 );
 
@@ -33,7 +43,12 @@ export default function CenteredGrid() {
           <LastNotes className={classes.paper} />
         </Grid>
         <Grid item xs={7}>
-          <Paper className={classes.map}>карта трубопроводов</Paper>
+          <Paper className={classes.map}>
+            карта трубопроводов{" "}
+            <div>
+              <Map />
+            </div>
+          </Paper>
         </Grid>
       </Grid>
     </div>

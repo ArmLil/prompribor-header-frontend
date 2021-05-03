@@ -1,38 +1,48 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
 import UserService from "../services/user.service";
 import { LoremIpsum, Avatar } from "react-lorem-ipsum";
 
-export default class Home extends Component {
+class Home extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      content: ""
+      content: "",
+      currentUser: undefined,
+      rootStyle: "pt-3",
     };
   }
 
   componentDidMount() {
+    const user = this.props.user;
+    if (user) {
+      this.setState({
+        rootStyle: "bodyPhone pt-3",
+      });
+    }
     UserService.getPublicContent().then(
-      response => {
+      (response) => {
         this.setState({
-          content: response.data
+          content: response.data,
         });
       },
-      error => {
+      (error) => {
         this.setState({
           content:
             (error.response && error.response.data) ||
             error.message ||
-            error.toString()
+            error.toString(),
         });
       }
     );
   }
 
   render() {
+    const { rootStyle } = this.state;
     return (
-      <div className="bodyPhone pt-3" style={{ height: "91vh" }}>
+      <div className={rootStyle} style={{ height: "91vh" }}>
         <div className="container" style={{ opacity: "0.9" }}>
           <header
             className="jumbotron"
@@ -46,3 +56,12 @@ export default class Home extends Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  const { user } = state.auth;
+  return {
+    user,
+  };
+}
+
+export default connect(mapStateToProps)(Home);
