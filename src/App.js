@@ -10,9 +10,9 @@ import Register from "./components/register.component";
 import Home from "./components/home.component";
 import Main from "./components/main.component";
 import Profile from "./components/profile.component";
-import BoardUser from "./components/board-user.component";
-import BoardModerator from "./components/board-moderator.component";
-import BoardAdmin from "./components/board-admin.component";
+// import BoardUser from "./components/board-user.component";
+// import BoardModerator from "./components/board-moderator.component";
+// import BoardAdmin from "./components/board-admin.component";
 
 import { logout } from "./actions/auth";
 import { clearMessage } from "./actions/message";
@@ -52,6 +52,7 @@ class App extends Component {
   logOut() {
     this.props.dispatch(logout());
   }
+
   // {showModeratorBoard && (
   //   <li className="nav-item">
   //     <Link to={"/mod"} className="nav-link">
@@ -76,19 +77,23 @@ class App extends Component {
   //   </li>
   // )}
 
+  // <Route path="/admin" component={BoardAdmin} />
+  // <Route path="/user" component={BoardUser} />
+  // <Route path="/mod" component={BoardModerator} />
+
   render() {
     const {
       currentUser,
-      showModeratorBoard,
-      showAdminBoard,
+      // showModeratorBoard,
+      // showAdminBoard,
       bodyPhone,
     } = this.state;
     return (
       <Router history={history}>
         <div className={bodyPhone}>
           <nav
-            className="navbar navbar-expand navbar-dark "
-            style={{ backgroundColor: "#040406", opacity: "0.88" }}
+            className="navbar navbar-expand navbar-dark  sticky-top"
+            style={{ backgroundColor: "#040406", opacity: "0.88", top: 0 }}
           >
             <Link to={"/"} className="navbar-brand">
               СисМон-Нефтепровод
@@ -136,13 +141,10 @@ class App extends Component {
           <div>
             <Switch>
               <Route exact path={["/", "/home"]} component={Home} />
-              <Route exact path="/main" component={Main} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/profile" component={Profile} />
-              <Route path="/user" component={BoardUser} />
-              <Route path="/mod" component={BoardModerator} />
-              <Route path="/admin" component={BoardAdmin} />
+              <Route path="/main" component={Main} />
             </Switch>
           </div>
         </div>

@@ -1,0 +1,201 @@
+import React from "react";
+import clsx from "clsx";
+import { Link } from "react-router-dom";
+import {
+  createStyles,
+  makeStyles,
+  useTheme,
+  Theme,
+} from "@material-ui/core/styles";
+import Drawer from "@material-ui/core/Drawer";
+import Toolbar from "@material-ui/core/Toolbar";
+import List from "@material-ui/core/List";
+// import Typography from "@material-ui/core/Typography";
+import Divider from "@material-ui/core/Divider";
+import IconButton from "@material-ui/core/IconButton";
+import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import DeviceHubIcon from "@material-ui/icons/DeviceHub"; //controllers
+import LocationOnOutlinedIcon from "@material-ui/icons/LocationOnOutlined"; //map
+import DvrOutlinedIcon from "@material-ui/icons/DvrOutlined"; //monitoring
+import DnsOutlinedIcon from "@material-ui/icons/DnsOutlined"; //comm centers
+import ListAltOutlinedIcon from "@material-ui/icons/ListAltOutlined"; //registers
+const drawerWidth = 240;
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      display: "flex",
+    },
+
+    menuButton: {
+      marginRight: 36,
+    },
+    hide: {
+      display: "none",
+    },
+    drawer: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+    drawerOpen: {
+      width: drawerWidth,
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+      }),
+      top: 56,
+    },
+    drawerClose: {
+      transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      overflowX: "hidden",
+      width: theme.spacing(7) + 1,
+      [theme.breakpoints.up("sm")]: {
+        width: theme.spacing(9) + 1,
+      },
+      top: 56,
+    },
+    toolbar: {
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "flex-end",
+      padding: theme.spacing(0, 1),
+      // necessary for content to be below app bar
+      ...theme.mixins.toolbar,
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(1),
+    },
+  })
+);
+
+export default function MiniDrawer() {
+  const classes = useStyles();
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div className={classes.root}>
+      <Drawer
+        variant="permanent"
+        className={clsx(classes.drawer, {
+          [classes.drawerOpen]: open,
+          [classes.drawerClose]: !open,
+        })}
+        classes={{
+          paper: clsx({
+            [classes.drawerOpen]: open,
+            [classes.drawerClose]: !open,
+          }),
+        }}
+      >
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            className={clsx(classes.menuButton, {
+              [classes.hide]: open,
+            })}
+          >
+            <MenuIcon />
+          </IconButton>
+          <div className={classes.toolbar}>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === "rtl" ? (
+                <ChevronRightIcon />
+              ) : (
+                <ChevronLeftIcon />
+              )}
+            </IconButton>
+          </div>
+        </Toolbar>
+        <Divider />
+        <List>
+          <Link
+            to={"/main/map-notes"}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <ListItem button key="Карта">
+              <ListItemIcon>
+                <LocationOnOutlinedIcon />
+              </ListItemIcon>
+              <ListItemText primary="Карта" />
+            </ListItem>
+          </Link>
+
+          <Link
+            to={"/main/monitoring"}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <ListItem button key="Мониторинг">
+              <ListItemIcon>
+                <DvrOutlinedIcon />
+              </ListItemIcon>
+              <ListItemText primary="Мониторинг" />
+            </ListItem>
+          </Link>
+        </List>
+
+        <Divider />
+        <List>
+          <Link
+            to={"/main/controllers"}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <ListItem button key="Контролеры">
+              <ListItemIcon>
+                <DeviceHubIcon />
+              </ListItemIcon>
+              <ListItemText primary="Контролеры" />
+            </ListItem>
+          </Link>
+
+          <Link
+            to={"/main/comm-centers"}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <ListItem button key="Коммуникационные центры">
+              <ListItemIcon>
+                <DnsOutlinedIcon />
+              </ListItemIcon>
+              <ListItemText primary="Коммуникационные центры" />
+            </ListItem>
+          </Link>
+
+          <Link
+            to={"/main/registers"}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <ListItem button key="Регистры">
+              <ListItemIcon>
+                <ListAltOutlinedIcon />
+              </ListItemIcon>
+              <ListItemText primary="Регистры" />
+            </ListItem>
+          </Link>
+        </List>
+      </Drawer>
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+      </main>
+    </div>
+  );
+}
