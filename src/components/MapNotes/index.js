@@ -7,24 +7,17 @@ import LastNotes from "./lastNotes";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      flexGrow: 1,
-      display: "flex",
+    container: {
+      display: "grid",
+      gridTemplateColumns: "repeat(12, 1fr)",
+      gridGap: theme.spacing(3),
     },
-    note: {
+    paper: {
       padding: theme.spacing(1),
       textAlign: "center",
       color: theme.palette.text.secondary,
-    },
-    map: {
-      padding: theme.spacing(2),
-      textAlign: "center",
-      color: theme.palette.text.secondary,
-      height: 500,
-    },
-    content: {
-      flexGrow: 1,
-      padding: theme.spacing(3),
+      whiteSpace: "nowrap",
+      marginBottom: theme.spacing(1),
     },
   })
 );
@@ -33,9 +26,19 @@ export default function CenteredGrid() {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <Map />
-      <LastNotes />
+    <div>
+      <Grid container spacing={2}>
+        <Grid item xs={7}>
+          <Paper className={classes.paper}>
+            <Map />
+          </Paper>
+        </Grid>
+        <Grid item xs={5}>
+          <Paper className={classes.paper}>
+            <LastNotes />
+          </Paper>
+        </Grid>
+      </Grid>
     </div>
   );
 }

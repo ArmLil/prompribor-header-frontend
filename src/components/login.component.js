@@ -159,7 +159,7 @@ class Login extends Component {
 }
 
 function mapStateToProps(state) {
-  const { isLoggedIn } = state.auth;
+  const { isLoggedIn } = state.authReducer;
   const { message } = state.message;
   return {
     isLoggedIn,

@@ -42,8 +42,8 @@ class App extends Component {
     if (user) {
       this.setState({
         currentUser: user,
-        showModeratorBoard: !user.roleAdmin,
-        showAdminBoard: user.roleAdmin,
+        // showModeratorBoard: !user.roleAdmin,
+        // showAdminBoard: user.roleAdmin,
         bodyPhone: "",
       });
     }
@@ -154,7 +154,7 @@ class App extends Component {
 }
 
 function mapStateToProps(state) {
-  const { user } = state.auth;
+  const { user } = state.authReducer;
   return {
     user,
   };

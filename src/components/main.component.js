@@ -14,20 +14,10 @@ const useStyles = makeStyles((theme: Theme) =>
       flexGrow: 1,
       display: "flex",
     },
-    note: {
-      padding: theme.spacing(1),
-      textAlign: "center",
-      color: theme.palette.text.secondary,
-    },
-    map: {
-      padding: theme.spacing(2),
-      textAlign: "center",
-      color: theme.palette.text.secondary,
-      height: 500,
-    },
-    content: {
+
+    main: {
       flexGrow: 1,
-      padding: theme.spacing(3),
+      padding: theme.spacing(1),
     },
   })
 );
@@ -38,18 +28,16 @@ export default function CenteredGrid() {
   return (
     <div className={classes.root}>
       <LeftBar />
-      <main className={classes.content}>
-        <div>
-          <Switch>
-            <Route exact path="/main" component={MapNotes} />
-            <Route exact path="/main/map-notes" component={MapNotes} />
-            <Route exact path="/main/monitoring" component={Monitoring} />
-            <Route exact path="/main/controllers" component={Controllers} />
-            <Route exact path="/main/comm-centers" component={CommCenters} />
-            <Route exact path="/main/registers" component={Registers} />
-          </Switch>
-        </div>
-      </main>
+      <div className={classes.main}>
+        <Switch>
+          <Route exact path="/main" component={MapNotes} />
+          <Route exact path="/main/map-notes" component={MapNotes} />
+          <Route exact path="/main/monitoring" component={Monitoring} />
+          <Route exact path="/main/controllers" component={Controllers} />
+          <Route exact path="/main/comm-centers" component={CommCenters} />
+          <Route exact path="/main/registers" component={Registers} />
+        </Switch>
+      </div>
     </div>
   );
 }

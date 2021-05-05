@@ -32,9 +32,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
     },
 
-    menuButton: {
-      marginRight: 36,
-    },
+    menuButton: {},
     hide: {
       display: "none",
     },

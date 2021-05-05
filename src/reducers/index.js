@@ -1,8 +1,10 @@
 import { combineReducers } from "redux";
-import auth from "./auth";
+import authReducer from "./auth";
 import message from "./message";
+import commCentersReducer from "./commCenters";
 
 export default combineReducers({
-  auth,
+  authReducer,
   message,
+  commCentersReducer,
 });

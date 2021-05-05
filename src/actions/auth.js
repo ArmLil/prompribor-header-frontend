@@ -4,28 +4,37 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
-  SET_MESSAGE
 } from "./types";
-
+import { setMessage } from "./message";
 import AuthService from "../services/auth.service";
 
-export const register = (username, email, password) => dispatch => {
+const registerSuccess = () => ({
+  type: REGISTER_SUCCESS,
+});
+
+const registerFail = () => ({
+  type: REGISTER_FAIL,
+});
+
+const loginSuccess = (data) => ({
+  type: LOGIN_SUCCESS,
+  payload: { user: data },
+});
+
+const loginFail = () => ({
+  type: LOGIN_FAIL,
+});
+
+export const register = (username, email, password) => (dispatch) => {
   return AuthService.register(username, email, password).then(
-    response => {
+    (response) => {
       console.log({ response });
 
-      dispatch({
-        type: REGISTER_SUCCESS
-      });
-
-      dispatch({
-        type: SET_MESSAGE,
-        payload: response.data.message
-      });
-
+      dispatch(registerSuccess());
+      dispatch(setMessage(response.data.message));
       return Promise.resolve();
     },
-    error => {
+    (error) => {
       const message =
         (error.response &&
           error.response.data &&
@@ -33,31 +42,21 @@ export const register = (username, email, password) => dispatch => {
         error.message ||
         error.toString();
 
-      dispatch({
-        type: REGISTER_FAIL
-      });
-
-      dispatch({
-        type: SET_MESSAGE,
-        payload: message
-      });
+      dispatch(registerFail);
+      dispatch(setMessage(message));
 
       return Promise.reject();
     }
   );
 };
 
-export const login = (username, password) => dispatch => {
+export const login = (username, password) => (dispatch) => {
   return AuthService.login(username, password).then(
-    data => {
-      dispatch({
-        type: LOGIN_SUCCESS,
-        payload: { user: data }
-      });
-
+    (data) => {
+      dispatch(loginSuccess(data));
       return Promise.resolve();
     },
-    error => {
+    (error) => {
       const message =
         (error.response &&
           error.response.data &&
@@ -65,24 +64,17 @@ export const login = (username, password) => dispatch => {
         error.message ||
         error.toString();
 
-      dispatch({
-        type: LOGIN_FAIL
-      });
-
-      dispatch({
-        type: SET_MESSAGE,
-        payload: message
-      });
+      dispatch(loginFail());
+      dispatch(setMessage(message));
 
       return Promise.reject();
     }
   );
 };
 
-export const logout = () => dispatch => {
+export const logout = () => (dispatch) => {
   AuthService.logout();
-
   dispatch({
-    type: LOGOUT
+    type: LOGOUT,
   });
 };
