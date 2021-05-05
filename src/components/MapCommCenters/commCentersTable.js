@@ -3,13 +3,15 @@ import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
+import Button from "@material-ui/core/Button";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import Loader from "../Loader";
 
 import { connect } from "react-redux";
-import { getCommCenters } from "../../actions/commCenters";
+import { getData } from "../../actions/data";
 
 const styles = () => ({
   table: {
@@ -34,45 +36,43 @@ const styles = () => ({
   },
 });
 
-function createData(name: string, note: number, state: number, move: any) {
-  return { name, note, state, move };
-}
-
-const rows = [
-  createData("Москва", 159, 6.0, 24, 4.0),
-  createData("Иваново", 237, 9.0, 37, 4.3),
-  createData("Санкт-Петербург", 262, 16.0, 24, 6.0),
-];
-
 class LastNotes extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      commCenters: [],
+      currentCommCenters: [],
     };
   }
 
   componentDidMount() {
     console.log("this.props", this.props);
     const { commCenters, dispatch } = this.props;
+    const getCommCenterUrl = "commCenters?controller=include";
 
-    if (commCenters == undefined) {
-      dispatch(getCommCenters()).catch((err) => console.log({ err }));
-    } else {
-      dispatch(getCommCenters())
-        .then(() => {
-          if (commCenters) {
-            this.setState({
-              commCenters: commCenters,
-            });
-          }
-        })
-        .catch((err) => console.log({ err }));
+    if (commCenters.length === 0) {
+      dispatch(getData(getCommCenterUrl));
     }
   }
   render() {
-    const { classes } = this.props;
+    const { classes, commCenters, error, loading } = this.props;
+    if (error) {
+      return <div>Error! {error.message}</div>;
+    }
+
+    if (loading) {
+      return <Loader />;
+    }
+    // <caption
+    //   style={{
+    //     captionSide: "top",
+    //   }}
+    // >
+    //
+    //   Последние уведомления
+    // </caption>
+    console.log(commCenters);
+
     return (
       <TableContainer>
         <Table
@@ -80,41 +80,41 @@ class LastNotes extends Component {
           size="small"
           aria-label="a dense table"
         >
-          <caption
-            style={{
-              captionSide: "top",
-            }}
-          >
-            Последние уведомления
-          </caption>
           <TableHead className={classes.head}>
             <TableRow>
               <TableCell className={classes.headerCell}>Локация</TableCell>
-              <TableCell align="right" className={classes.headerCell}>
-                Уведомление
+              <TableCell align="center" className={classes.headerCell}>
+                Описание
               </TableCell>
-              <TableCell align="right" className={classes.headerCell}>
-                Состояние
+              <TableCell align="center" className={classes.headerCell}>
+                Статус
               </TableCell>
-              <TableCell align="right" className={classes.headerCell}>
+              <TableCell align="center" className={classes.headerCell}>
                 Перейти
               </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {commCenters.map((row) => (
               <TableRow hover key={row.name}>
                 <TableCell scope="row" className={classes.cell}>
                   {row.name}
                 </TableCell>
                 <TableCell align="center" className={classes.cell}>
-                  {row.note}
+                  {row.description}
                 </TableCell>
                 <TableCell align="center" className={classes.cell}>
-                  {row.state}
+                  {row.status}
                 </TableCell>
                 <TableCell align="center" className={classes.cell}>
-                  {row.move}
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    href="#outlined-buttons"
+                    style={{ minWidth: 35, height: 20 }}
+                  >
+                    >>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -128,7 +128,8 @@ class LastNotes extends Component {
 function mapStateToProps(state) {
   console.log({ state });
   const { message } = state.message;
-  const { commCenters } = state.commCentersReducer.items;
+  const commCenters = state.commCentersReducer.items;
+  const { error, loading } = state.commCentersReducer;
   return {
     message,
     commCenters,

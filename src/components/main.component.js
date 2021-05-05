@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import MapNotes from "./MapNotes";
+import MapCommCenters from "./MapCommCenters";
 import Monitoring from "./Monitoring";
 import Controllers from "./Controllers";
 import CommCenters from "./CommCenters";
@@ -30,8 +30,8 @@ export default function CenteredGrid() {
       <LeftBar />
       <div className={classes.main}>
         <Switch>
-          <Route exact path="/main" component={MapNotes} />
-          <Route exact path="/main/map-notes" component={MapNotes} />
+          <Route exact path="/main" component={MapCommCenters} />
+          <Route exact path="/main/map-notes" component={MapCommCenters} />
           <Route exact path="/main/monitoring" component={Monitoring} />
           <Route exact path="/main/controllers" component={Controllers} />
           <Route exact path="/main/comm-centers" component={CommCenters} />

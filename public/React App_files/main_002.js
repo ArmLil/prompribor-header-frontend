@@ -1702,16 +1702,16 @@ if (true) {
 
 /***/ }),
 
-/***/ "./src/components/MapNotes/index.js":
+/***/ "./src/components/MapCommCenters/index.js":
 /*!******************************************!*\
-  !*** ./src/components/MapNotes/index.js ***!
+  !*** ./src/components/MapCommCenters/index.js ***!
   \******************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* WEBPACK VAR INJECTION */(function(__react_refresh_utils__, __react_refresh_error_overlay__) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MapNotes; });
+/* WEBPACK VAR INJECTION */(function(__react_refresh_utils__, __react_refresh_error_overlay__) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MapCommCenters; });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _services_user_service__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../services/user.service */ "./src/services/user.service.js");
@@ -1720,11 +1720,11 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.$Refresh$.runtime = __webpack_require__(/*! ./node_modules/react-refresh/runtime.js */ "./node_modules/react-refresh/runtime.js");
 __webpack_require__.$Refresh$.setup(module.i);
 
-var _jsxFileName = "/home/lilit/workspace/prompribor/modbus_controllers_communications/prompribor-header-frontend/src/components/MapNotes/index.js";
+var _jsxFileName = "/home/lilit/workspace/prompribor/modbus_controllers_communications/prompribor-header-frontend/src/components/MapCommCenters/index.js";
 
 
 
-class MapNotes extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
+class MapCommCenters extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
   constructor(props) {
     super(props);
     this.state = {
@@ -1750,7 +1750,7 @@ class MapNotes extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
       children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__["jsxDEV"])("header", {
         className: "jumbotron",
         children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_2__["jsxDEV"])("h3", {
-          children: MapNotes
+          children: MapCommCenters
         }, void 0, false, {
           fileName: _jsxFileName,
           lineNumber: 38,
@@ -3376,7 +3376,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/Paper */ "./node_modules/@material-ui/core/esm/Paper/index.js");
 /* harmony import */ var _material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/Grid */ "./node_modules/@material-ui/core/esm/Grid/index.js");
 /* harmony import */ var _LastNotes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./LastNotes */ "./src/components/LastNotes/index.js");
-/* harmony import */ var _MapNotes__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./MapNotes */ "./src/components/MapNotes/index.js");
+/* harmony import */ var _MapCommCenters__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./MapCommCenters */ "./src/components/MapCommCenters/index.js");
 /* harmony import */ var _Monitor__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Monitor */ "./src/components/Monitor/index.js");
 /* harmony import */ var _Controllers__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Controllers */ "./src/components/Controllers/index.js");
 /* harmony import */ var _CommCenters__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./CommCenters */ "./src/components/CommCenters/index.js");
@@ -3440,7 +3440,7 @@ function CenteredGrid() {
         children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_12__["jsxDEV"])(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Switch"], {
           children: [/*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_12__["jsxDEV"])(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
             path: "/main/map-notes",
-            component: _MapNotes__WEBPACK_IMPORTED_MODULE_6__["default"]
+            component: _MapCommCenters__WEBPACK_IMPORTED_MODULE_6__["default"]
           }, void 0, false, {
             fileName: _jsxFileName,
             lineNumber: 47,

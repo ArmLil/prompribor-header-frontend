@@ -17,7 +17,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/Paper */ "./node_modules/@material-ui/core/esm/Paper/index.js");
 /* harmony import */ var _material_ui_core_Grid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/Grid */ "./node_modules/@material-ui/core/esm/Grid/index.js");
 /* harmony import */ var _LastNotes__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./LastNotes */ "./src/components/LastNotes/index.js");
-/* harmony import */ var _MapNotes__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./MapNotes */ "./src/components/MapNotes/index.js");
+/* harmony import */ var _MapCommCenters__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./MapCommCenters */ "./src/components/MapCommCenters/index.js");
 /* harmony import */ var _Monitor__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Monitor */ "./src/components/Monitor/index.js");
 /* harmony import */ var _Controllers__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./Controllers */ "./src/components/Controllers/index.js");
 /* harmony import */ var _CommCenters__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./CommCenters */ "./src/components/CommCenters/index.js");
@@ -81,7 +81,7 @@ function CenteredGrid() {
         children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_12__["jsxDEV"])(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Switch"], {
           children: [/*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_12__["jsxDEV"])(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
             path: "/main/map-notes",
-            component: _MapNotes__WEBPACK_IMPORTED_MODULE_6__["default"]
+            component: _MapCommCenters__WEBPACK_IMPORTED_MODULE_6__["default"]
           }, void 0, false, {
             fileName: _jsxFileName,
             lineNumber: 47,
