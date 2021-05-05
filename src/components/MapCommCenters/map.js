@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+
 import {
   MapContainer,
   TileLayer,
@@ -6,7 +8,8 @@ import {
   Tooltip,
   useMapEvents,
 } from "react-leaflet";
-import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { getData } from "../../actions/data";
 
 const AddMarker = () => {
   const [position, setPosition] = useState(null);

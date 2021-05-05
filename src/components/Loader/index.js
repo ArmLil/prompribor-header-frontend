@@ -1,7 +1,7 @@
 import React from "react";
 import "./Loader.css";
 
-export default () => (
+const Loader = () => (
   <div className="loader-wrap">
     <div className="lds-roller">
       <div />
@@ -14,3 +14,4 @@ export default () => (
     </div>
   </div>
 );
+export default Loader;
