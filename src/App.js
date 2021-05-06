@@ -158,16 +158,14 @@ class App extends Component {
             )}
           </nav>
 
-          <div>
-            <Switch>
-              <Route exact path={["/", "/home"]} component={Home} />
-              <Route exact path="/login" component={Login} />
-              <Route exact path="/register" component={Register} />
-              <Route exact path="/profile" component={Profile} />
+          <Switch>
+            <Route exact path={["/", "/home"]} component={Home} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/register" component={Register} />
+            <Route exact path="/profile" component={Profile} />
 
-              <PrivateRoute path="/main" component={Main} />
-            </Switch>
-          </div>
+            <PrivateRoute path="/main" component={Main} />
+          </Switch>
         </div>
       </Router>
     );

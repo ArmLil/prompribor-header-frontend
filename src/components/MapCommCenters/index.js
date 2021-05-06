@@ -51,7 +51,7 @@ class MapCommCenters extends Component {
       return <Loader />;
     }
     return (
-      <div style={{ marginTop: 20 }}>
+      <div style={{ margin: 20 }}>
         <Grid container spacing={2}>
           <Grid item xs={8}>
             <Paper className={classes.paper}>

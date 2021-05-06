@@ -7,6 +7,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import ArrowForwardOutlinedIcon from "@material-ui/icons/ArrowForwardOutlined";
 
 const useStyles = makeStyles({
   table: {
@@ -74,15 +75,8 @@ export default function CommCentersTable({ commCenters }) {
                 {row.status}
               </TableCell>
               <TableCell align="center" className={classes.cell}>
-                <Link
-                  to={"/main/monitoring"}
-                  style={{ textDecoration: "none", color: "black" }}
-                  variant="outlined"
-                  color="primary"
-                  href="#outlined-buttons"
-                  style={{ minWidth: 35, height: 20 }}
-                >
-                  >>
+                <Link to={"/main/monitoring"}>
+                  <ArrowForwardOutlinedIcon />
                 </Link>
               </TableCell>
             </TableRow>
