@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import ExtMarker from "react-leaflet-enhanced-marker";
 import PersonPinCircleOutlinedIcon from "@material-ui/icons/PersonPinCircleOutlined";
-import MyLocationIcon from "@material-ui/icons/MyLocation";
 // import Control from 'react-leaflet-control';
-import L, { LatLng, latLngBounds, FeatureGroup } from "leaflet";
+// import L, { LatLng, latLngBounds, FeatureGroup } from "leaflet";
+import { latLngBounds } from "leaflet";
 import {
   MapContainer,
   TileLayer,
@@ -14,7 +14,6 @@ import {
   Polyline,
   useMap,
   Marker,
-  MapConsumer,
 } from "react-leaflet";
 
 const Map = ({ commCenters }) => {
@@ -25,7 +24,6 @@ const Map = ({ commCenters }) => {
     places.push(Object.assign({}, item, { position: [item.lat, item.len] }));
     polyline.push([item.lat, item.len]);
   });
-  console.log({ places });
   const defaultPosition: LatLngExpression = [55.755826, 37.6173]; // Paris position
   const showPreview = (place) => {
     return place.toString();
@@ -94,11 +92,11 @@ const Map = ({ commCenters }) => {
           ))}
         </MarkerClusterGroup>
         <Polyline pathOptions={{ color: "blue" }} positions={polyline} />
-        <MyLocationIcon />
         <ExtMarker
           position={[0, 0]}
           icon={<PersonPinCircleOutlinedIcon style={{ fontSize: 40 }} />}
         />
+        <LocationMarker />
       </MapContainer>
     </div>
   );
