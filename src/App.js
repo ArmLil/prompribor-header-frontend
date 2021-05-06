@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Router, Switch, Route, Link } from "react-router-dom";
+import { Router, Switch, Route, Link, Redirect } from "react-router-dom";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -88,6 +88,26 @@ class App extends Component {
       // showAdminBoard,
       bodyPhone,
     } = this.state;
+
+    function PrivateRoute({ children, ...rest }) {
+      return (
+        <Route
+          {...rest}
+          render={({ location }) =>
+            currentUser ? (
+              children
+            ) : (
+              <Redirect
+                to={{
+                  pathname: "/login",
+                  state: { from: location },
+                }}
+              />
+            )
+          }
+        />
+      );
+    }
     return (
       <Router history={history}>
         <div className={bodyPhone}>
@@ -144,7 +164,8 @@ class App extends Component {
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <Route exact path="/profile" component={Profile} />
-              <Route path="/main" component={Main} />
+
+              <PrivateRoute path="/main" component={Main} />
             </Switch>
           </div>
         </div>

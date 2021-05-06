@@ -1,9 +1,9 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import Button from "@material-ui/core/Button";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
@@ -74,14 +74,16 @@ export default function CommCentersTable({ commCenters }) {
                 {row.status}
               </TableCell>
               <TableCell align="center" className={classes.cell}>
-                <Button
+                <Link
+                  to={"/main/monitoring"}
+                  style={{ textDecoration: "none", color: "black" }}
                   variant="outlined"
                   color="primary"
                   href="#outlined-buttons"
                   style={{ minWidth: 35, height: 20 }}
                 >
                   >>
-                </Button>
+                </Link>
               </TableCell>
             </TableRow>
           ))}
