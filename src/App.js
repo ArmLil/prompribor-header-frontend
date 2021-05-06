@@ -27,7 +27,6 @@ class App extends Component {
     this.state = {
       showModeratorBoard: false,
       showAdminBoard: false,
-      currentUser: undefined,
       bodyPhone: "bodyPhone",
     };
 
@@ -41,7 +40,6 @@ class App extends Component {
 
     if (user) {
       this.setState({
-        currentUser: user,
         // showModeratorBoard: !user.roleAdmin,
         // showAdminBoard: user.roleAdmin,
         bodyPhone: "",
@@ -69,7 +67,7 @@ class App extends Component {
   //   </li>
   // )}
   //
-  // {currentUser && (
+  // {user && (
   //   <li className="nav-item">
   //     <Link to={"/user"} className="nav-link">
   //       User
@@ -83,12 +81,12 @@ class App extends Component {
 
   render() {
     const {
-      currentUser,
       // showModeratorBoard,
       // showAdminBoard,
       bodyPhone,
     } = this.state;
-
+    const { user } = this.props;
+    console.log({ user });
     const PrivateRoute = ({
       comp: Component, // use comp prop
       ...rest
@@ -96,7 +94,7 @@ class App extends Component {
       <Route
         {...rest}
         render={(props) =>
-          !currentUser ? <Redirect to="/login" /> : <Component {...props} />
+          !user ? <Redirect to="/login" /> : <Component {...props} />
         }
       />
     );
@@ -111,7 +109,7 @@ class App extends Component {
               СисМон-Нефтепровод
             </Link>
             <div className="navbar-nav mr-auto">
-              {currentUser && (
+              {user && (
                 <li className="nav-item">
                   <Link to={"/main"} className="nav-link">
                     Главный
@@ -120,11 +118,11 @@ class App extends Component {
               )}
             </div>
 
-            {currentUser ? (
+            {user ? (
               <div className="navbar-nav ml-auto">
                 <li className="nav-item">
                   <Link to={"/profile"} className="nav-link">
-                    {currentUser.username}
+                    {user.username}
                   </Link>
                 </li>
                 <li className="nav-item">
