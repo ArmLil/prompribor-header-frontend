@@ -89,25 +89,17 @@ class App extends Component {
       bodyPhone,
     } = this.state;
 
-    function PrivateRoute({ children, ...rest }) {
-      return (
-        <Route
-          {...rest}
-          render={({ location }) =>
-            currentUser ? (
-              children
-            ) : (
-              <Redirect
-                to={{
-                  pathname: "/login",
-                  state: { from: location },
-                }}
-              />
-            )
-          }
-        />
-      );
-    }
+    const PrivateRoute = ({
+      comp: Component, // use comp prop
+      ...rest
+    }) => (
+      <Route
+        {...rest}
+        render={(props) =>
+          !currentUser ? <Redirect to="/login" /> : <Component {...props} />
+        }
+      />
+    );
     return (
       <Router history={history}>
         <div className={bodyPhone}>
@@ -164,7 +156,7 @@ class App extends Component {
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
 
-            <PrivateRoute path="/main" component={Main} />
+            <PrivateRoute path="/main" comp={Main} />
           </Switch>
         </div>
       </Router>
