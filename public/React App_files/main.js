@@ -80,7 +80,7 @@ function CenteredGrid() {
       children: [/*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_12__["jsxDEV"])("div", {
         children: /*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_12__["jsxDEV"])(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Switch"], {
           children: [/*#__PURE__*/Object(react_jsx_dev_runtime__WEBPACK_IMPORTED_MODULE_12__["jsxDEV"])(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Route"], {
-            path: "/main/map-notes",
+            path: "/main/map-commCenters",
             component: _MapCommCenters__WEBPACK_IMPORTED_MODULE_6__["default"]
           }, void 0, false, {
             fileName: _jsxFileName,

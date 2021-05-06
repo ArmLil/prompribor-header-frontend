@@ -11,7 +11,6 @@ import LeftBar from "./leftBar.component";
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      flexGrow: 1,
       display: "flex",
     },
 
@@ -31,7 +30,11 @@ export default function CenteredGrid() {
       <div className={classes.main}>
         <Switch>
           <Route exact path="/main" component={MapCommCenters} />
-          <Route exact path="/main/map-notes" component={MapCommCenters} />
+          <Route
+            exact
+            path="/main/map-commCenters"
+            component={MapCommCenters}
+          />
           <Route exact path="/main/monitoring" component={Monitoring} />
           <Route exact path="/main/controllers" component={Controllers} />
           <Route exact path="/main/comm-centers" component={CommCenters} />

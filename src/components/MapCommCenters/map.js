@@ -1,37 +1,46 @@
 import React, { useEffect, useState } from "react";
-
+import MarkerClusterGroup from "react-leaflet-markercluster";
+import ExtMarker from "react-leaflet-enhanced-marker";
+import PersonPinCircleOutlinedIcon from "@material-ui/icons/PersonPinCircleOutlined";
+import MyLocationIcon from "@material-ui/icons/MyLocation";
+// import Control from 'react-leaflet-control';
+import L, { LatLng, latLngBounds, FeatureGroup } from "leaflet";
 import {
   MapContainer,
   TileLayer,
-  Marker,
   Popup,
   Tooltip,
   useMapEvents,
+  Polyline,
+  useMap,
+  Marker,
+  MapConsumer,
 } from "react-leaflet";
-import { connect } from "react-redux";
-import { getData } from "../../actions/data";
 
-const AddMarker = () => {
-  const [position, setPosition] = useState(null);
+const Map = ({ commCenters }) => {
+  const places = [];
+  const polyline = [];
 
-  useMapEvents({
-    click: (e) => {
-      setPosition(e.latlng); // 👈 add marker
-
-      /* CODE TO ADD NEW PLACE TO STORE (check the source code) */
-    },
+  commCenters.forEach((item, i) => {
+    places.push(Object.assign({}, item, { position: [item.lat, item.len] }));
+    polyline.push([item.lat, item.len]);
   });
-
-  return position === null ? null : <Marker position={position}></Marker>;
-};
-
-const places = [{ id: "1", name: "Moscow", position: [51.505, -0.09] }];
-
-const Map = () => {
-  const defaultPosition: LatLngExpression = [51.505, -0.09]; // Paris position
+  console.log({ places });
+  const defaultPosition: LatLngExpression = [55.755826, 37.6173]; // Paris position
   const showPreview = (place) => {
     return place.toString();
   };
+
+  function ChangeView({ center, markers }: IChangeView) {
+    const map = useMap();
+    let markerBounds = latLngBounds([]);
+    markers.forEach((marker) => {
+      markerBounds.extend([marker.lat, marker.len]);
+    });
+    markerBounds.isValid() && map.fitBounds(markerBounds);
+    return null;
+  }
+
   function LocationMarker() {
     const [position, setPosition] = useState(null);
     const map = useMapEvents({
@@ -43,35 +52,52 @@ const Map = () => {
         map.flyTo(e.latlng, map.getZoom());
       },
     });
-
+    // marker.setIcon(<Icon> icon);
     return position === null ? null : (
-      <Marker position={position}>
-        <Popup>You are here</Popup>
-      </Marker>
+      <ExtMarker
+        position={position}
+        icon={
+          <PersonPinCircleOutlinedIcon
+            style={{ fontSize: 40, opacity: "0.95", color: "#b51f1fbc" }}
+          />
+        }
+      >
+        <Popup>Вы тут!</Popup>
+      </ExtMarker>
     );
   }
+
   return (
     <div>
       Карта коммуникационных центров
       <MapContainer
         center={defaultPosition}
-        zoom={13}
+        zoom={4}
         className="map__container"
         style={{ height: "420px" }}
       >
-        {places.map((place: Place) => (
-          <Marker
-            key={place.id}
-            position={place.position} // 👈
-            eventHandlers={{ click: () => showPreview(place) }}
-          >
-            {/* show place's title on hover the marker */}
-            <Tooltip>{place.name}</Tooltip>
-          </Marker>
-        ))}
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <ChangeView center={defaultPosition} markers={places} />
+        <MarkerClusterGroup showCoverageOnHover={true}>
+          {places.map((place: Place) => (
+            <Marker
+              key={place.id}
+              position={place.position}
+              eventHandlers={{ click: () => showPreview(place) }}
+            >
+              {/* show place's title on hover the marker */}
+              <Tooltip>{place.name}</Tooltip>
+            </Marker>
+          ))}
+        </MarkerClusterGroup>
+        <Polyline pathOptions={{ color: "blue" }} positions={polyline} />
+        <MyLocationIcon />
+        <ExtMarker
+          position={[0, 0]}
+          icon={<PersonPinCircleOutlinedIcon style={{ fontSize: 40 }} />}
         />
       </MapContainer>
     </div>

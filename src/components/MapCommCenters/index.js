@@ -27,13 +27,6 @@ const useStyles = (theme: Theme) =>
   });
 
 class MapCommCenters extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      currentCommCenters: [],
-    };
-  }
   componentDidMount() {
     console.log("this.props", this.props);
     const { commCenters, dispatchGetData } = this.props;
@@ -45,6 +38,11 @@ class MapCommCenters extends Component {
   }
   render() {
     const { classes, commCenters, error, loading } = this.props;
+
+    commCenters.sort(function (a, b) {
+      return a.index - b.index;
+    });
+
     if (error) {
       return <div>Error! {error.message}</div>;
     }
@@ -55,12 +53,12 @@ class MapCommCenters extends Component {
     return (
       <div>
         <Grid container spacing={2}>
-          <Grid item xs={7}>
+          <Grid item xs={8}>
             <Paper className={classes.paper}>
-              <Map />
+              <Map commCenters={commCenters} />
             </Paper>
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={4}>
             <Paper className={classes.paper}>
               <CommCentersTable commCenters={commCenters} />
             </Paper>

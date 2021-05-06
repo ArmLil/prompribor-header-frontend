@@ -128,7 +128,7 @@ export default function MiniDrawer() {
         <Divider />
         <List>
           <Link
-            to={"/main/map-notes"}
+            to={"/main/map-commCenters"}
             style={{ textDecoration: "none", color: "black" }}
           >
             <ListItem button key="Карта">
