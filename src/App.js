@@ -8,7 +8,7 @@ import "./App.css";
 import Login from "./components/login.component";
 import Register from "./components/register.component";
 import Home from "./components/home.component";
-import Main from "./components/main.component";
+import Main from "./components/Main";
 import Profile from "./components/profile.component";
 // import BoardUser from "./components/board-user.component";
 // import BoardModerator from "./components/board-moderator.component";

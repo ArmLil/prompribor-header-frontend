@@ -21,9 +21,10 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import DeviceHubIcon from "@material-ui/icons/DeviceHub"; //controllers
 import LocationOnOutlinedIcon from "@material-ui/icons/LocationOnOutlined"; //map
-import DvrOutlinedIcon from "@material-ui/icons/DvrOutlined"; //monitoring
+// import DvrOutlinedIcon from "@material-ui/icons/DvrOutlined"; //monitoring
 import DnsOutlinedIcon from "@material-ui/icons/DnsOutlined"; //comm centers
 import ListAltOutlinedIcon from "@material-ui/icons/ListAltOutlined"; //registers
+import ListItemMonitor from "./listItemMonitor";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -68,10 +69,15 @@ const useStyles = makeStyles((theme: Theme) =>
       // necessary for content to be below app bar
       ...theme.mixins.toolbar,
     },
+
+    link: {
+      textDecoration: "none",
+      color: "black",
+    },
   })
 );
 
-export default function MiniDrawer() {
+export default function LeftBar({ commCenters }) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -123,10 +129,7 @@ export default function MiniDrawer() {
         </Toolbar>
         <Divider />
         <List>
-          <Link
-            to={"/main/map-commCenters"}
-            style={{ textDecoration: "none", color: "black" }}
-          >
+          <Link to={"/main/map-commCenters"} className={classes.link}>
             <ListItem button key="Карта">
               <ListItemIcon>
                 <LocationOnOutlinedIcon />
@@ -134,26 +137,12 @@ export default function MiniDrawer() {
               <ListItemText primary="Карта" />
             </ListItem>
           </Link>
-
-          <Link
-            to={"/main/monitoring"}
-            style={{ textDecoration: "none", color: "black" }}
-          >
-            <ListItem button key="Мониторинг">
-              <ListItemIcon>
-                <DvrOutlinedIcon />
-              </ListItemIcon>
-              <ListItemText primary="Мониторинг" />
-            </ListItem>
-          </Link>
+          <ListItemMonitor commCenters={commCenters} />
         </List>
 
         <Divider />
         <List>
-          <Link
-            to={"/main/controllers"}
-            style={{ textDecoration: "none", color: "black" }}
-          >
+          <Link to={"/main/controllers"} className={classes.link}>
             <ListItem button key="Контролеры">
               <ListItemIcon>
                 <DeviceHubIcon />
@@ -162,10 +151,7 @@ export default function MiniDrawer() {
             </ListItem>
           </Link>
 
-          <Link
-            to={"/main/comm-centers"}
-            style={{ textDecoration: "none", color: "black" }}
-          >
+          <Link to={"/main/comm-centers"} className={classes.link}>
             <ListItem button key="Коммуникационные центры">
               <ListItemIcon>
                 <DnsOutlinedIcon />
@@ -174,10 +160,7 @@ export default function MiniDrawer() {
             </ListItem>
           </Link>
 
-          <Link
-            to={"/main/registers"}
-            style={{ textDecoration: "none", color: "black" }}
-          >
+          <Link to={"/main/registers"} className={classes.link}>
             <ListItem button key="Регистры">
               <ListItemIcon>
                 <ListAltOutlinedIcon />

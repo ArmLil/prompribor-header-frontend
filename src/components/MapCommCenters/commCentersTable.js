@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -94,7 +93,7 @@ export default function CommCentersTable({ commCenters }) {
                 style={{ padding: 2 }}
               >
                 <Button
-                  href={"/main/monitoring"}
+                  href={`/main/monitoring/${row.name}`}
                   variant="outlined"
                   size="small"
                   className={classes.move}

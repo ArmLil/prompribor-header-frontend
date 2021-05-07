@@ -1,32 +1,29 @@
 import React, { Component } from "react";
+import { Switch, Route } from "react-router-dom";
 import { withStyles, createStyles, Theme } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
+import MapCommCenters from "../MapCommCenters";
+import Monitoring from "../Monitoring";
+import Controllers from "../Controllers";
+import CommCenters from "../CommCenters";
+import Registers from "../Registers";
+import LeftBar from "./leftBar.component";
 import Loader from "../Loader";
 
 import { connect } from "react-redux";
 import { getData } from "../../actions/data";
 
-import Map from "./map";
-import CommCentersTable from "./commCentersTable";
-
 const useStyles = (theme: Theme) =>
   createStyles({
-    container: {
-      display: "grid",
-      gridTemplateColumns: "repeat(12, 1fr)",
-      gridGap: theme.spacing(3),
+    root: {
+      display: "flex",
     },
-    paper: {
-      padding: theme.spacing(1),
-      textAlign: "center",
-      color: theme.palette.text.secondary,
-      whiteSpace: "nowrap",
-      marginBottom: theme.spacing(1),
+
+    main: {
+      flexGrow: 1,
     },
   });
 
-class MapCommCenters extends Component {
+class Main extends Component {
   componentDidMount() {
     // console.log("this.props", this.props);
     const { commCenters, dispatchGetData } = this.props;
@@ -51,19 +48,22 @@ class MapCommCenters extends Component {
       return <Loader />;
     }
     return (
-      <div style={{ margin: 20 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={8}>
-            <Paper className={classes.paper}>
-              <Map commCenters={commCenters} />
-            </Paper>
-          </Grid>
-          <Grid item xs={4}>
-            <Paper className={classes.paper}>
-              <CommCentersTable commCenters={commCenters} />
-            </Paper>
-          </Grid>
-        </Grid>
+      <div className={classes.root}>
+        <LeftBar commCenters={commCenters} />
+        <div className={classes.main}>
+          <Switch>
+            <Route exact path="/main" component={MapCommCenters} />
+            <Route
+              exact
+              path="/main/map-commCenters"
+              component={MapCommCenters}
+            />
+            <Route exact path="/main/monitoring/:name" component={Monitoring} />
+            <Route exact path="/main/controllers" component={Controllers} />
+            <Route exact path="/main/comm-centers" component={CommCenters} />
+            <Route exact path="/main/registers" component={Registers} />
+          </Switch>
+        </div>
       </div>
     );
   }
@@ -88,4 +88,4 @@ function mapStateToProps(state) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(useStyles)(MapCommCenters));
+)(withStyles(useStyles)(Main));
