@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Button from "@material-ui/core/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -8,6 +9,7 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import ArrowForwardOutlinedIcon from "@material-ui/icons/ArrowForwardOutlined";
+import StopRoundedIcon from "@material-ui/icons/StopRounded";
 
 const useStyles = makeStyles({
   table: {
@@ -29,6 +31,10 @@ const useStyles = makeStyles({
   head: {
     color: "#F7F6F4",
     border: "solid #D79E45 2px",
+  },
+  move: {
+    padding: 0,
+    minWidth: "44px",
   },
 });
 
@@ -57,7 +63,11 @@ export default function CommCentersTable({ commCenters }) {
             <TableCell align="center" className={classes.headerCell}>
               Статус
             </TableCell>
-            <TableCell align="center" className={classes.headerCell}>
+            <TableCell
+              align="center"
+              className={classes.headerCell}
+              style={{ padding: 2 }}
+            >
               Перейти
             </TableCell>
           </TableRow>
@@ -72,12 +82,25 @@ export default function CommCentersTable({ commCenters }) {
                 {row.description}
               </TableCell>
               <TableCell align="center" className={classes.cell}>
-                {row.status}
+                <StopRoundedIcon
+                  style={{
+                    color: row.status === "offline" ? "#d50000" : "#64dd17",
+                  }}
+                />
               </TableCell>
-              <TableCell align="center" className={classes.cell}>
-                <Link to={"/main/monitoring"}>
-                  <ArrowForwardOutlinedIcon />
-                </Link>
+              <TableCell
+                align="center"
+                className={classes.cell}
+                style={{ padding: 2 }}
+              >
+                <Button
+                  href={"/main/monitoring"}
+                  variant="outlined"
+                  size="small"
+                  className={classes.move}
+                >
+                  <ArrowForwardOutlinedIcon fontSize="small" />
+                </Button>
               </TableCell>
             </TableRow>
           ))}
