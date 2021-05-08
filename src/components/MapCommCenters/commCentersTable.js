@@ -93,7 +93,7 @@ export default function CommCentersTable({ commCenters }) {
                 style={{ padding: 2 }}
               >
                 <Button
-                  href={`/main/monitoring/${row.name}`}
+                  href={`/main/monitoring/${row.path}`}
                   variant="outlined"
                   size="small"
                   className={classes.move}

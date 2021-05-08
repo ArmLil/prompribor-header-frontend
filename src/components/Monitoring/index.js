@@ -24,8 +24,7 @@ const useStyles = (theme: Theme) =>
 class Monitoring extends Component {
   componentDidMount() {
     // console.log("this.props", this.props);
-    const name = this.props.match.params.name;
-    console.log({ name });
+    const commCenterPath = this.props.match.params.commCenterPath;
     const { commCenters, dispatchGetData } = this.props;
     const getCommCenterUrl = "commCenters?controller=include";
 
@@ -35,12 +34,13 @@ class Monitoring extends Component {
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
     console.log({ prevProps, prevState, snapshot });
-    const name = this.props.match.params.name;
-    console.log({ name });
+    const commCenterPath = this.props.match.params.commCenterPath;
   }
   render() {
     const { classes, commCenters, error, loading } = this.props;
-    const name = this.props.match.params.name;
+    const commCenterPath = this.props.match.params.commCenterPath;
+    console.log({ commCenterPath });
+
     commCenters.sort(function (a, b) {
       return a.index - b.index;
     });
@@ -52,7 +52,7 @@ class Monitoring extends Component {
     if (loading) {
       return <Loader />;
     }
-    return <div className={classes.root}>{name}</div>;
+    return <div className={classes.root}>{commCenterPath}</div>;
   }
 }
 

@@ -66,15 +66,15 @@ export default function NestedList({ commCenters }) {
           {commCenters
             ? commCenters.map((comm) => (
                 <Link
-                  key={comm.id}
-                  to={`${path}/monitoring/${comm.name}`}
+                  key={comm.path}
+                  to={`${path}/monitoring/${comm.path}`}
                   className={classes.link}
                 >
                   <ListItem button className={classes.nested}>
                     <ListItemIcon>
                       <FiberManualRecordIcon style={{ width: "8px" }} />
                     </ListItemIcon>
-                    <ListItemText primary={comm.name}> </ListItemText>
+                    <ListItemText primary={comm.path}> </ListItemText>
                   </ListItem>
                 </Link>
               ))

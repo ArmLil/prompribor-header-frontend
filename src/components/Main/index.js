@@ -58,7 +58,11 @@ class Main extends Component {
               path="/main/map-commCenters"
               component={MapCommCenters}
             />
-            <Route exact path="/main/monitoring/:name" component={Monitoring} />
+            <Route
+              exact
+              path="/main/monitoring/:commCenterPath"
+              component={Monitoring}
+            />
             <Route exact path="/main/controllers" component={Controllers} />
             <Route exact path="/main/comm-centers" component={CommCenters} />
             <Route exact path="/main/registers" component={Registers} />
