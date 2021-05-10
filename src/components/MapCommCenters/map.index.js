@@ -5,7 +5,7 @@ import Grid from "@material-ui/core/Grid";
 import Loader from "../Loader";
 
 import { connect } from "react-redux";
-import { getData } from "../../actions/data";
+import { getCommCenters } from "../../actions/commCenters";
 
 import Map from "./map";
 import CommCentersTable from "./commCentersTable";
@@ -29,11 +29,11 @@ const useStyles = (theme: Theme) =>
 class MapCommCenters extends Component {
   componentDidMount() {
     // console.log("this.props", this.props);
-    const { commCenters, dispatchGetData } = this.props;
+    const { commCenters, dispatchGetCommCenters } = this.props;
     const getCommCenterUrl = "commCenters?controller=include";
 
     if (commCenters.length === 0) {
-      dispatchGetData(getCommCenterUrl);
+      dispatchGetCommCenters(getCommCenterUrl);
     }
   }
   render() {
@@ -69,8 +69,8 @@ class MapCommCenters extends Component {
   }
 }
 const mapDispatchToProps = (dispatch) => ({
-  dispatchGetData: (url) => {
-    dispatch(getData(url));
+  dispatchGetCommCenters: (url) => {
+    dispatch(getCommCenters(url));
   },
 });
 

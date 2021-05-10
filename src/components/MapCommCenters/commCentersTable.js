@@ -73,7 +73,7 @@ export default function CommCentersTable({ commCenters }) {
         </TableHead>
         <TableBody>
           {commCenters.map((row) => (
-            <TableRow hover key={row.name}>
+            <TableRow hover key={row.path}>
               <TableCell scope="row" className={classes.cell}>
                 {row.name}
               </TableCell>

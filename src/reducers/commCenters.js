@@ -1,7 +1,7 @@
 import {
-  FETCH_DATA_BEGIN,
-  FETCH_DATA_SUCCESS,
-  FETCH_DATA_FAIL,
+  FETCH_COMMCENTERS_BEGIN,
+  FETCH_COMMCENTERS_SUCCESS,
+  FETCH_COMMCENTERS_FAIL,
 } from "../actions/types";
 
 const initialState = {
@@ -12,19 +12,19 @@ const initialState = {
 
 export default function commCentersReducer(state = initialState, action) {
   switch (action.type) {
-    case FETCH_DATA_BEGIN:
+    case FETCH_COMMCENTERS_BEGIN:
       return {
         ...state,
         loading: true,
         error: null,
       };
-    case FETCH_DATA_SUCCESS:
+    case FETCH_COMMCENTERS_SUCCESS:
       return {
         ...state,
         loading: false,
         items: action.payload.commCenters.rows,
       };
-    case FETCH_DATA_FAIL:
+    case FETCH_COMMCENTERS_FAIL:
       return {
         ...state,
         loading: false,

@@ -5,7 +5,7 @@ import TopNavBar from "./topNavbar";
 import Loader from "../Loader";
 
 import { connect } from "react-redux";
-import { getData } from "../../actions/data";
+import { getCommCenters } from "../../actions/commCenters";
 
 const useStyles = (theme: Theme) =>
   createStyles({
@@ -55,7 +55,7 @@ class Body extends Component {
 
 const mapDispatchToProps = (dispatch) => ({
   dispatchGetData: (url) => {
-    dispatch(getData(url));
+    dispatch(getCommCenters(url));
   },
 });
 

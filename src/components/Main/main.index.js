@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 import { withStyles, createStyles, Theme } from "@material-ui/core/styles";
-import MapCommCenters from "../MapCommCenters";
-import Monitoring from "../Monitoring";
-import Controllers from "../Controllers";
-import CommCenters from "../CommCenters";
+import MapCommCenters from "../MapCommCenters/map.index";
+import Monitoring from "../Monitoring/monitoring.index";
+import Controllers from "../Controllers/controllers.index";
+import CommCenters from "../CommCenters/commCenters.index";
 import Registers from "../Registers";
 import LeftBar from "./leftBar.component";
 import Loader from "../Loader";
 
 import { connect } from "react-redux";
-import { getData } from "../../actions/data";
+import { getCommCenters } from "../../actions/commCenters";
 
 const useStyles = (theme: Theme) =>
   createStyles({
@@ -26,11 +26,11 @@ const useStyles = (theme: Theme) =>
 class Main extends Component {
   componentDidMount() {
     // console.log("this.props", this.props);
-    const { commCenters, dispatchGetData } = this.props;
+    const { commCenters, dispatchGetCommCenters } = this.props;
     const getCommCenterUrl = "commCenters?controller=include";
 
     if (commCenters.length === 0) {
-      dispatchGetData(getCommCenterUrl);
+      dispatchGetCommCenters(getCommCenterUrl);
     }
   }
   render() {
@@ -73,8 +73,8 @@ class Main extends Component {
   }
 }
 const mapDispatchToProps = (dispatch) => ({
-  dispatchGetData: (url) => {
-    dispatch(getData(url));
+  dispatchGetCommCenters: (url) => {
+    dispatch(getCommCenters(url));
   },
 });
 

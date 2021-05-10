@@ -82,7 +82,7 @@ const Map = ({ commCenters }) => {
         <MarkerClusterGroup showCoverageOnHover={true}>
           {places.map((place: Place) => (
             <Marker
-              key={place.id}
+              key={place.name}
               position={place.position}
               eventHandlers={{ click: () => showPreview(place) }}
             >

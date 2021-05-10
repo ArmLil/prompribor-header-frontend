@@ -1,35 +1,35 @@
 import {
-  FETCH_DATA_BEGIN,
-  FETCH_DATA_SUCCESS,
-  FETCH_DATA_FAIL,
+  FETCH_CONTROLLER_BEGIN,
+  FETCH_CONTROLLER_SUCCESS,
+  FETCH_CONTROLLER_FAIL,
 } from "../actions/types";
 
 const initialState = {
-  item: {},
+  item: [],
   loading: false,
   error: null,
 };
 
 export default function controllerReducer(state = initialState, action) {
   switch (action.type) {
-    case FETCH_DATA_BEGIN:
+    case FETCH_CONTROLLER_BEGIN:
       return {
         ...state,
         loading: true,
         error: null,
       };
-    case FETCH_DATA_SUCCESS:
+    case FETCH_CONTROLLER_SUCCESS:
       return {
         ...state,
         loading: false,
-        items: action.payload.commCenters.rows,
+        item: action.payload,
       };
-    case FETCH_DATA_FAIL:
+    case FETCH_CONTROLLER_FAIL:
       return {
         ...state,
         loading: false,
         error: action.payload.error,
-        item: {},
+        item: [],
       };
     default:
       return state;
