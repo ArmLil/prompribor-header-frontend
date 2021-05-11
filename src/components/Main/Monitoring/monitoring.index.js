@@ -4,11 +4,11 @@ import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import TopNavBar from "./topNavbar";
-import Loader from "../Loader";
+import Loader from "../../Loader";
 import Body from "./body";
 
 import { connect } from "react-redux";
-import { getController } from "../../actions/controller";
+import { getController } from "../../../actions/controller";
 
 const useStyles = (theme: Theme) =>
   createStyles({
@@ -40,15 +40,10 @@ class Monitoring extends Component {
     dispatchGetController(getControllerUrl);
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log("didupdate");
-    // console.log("prev.controoler=", prevProps.controller.commCenterPath);
-    // const { dispatchGetController } = this.props;
     const thisPath = this.props.match.params.commCenterPath;
     const prevPath = prevProps.match.params.commCenterPath;
-    console.log({ prevPath }, { thisPath });
     if (prevPath !== thisPath) {
       const getControllerUrl = `controllers/getRegGroupsRegistersValues/${thisPath}`;
-      console.log("not ==", getControllerUrl);
       this.props.dispatchGetController(getControllerUrl);
     }
   }

@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { withStyles, createStyles, Theme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import TopNavBar from "./topNavbar";
-import Loader from "../Loader";
+import Loader from "../../Loader";
 
 import { connect } from "react-redux";
-import { getCommCenters } from "../../actions/commCenters";
+import { getCommCenters } from "../../../actions/commCenters";
 
 const useStyles = (theme: Theme) =>
   createStyles({

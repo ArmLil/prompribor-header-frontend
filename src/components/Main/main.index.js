@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 import { withStyles, createStyles, Theme } from "@material-ui/core/styles";
-import MapCommCenters from "../MapCommCenters/map.index";
-import Monitoring from "../Monitoring/monitoring.index";
-import Controllers from "../Controllers/controllers.index";
-import CommCenters from "../CommCenters/commCenters.index";
-import Registers from "../Registers";
+import MapCommCenters from "./MapCommCenters/map.index";
+import Monitoring from "./Monitoring/monitoring.index";
+import Controllers from "./Controllers/controllers.index";
+import CommCenters from "./CommCenters/commCenters.index";
+import Registers from "./Registers";
 import LeftBar from "./leftBar.component";
 import Loader from "../Loader";
 

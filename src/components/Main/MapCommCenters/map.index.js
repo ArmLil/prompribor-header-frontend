@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { withStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import Loader from "../Loader";
+import Loader from "../../Loader";
 
 import { connect } from "react-redux";
-import { getCommCenters } from "../../actions/commCenters";
+import { getCommCenters } from "../../../actions/commCenters";
 
 import Map from "./map";
 import CommCentersTable from "./commCentersTable";
