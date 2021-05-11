@@ -1,23 +1,50 @@
 import React, { Component } from "react";
+import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
 import { withStyles, createStyles, Theme } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import Typography from "@material-ui/core/Typography";
+import StopRoundedIcon from "@material-ui/icons/StopRounded";
+import Box from "@material-ui/core/Box";
 import TopNavBar from "./topNavbar";
 import Loader from "../../Loader";
 import Body from "./body";
+import Title from "./title";
 
 import { connect } from "react-redux";
 import { getController } from "../../../actions/controller";
 
 const useStyles = (theme: Theme) =>
   createStyles({
-    root: {
-      display: "flex",
+    container: {
+      display: "grid",
+      gridTemplateColumns: "repeat(12, 1fr)",
+      gridGap: theme.spacing(3),
     },
-
-    main: {
-      flexGrow: 1,
+    paper: {
+      padding: theme.spacing(1),
+      // color: theme.palette.text.secondary,
+      whiteSpace: "nowrap",
+      marginBottom: theme.spacing(1),
+    },
+    title: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "baseline",
+      marginLeft: theme.spacing(3),
+      marginBottom: theme.spacing(1),
+    },
+    firstLayerTitle: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "baseline",
+      justifyContent: "space-between",
+    },
+    subTitle: {
+      marginRight: 10,
+      color: theme.palette.text.secondary,
     },
   });
 
@@ -26,10 +53,7 @@ class Monitoring extends Component {
     super();
 
     // Define the initial state:
-    this.state = {
-      controller: {},
-      controllerPath: "",
-    };
+    this.state = {};
   }
   componentDidMount() {
     // console.log("this.props", this.props);
@@ -53,8 +77,8 @@ class Monitoring extends Component {
 
   render() {
     const { classes, controller, error, loading } = this.props;
-    const commCenterPath = this.props.match.params.commCenterPath;
 
+    const commCenter = controller.commCenter;
     if (error) {
       return <div>Error! {error.message}</div>;
     }
@@ -62,7 +86,20 @@ class Monitoring extends Component {
     if (loading) {
       return <Loader />;
     }
-    return <div className={classes.root}>{controller.commCenterPath}</div>;
+    return (
+      <div>
+        <Grid container spacing={1}>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              <Title controller={controller} />
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>body</Paper>
+          </Grid>
+        </Grid>
+      </div>
+    );
   }
 }
 
@@ -73,7 +110,7 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 function mapStateToProps(state) {
-  console.log("state.controller", state.controllerReducer.item);
+  console.log("state.monitoring", state);
   const { message } = state.message;
   const controller = state.controllerReducer.item;
   const { error, loading } = state.controllerReducer;

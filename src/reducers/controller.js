@@ -5,7 +5,13 @@ import {
 } from "../actions/types";
 
 const initialState = {
-  item: [],
+  item: {
+    commCenter: { name: "", description: "", status: "", path: "" },
+    name: "",
+    description: "",
+    modbusId: "",
+    registersGroup: [],
+  },
   loading: false,
   error: null,
 };
