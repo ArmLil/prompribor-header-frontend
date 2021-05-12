@@ -19,24 +19,23 @@ const initialState = {
 export default function controllerReducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_CONTROLLER_BEGIN:
-      return {
-        ...state,
+      return Object.assign({}, state, {
         loading: true,
         error: null,
-      };
+      });
     case FETCH_CONTROLLER_SUCCESS:
-      return {
-        ...state,
+      return Object.assign({}, state, {
         loading: false,
         item: action.payload,
-      };
+      });
+
     case FETCH_CONTROLLER_FAIL:
-      return {
-        ...state,
+      return Object.assign({}, state, {
         loading: false,
         error: action.payload.error,
-        item: [],
-      };
+        item: initialState.item,
+      });
+
     default:
       return state;
   }

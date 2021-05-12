@@ -48,6 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
         duration: theme.transitions.duration.enteringScreen,
       }),
       top: 56,
+      backgroundColor: "#fbfbfb",
     },
     drawerClose: {
       transition: theme.transitions.create("width", {
@@ -60,6 +61,7 @@ const useStyles = makeStyles((theme: Theme) =>
         width: theme.spacing(9) + 1,
       },
       top: 56,
+      backgroundColor: "#fbfbfb",
     },
     toolbar: {
       display: "flex",

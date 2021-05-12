@@ -103,7 +103,7 @@ class App extends Component {
         <div className={bodyPhone}>
           <nav
             className="navbar navbar-expand navbar-dark  sticky-top"
-            style={{ backgroundColor: "#040406", opacity: "0.88", top: 0 }}
+            style={{ backgroundColor: "#040406", opacity: "", top: 0 }}
           >
             <Link to={"/"} className="navbar-brand">
               СисМон-Нефтепровод

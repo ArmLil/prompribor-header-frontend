@@ -2,22 +2,17 @@ import React, { Component } from "react";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import { withStyles, createStyles, Theme } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Typography from "@material-ui/core/Typography";
-import StopRoundedIcon from "@material-ui/icons/StopRounded";
-import Box from "@material-ui/core/Box";
-import TopNavBar from "./topNavbar";
 import Loader from "../../Loader";
 import Body from "./body";
 import Title from "./title";
-
 import { connect } from "react-redux";
 import { getController } from "../../../actions/controller";
 
 const useStyles = (theme: Theme) =>
   createStyles({
+    root: {
+      flexGrow: 0.8,
+    },
     container: {
       display: "grid",
       gridTemplateColumns: "repeat(12, 1fr)",
@@ -58,7 +53,7 @@ class Monitoring extends Component {
   componentDidMount() {
     // console.log("this.props", this.props);
     const commCenterPath = this.props.match.params.commCenterPath;
-    const { controller, dispatchGetController } = this.props;
+    const { dispatchGetController } = this.props;
     const getControllerUrl = `controllers/getRegGroupsRegistersValues/${commCenterPath}`;
     console.log("row 30 begin dispatch");
     dispatchGetController(getControllerUrl);
@@ -72,13 +67,11 @@ class Monitoring extends Component {
     }
   }
   componentWillUnmount() {
-    console.log("Unmount");
+    // console.log("Unmount");
   }
 
   render() {
     const { classes, controller, error, loading } = this.props;
-
-    const commCenter = controller.commCenter;
     if (error) {
       return <div>Error! {error.message}</div>;
     }
@@ -87,18 +80,17 @@ class Monitoring extends Component {
       return <Loader />;
     }
     return (
-      <div>
-        <Grid container spacing={1}>
-          <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <Title controller={controller} />
-            </Paper>
-          </Grid>
-          <Grid item xs={12}>
-            <Paper className={classes.paper}>body</Paper>
-          </Grid>
+      <Grid container className={classes.root}>
+        <Grid item xs={12}>
+          <Paper className={classes.paper}>
+            <Title controller={controller} />
+          </Paper>
         </Grid>
-      </div>
+
+        <Grid item xs={12}>
+          <Body controller={controller} />
+        </Grid>
+      </Grid>
     );
   }
 }
@@ -110,10 +102,10 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 function mapStateToProps(state) {
-  console.log("state.monitoring", state);
+  // console.log("state.monitoring", state);
   const { message } = state.message;
   const controller = state.controllerReducer.item;
-  const { error, loading } = state.controllerReducer;
+  const { error, loading } = state.controllerReducer.item;
   return {
     message,
     controller,
