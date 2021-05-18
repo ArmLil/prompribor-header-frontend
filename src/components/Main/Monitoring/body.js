@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -29,8 +29,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Body({ controller }) {
   const classes = useStyles();
-  console.log(controller);
-  console.log(controller.registersGroups);
   let groups = [];
   if (controller.registersGroups) {
     controller.registersGroups.forEach((gr, i) => {

@@ -6,7 +6,10 @@ import Loader from "../../Loader";
 import Body from "./body";
 import Title from "./title";
 import { connect } from "react-redux";
-import { getController } from "../../../actions/controller";
+import {
+  getController,
+  updateControllerBySocket,
+} from "../../../actions/controller";
 
 const useStyles = (theme: Theme) =>
   createStyles({
@@ -47,11 +50,9 @@ class Monitoring extends Component {
   constructor() {
     super();
 
-    // Define the initial state:
     this.state = {};
   }
   componentDidMount() {
-    // console.log("this.props", this.props);
     const commCenterPath = this.props.match.params.commCenterPath;
     const { dispatchGetController } = this.props;
     const getControllerUrl = `controllers/getRegGroupsRegistersValues/${commCenterPath}`;
@@ -59,15 +60,18 @@ class Monitoring extends Component {
     dispatchGetController(getControllerUrl);
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
+    const { classes, controller, error, loading } = this.props;
+    const {
+      dispatchGetController,
+      dispatchUpdateControllerBySocket,
+    } = this.props;
+
     const thisPath = this.props.match.params.commCenterPath;
     const prevPath = prevProps.match.params.commCenterPath;
     if (prevPath !== thisPath) {
       const getControllerUrl = `controllers/getRegGroupsRegistersValues/${thisPath}`;
-      this.props.dispatchGetController(getControllerUrl);
+      dispatchGetController(getControllerUrl);
     }
-  }
-  componentWillUnmount() {
-    // console.log("Unmount");
   }
 
   render() {
@@ -98,6 +102,9 @@ class Monitoring extends Component {
 const mapDispatchToProps = (dispatch) => ({
   dispatchGetController: (url) => {
     dispatch(getController(url));
+  },
+  dispatchUpdateControllerBySocket: (controller, registerControllerValue) => {
+    dispatch(updateControllerBySocket(registerControllerValue));
   },
 });
 

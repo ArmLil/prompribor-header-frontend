@@ -8,11 +8,12 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import ArrowForwardOutlinedIcon from "@material-ui/icons/ArrowForwardOutlined";
+import Typography from "@material-ui/core/Typography";
 import StopRoundedIcon from "@material-ui/icons/StopRounded";
 
 const useStyles = makeStyles({
   table: {
-    minWidth: 250,
+    // maxWidth: 50,
   },
   cell: {
     padding: 5,
@@ -20,6 +21,7 @@ const useStyles = makeStyles({
     borderLeft: "solid #E6E4E7 2px",
     borderRight: "solid #E6E4E7 2px",
     borderBottom: "solid #E6E4E7 2px",
+    maxWidth: 300,
   },
   headerCell: {
     padding: 5,
@@ -56,7 +58,11 @@ export default function CommCentersTable({ commCenters }) {
         <TableHead className={classes.head}>
           <TableRow>
             <TableCell className={classes.headerCell}>Локация</TableCell>
-            <TableCell align="center" className={classes.headerCell}>
+            <TableCell
+              align="center"
+              className={classes.headerCell}
+              style={{ whiteSpace: "normal" }}
+            >
               Описание
             </TableCell>
             <TableCell align="center" className={classes.headerCell}>
@@ -77,8 +83,12 @@ export default function CommCentersTable({ commCenters }) {
               <TableCell scope="row" className={classes.cell}>
                 {row.name}
               </TableCell>
+
               <TableCell align="center" className={classes.cell}>
-                {row.description}
+                <Typography style={{ overflowX: "scroll" }}>
+                  {" "}
+                  {row.description}{" "}
+                </Typography>
               </TableCell>
               <TableCell align="center" className={classes.cell}>
                 <StopRoundedIcon

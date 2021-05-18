@@ -25,7 +25,7 @@ const useStyles = (theme: Theme) =>
 
 class Main extends Component {
   componentDidMount() {
-    // console.log("this.props", this.props);
+    console.log("componentDidMount() Main....");
     const { commCenters, dispatchGetCommCenters } = this.props;
     const getCommCenterUrl = "commCenters?controller=include";
 

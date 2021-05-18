@@ -32,9 +32,10 @@ class MapCommCenters extends Component {
     const { commCenters, dispatchGetCommCenters } = this.props;
     const getCommCenterUrl = "commCenters?controller=include";
 
-    if (commCenters.length === 0) {
-      dispatchGetCommCenters(getCommCenterUrl);
-    }
+    // if (commCenters.length === 0) {
+    //   console.log("if (commCenters.length === 0)");
+    //   dispatchGetCommCenters(getCommCenterUrl);
+    // }
   }
   render() {
     const { classes, commCenters, error, loading } = this.props;
@@ -53,12 +54,12 @@ class MapCommCenters extends Component {
     return (
       <div style={{ margin: 20 }}>
         <Grid container spacing={2}>
-          <Grid item xs={8}>
+          <Grid item xs={12}>
             <Paper className={classes.paper} style={{ backgroundColor: "" }}>
               <Map commCenters={commCenters} />
             </Paper>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={12}>
             <Paper className={classes.paper}>
               <CommCentersTable commCenters={commCenters} />
             </Paper>

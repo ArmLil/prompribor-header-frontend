@@ -72,7 +72,7 @@ const Map = ({ commCenters }) => {
         center={defaultPosition}
         zoom={4}
         className="map__container"
-        style={{ height: "420px" }}
+        style={{ height: "650px" }}
       >
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
