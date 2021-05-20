@@ -1,0 +1,8 @@
+Package: sysmon-frontend
+Version: 1.0
+Architecture: amd64
+Maintainer: Lilit Oganisyan <l.oganisyan@voentelecom.ru>
+Section: sysmon
+Priority: optional
+Homepage: http://www.voentelecom.ru/
+Description: Sysmon Frontend

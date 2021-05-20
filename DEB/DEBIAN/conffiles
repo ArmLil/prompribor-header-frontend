@@ -1,0 +1,2 @@
+/etc/logrotate.d/sysmon-frontend
+/etc/nginx/conf.d/sysmon-frontend.conf

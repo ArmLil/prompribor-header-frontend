@@ -1,0 +1,21 @@
+#!/bin/sh -e
+
+case "$1" in
+    failed-upgrade|abort-install|abort-upgrade|disappear|upgrade)
+    ;;
+    remove)
+    ;;
+    purge)
+
+        rm -f /etc/sysmon/sysmon-frontend.conf
+        rm -f /etc/nginx/conf.d/sysmon-frontend.conf
+        service nginx reload
+        rm -rf /var/log/sysmon/frontend
+    ;;
+
+    *)
+        echo "postrm called with unknown argument \`$1'" >&2
+        exit 1
+esac
+
+exit 0

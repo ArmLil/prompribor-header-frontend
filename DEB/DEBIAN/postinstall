@@ -1,0 +1,21 @@
+#!/bin/sh -e
+
+if [ "$1" = "configure" ]; then
+    if ! getent group sysmon > /dev/null 2>&1 ; then
+        addgroup --system --quiet sysmon
+    fi
+
+    if ! getent passwd sysmon > /dev/null 2>&1 ; then
+        adduser --quiet \
+            --system --disabled-login --ingroup sysmon \
+            --home /var/lib/sysmon/ --no-create-home \
+            sysmon
+    fi
+
+    mkdir -p /var/log/sysmon/frontend
+    chown sysmon:sysmon /var/log/sysmon/frontend -R
+    service nginx reload
+    service nginx restart
+fi
+
+exit 0
