@@ -72,3 +72,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 ### auth link
 
 https://bezkoder.com/react-redux-jwt-auth/
+
+port, host defined in src/api.js

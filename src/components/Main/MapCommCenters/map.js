@@ -41,7 +41,7 @@ const Map = ({ commCenters }) => {
     return null;
   }
 
-  const [carPosition, setCarPosition] = useState([56.2965, 42.696]);
+  const [carPosition, setCarPosition] = useState([56.301668, 42.678]);
   useEffect(() => {
     let isMounted = true;
     socket.once("carPostion", (data) => {
