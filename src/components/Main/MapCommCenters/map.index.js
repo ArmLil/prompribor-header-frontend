@@ -44,12 +44,12 @@ class MapCommCenters extends Component {
     return (
       <div style={{ margin: 20 }}>
         <Grid container spacing={2}>
-          <Grid item xs={8}>
+          <Grid item xs={11}>
             <Paper className={classes.paper} style={{ backgroundColor: "" }}>
               <Map commCenters={commCenters} />
             </Paper>
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={10}>
             <Paper className={classes.paper}>
               <CommCentersTable commCenters={commCenters} />
             </Paper>

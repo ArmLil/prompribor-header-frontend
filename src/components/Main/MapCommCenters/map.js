@@ -41,7 +41,7 @@ const Map = ({ commCenters }) => {
     return null;
   }
 
-  const [carPosition, setCarPosition] = useState([56.3005, 42.688]);
+  const [carPosition, setCarPosition] = useState([56.301, 42.688]);
   useEffect(() => {
     let isMounted = true;
     socket.once("carPostion", (data) => {
@@ -106,7 +106,7 @@ const Map = ({ commCenters }) => {
         center={defaultPosition}
         zoom={4}
         className="map__container"
-        style={{ height: "650px" }}
+        style={{ height: "550px" }}
       >
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -118,7 +118,12 @@ const Map = ({ commCenters }) => {
             <Marker
               key={place.name}
               position={place.position}
-              eventHandlers={{ click: () => showPreview(place) }}
+              eventHandlers={{
+                click: () => {
+                  console.log("click");
+                  showPreview(place);
+                },
+              }}
             >
               {/* show place's title on hover the marker */}
               <Tooltip>{place.name}</Tooltip>

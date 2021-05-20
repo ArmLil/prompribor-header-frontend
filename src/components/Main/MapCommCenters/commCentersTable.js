@@ -85,7 +85,7 @@ export default function CommCentersTable({ commCenters }) {
               </TableCell>
 
               <TableCell align="center" className={classes.cell}>
-                <Typography style={{ overflowX: "scroll" }}>
+                <Typography style={{ overflowX: "hidden" }}>
                   {" "}
                   {row.description}{" "}
                 </Typography>
