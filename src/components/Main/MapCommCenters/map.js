@@ -1,22 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import MarkerClusterGroup from "react-leaflet-markercluster";
 import ExtMarker from "react-leaflet-enhanced-marker";
-import PersonPinCircleOutlinedIcon from "@material-ui/icons/PersonPinCircleOutlined";
+// import PersonPinCircleOutlinedIcon from "@material-ui/icons/PersonPinCircleOutlined";
+import LocalShippingIcon from "@material-ui/icons/LocalShipping";
+// import car from "../../../images/car.jpeg";
 // import Control from 'react-leaflet-control';
 // import L, { LatLng, latLngBounds, FeatureGroup } from "leaflet";
 import { latLngBounds } from "leaflet";
 import {
   MapContainer,
   TileLayer,
-  Popup,
   Tooltip,
-  useMapEvents,
   Polyline,
   useMap,
   Marker,
 } from "react-leaflet";
+import { SocketContext } from "../../../socket_api";
 
 const Map = ({ commCenters }) => {
+  const socket = useContext(SocketContext);
   const places = [];
   const polyline = [];
 
@@ -39,29 +41,61 @@ const Map = ({ commCenters }) => {
     return null;
   }
 
-  function LocationMarker() {
-    const [position, setPosition] = useState(null);
-    const map = useMapEvents({
-      click() {
-        map.locate();
-      },
-      locationfound(e) {
-        setPosition(e.latlng);
-        map.flyTo(e.latlng, map.getZoom());
-      },
+  const [carPosition, setCarPosition] = useState([56.2965, 42.696]);
+  useEffect(() => {
+    let isMounted = true;
+    socket.once("carPostion", (data) => {
+      console.log("socket on carPostion");
+      console.log(data.latlen);
+      console.log("carPosition=", carPosition);
+      if (isMounted && carPosition !== data.latlen) {
+        setCarPosition(data.latlen);
+      }
     });
-    // marker.setIcon(<Icon> icon);
-    return position === null ? null : (
+    return () => {
+      isMounted = false;
+    };
+  }, [socket, carPosition]);
+
+  // function LocationMarker() {
+  //   const [position, setPosition] = useState(null);
+  //   const map = useMapEvents({
+  //     click() {
+  //       map.locate();
+  //     },
+  //     locationfound(e) {
+  //       setPosition(e.latlng);
+  //       map.flyTo(e.latlng, map.getZoom());
+  //     },
+  //   });
+  //   // marker.setIcon(<Icon> icon);
+  //   return position === null ? null : (
+  //     <ExtMarker
+  //       position={position}
+  //       icon={
+  //         <PersonPinCircleOutlinedIcon
+  //           style={{ fontSize: 40, opacity: "0.95", color: "#b51f1fbc" }}
+  //         />
+  //       }
+  //     >
+  //       <Popup>Вы тут!</Popup>
+  //     </ExtMarker>
+  //   );
+  // }
+  // <LocationMarker />
+
+  function CarMarker() {
+    console.log("CarMarker...");
+    // icon={<img src={car} style={{ width: "40px" }} />}
+    return (
       <ExtMarker
-        position={position}
+        position={carPosition}
         icon={
-          <PersonPinCircleOutlinedIcon
-            style={{ fontSize: 40, opacity: "0.95", color: "#b51f1fbc" }}
+          <LocalShippingIcon
+            style={{ fontSize: 40, opacity: "0.95", color: "green" }}
           />
         }
-      >
-        <Popup>Вы тут!</Popup>
-      </ExtMarker>
+      />
     );
   }
 
@@ -92,11 +126,7 @@ const Map = ({ commCenters }) => {
           ))}
         </MarkerClusterGroup>
         <Polyline pathOptions={{ color: "blue" }} positions={polyline} />
-        <ExtMarker
-          position={[0, 0]}
-          icon={<PersonPinCircleOutlinedIcon style={{ fontSize: 40 }} />}
-        />
-        <LocationMarker />
+        <CarMarker />
       </MapContainer>
     </div>
   );

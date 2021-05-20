@@ -60,11 +60,7 @@ class Monitoring extends Component {
     dispatchGetController(getControllerUrl);
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const { classes, controller, error, loading } = this.props;
-    const {
-      dispatchGetController,
-      dispatchUpdateControllerBySocket,
-    } = this.props;
+    const { dispatchGetController } = this.props;
 
     const thisPath = this.props.match.params.commCenterPath;
     const prevPath = prevProps.match.params.commCenterPath;
