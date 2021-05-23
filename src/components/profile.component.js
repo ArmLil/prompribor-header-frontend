@@ -9,10 +9,6 @@ class Profile extends Component {
     if (!currentUser) {
       return <Redirect to="/login" />;
     }
-    // <p>
-    //   <strong>Token:</strong> {currentUser.token.substring(0, 20)} ...{" "}
-    //   {currentUser.token.substr(currentUser.token.length - 20)}
-    // </p>
 
     return (
       <div className="bodyPhone pt-3" style={{ height: "91vh" }}>
@@ -31,7 +27,7 @@ class Profile extends Component {
               <strong>е-майл:</strong> {currentUser.email}
             </p>
             <strong>
-              {currentUser.roleAdmin ? "роль: админ" : "роль: гость"}
+              {currentUser.roleAdmin ? "права: админ" : "права: гость"}
             </strong>
           </header>
         </div>

@@ -3,6 +3,7 @@ import { Switch, Route } from "react-router-dom";
 import { withStyles, createStyles, Theme } from "@material-ui/core/styles";
 import MapCommCenters from "./MapCommCenters/map.index";
 import Monitoring from "./Monitoring/monitoring.index";
+import Journals from "./Journals/journals.index";
 import Controllers from "./Controllers/controllers.index";
 import CommCenters from "./CommCenters/commCenters.index";
 import Registers from "./Registers";
@@ -35,7 +36,6 @@ class Main extends Component {
   }
   render() {
     const { classes, commCenters, error, loading } = this.props;
-
     commCenters.sort(function (a, b) {
       return a.index - b.index;
     });
@@ -44,7 +44,7 @@ class Main extends Component {
       return <div>Error! {error.message}</div>;
     }
 
-    if (loading) {
+    if (loading || commCenters.length === 0) {
       return <Loader />;
     }
     return (
@@ -63,6 +63,7 @@ class Main extends Component {
               path="/main/monitoring/:commCenterPath"
               component={Monitoring}
             />
+            <Route exact path="/main/journals" component={Journals} />
             <Route exact path="/main/controllers" component={Controllers} />
             <Route exact path="/main/comm-centers" component={CommCenters} />
             <Route exact path="/main/registers" component={Registers} />

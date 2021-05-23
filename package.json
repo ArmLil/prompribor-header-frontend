@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "3d-react-carousal": "^3.1.0",
     "@fontsource/roboto": "^4.2.3",
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
@@ -11,6 +12,7 @@
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
+    "font-awesome": "^4.7.0",
     "leaflet": "^1.7.1",
     "leaflet-drift-marker": "^2.0.0",
     "react": "^17.0.2",

@@ -3,6 +3,8 @@ import MarkerClusterGroup from "react-leaflet-markercluster";
 import ExtMarker from "react-leaflet-enhanced-marker";
 // import PersonPinCircleOutlinedIcon from "@material-ui/icons/PersonPinCircleOutlined";
 import LocalShippingIcon from "@material-ui/icons/LocalShipping";
+import Button from "@material-ui/core/Button";
+
 // import car from "../../../images/car.jpeg";
 // import Control from 'react-leaflet-control';
 // import L, { LatLng, latLngBounds, FeatureGroup } from "leaflet";
@@ -17,7 +19,8 @@ import {
 } from "react-leaflet";
 import { SocketContext } from "../../../socket_api";
 
-const Map = ({ commCenters }) => {
+const Map = ({ commCenters, history }) => {
+  console.log({ history });
   const socket = useContext(SocketContext);
   const places = [];
   const polyline = [];
@@ -120,8 +123,8 @@ const Map = ({ commCenters }) => {
               position={place.position}
               eventHandlers={{
                 click: () => {
-                  console.log("click");
-                  showPreview(place);
+                  // showPreview(place);
+                  history.push("/main/journals");
                 },
               }}
             >

@@ -70,7 +70,7 @@ class GlobalContainer extends Component {
       // showAdminBoard,
     } = this.state;
     const { user, bodyPhone } = this.props;
-    console.log({ user });
+    console.log({ user, bodyPhone });
     const PrivateRoute = ({
       comp: Component, // use comp prop
       ...rest
@@ -147,9 +147,10 @@ class GlobalContainer extends Component {
 }
 
 function mapStateToProps(state) {
-  const { user } = state.authReducer;
+  const { user, bodyPhone } = state.authReducer;
   return {
     user,
+    bodyPhone,
   };
 }
 

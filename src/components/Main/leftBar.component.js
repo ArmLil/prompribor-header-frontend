@@ -19,6 +19,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import DvrOutlinedIcon from "@material-ui/icons/DvrOutlined"; //journals
 import DeviceHubIcon from "@material-ui/icons/DeviceHub"; //controllers
 import LocationOnOutlinedIcon from "@material-ui/icons/LocationOnOutlined"; //map
 // import DvrOutlinedIcon from "@material-ui/icons/DvrOutlined"; //monitoring
@@ -140,6 +141,14 @@ export default function LeftBar({ commCenters }) {
             </ListItem>
           </Link>
           <ListItemMonitor commCenters={commCenters} />
+          <Link to={"/main/journals"} className={classes.link}>
+            <ListItem button key="Журналы">
+              <ListItemIcon>
+                <DvrOutlinedIcon />
+              </ListItemIcon>
+              <ListItemText primary="Журналы" />
+            </ListItem>
+          </Link>
         </List>
 
         <Divider />

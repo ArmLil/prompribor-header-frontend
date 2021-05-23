@@ -3,12 +3,11 @@ import { withStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Loader from "../../Loader";
+import ListJournals from "./list.journals";
+import JournalsTable from "./journals.table";
 
 import { connect } from "react-redux";
 import { getCommCenters } from "../../../actions/commCenters";
-
-import Map from "./map";
-import CommCentersTable from "./commCentersTable";
 
 const useStyles = (theme: Theme) =>
   createStyles({
@@ -26,32 +25,34 @@ const useStyles = (theme: Theme) =>
     },
   });
 
-class MapCommCenters extends Component {
+class Journals extends Component {
   render() {
-    const { classes, commCenters, error, loading, history } = this.props;
-
-    commCenters.sort(function (a, b) {
-      return a.index - b.index;
-    });
-
-    if (error) {
-      return <div>Error! {error.message}</div>;
-    }
-
-    if (loading) {
-      return <Loader />;
-    }
+    console.log(this.props);
+    const { classes } = this.props;
+    // const { classes, commCenters, error, loading, history } = this.props;
+    //
+    // commCenters.sort(function (a, b) {
+    //   return a.index - b.index;
+    // });
+    //
+    // if (error) {
+    //   return <div>Error! {error.message}</div>;
+    // }
+    //
+    // if (loading) {
+    //   return <Loader />;
+    // }
     return (
       <div style={{ margin: 20 }}>
         <Grid container spacing={2}>
           <Grid item xs={11}>
-            <Paper className={classes.paper} style={{ backgroundColor: "" }}>
-              <Map commCenters={commCenters} history={history} />
+            <Paper className={classes.paper}>
+              <ListJournals />
             </Paper>
           </Grid>
           <Grid item xs={10}>
             <Paper className={classes.paper}>
-              <CommCentersTable commCenters={commCenters} />
+              <JournalsTable />
             </Paper>
           </Grid>
         </Grid>
@@ -79,4 +80,4 @@ function mapStateToProps(state) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(withStyles(useStyles)(MapCommCenters));
+)(withStyles(useStyles)(Journals));
