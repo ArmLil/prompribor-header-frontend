@@ -4,7 +4,8 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Loader from "../../Loader";
 import ListJournals from "./list.journals";
-import JournalsTable from "./journals.table";
+import JournalsGeneralTable from "./journals.GeneralTable";
+import JournalsGnsTable from "./journals.GnsTable";
 
 import { connect } from "react-redux";
 import { getCommCenters } from "../../../actions/commCenters";
@@ -50,9 +51,14 @@ class Journals extends Component {
               <ListJournals />
             </Paper>
           </Grid>
-          <Grid item xs={10}>
+          <Grid item xs={12}>
             <Paper className={classes.paper}>
-              <JournalsTable />
+              <JournalsGeneralTable />
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper className={classes.paper}>
+              <JournalsGnsTable />
             </Paper>
           </Grid>
         </Grid>
