@@ -44,22 +44,6 @@ const Map = ({ commCenters, history }) => {
     return null;
   }
 
-  const [carPosition, setCarPosition] = useState([56.301, 42.688]);
-  useEffect(() => {
-    let isMounted = true;
-    socket.once("carPostion", (data) => {
-      console.log("socket on carPostion");
-      console.log(data.latlen);
-      console.log("carPosition=", carPosition);
-      if (isMounted && carPosition !== data.latlen) {
-        setCarPosition(data.latlen);
-      }
-    });
-    return () => {
-      isMounted = false;
-    };
-  }, [socket, carPosition]);
-
   // function LocationMarker() {
   //   const [position, setPosition] = useState(null);
   //   const map = useMapEvents({
@@ -88,6 +72,23 @@ const Map = ({ commCenters, history }) => {
   // <LocationMarker />
 
   function CarMarker() {
+    const [carPosition, setCarPosition] = useState([56.301, 42.688]);
+    useEffect(() => {
+      let isMounted = true;
+      const carPositionListeners = (data) => {
+        console.log("socket on carPostion");
+        console.log(data.latlen);
+        console.log("carPosition=", carPosition);
+        if (isMounted && carPosition !== data.latlen) {
+          setCarPosition(data.latlen);
+        }
+      };
+      socket.on("carPostion", carPositionListeners);
+      return () => {
+        isMounted = false;
+        socket.off("carPostion", carPositionListeners);
+      };
+    }, [socket, carPosition]);
     console.log("CarMarker...");
     // icon={<img src={car} style={{ width: "40px" }} />}
     return (

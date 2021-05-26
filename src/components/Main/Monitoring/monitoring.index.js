@@ -10,6 +10,7 @@ import {
   getController,
   updateControllerBySocket,
 } from "../../../actions/controller";
+import { socket, SocketContext } from "../../../socket_api";
 
 const useStyles = (theme: Theme) =>
   createStyles({
@@ -60,8 +61,11 @@ class Monitoring extends Component {
     dispatchGetController(getControllerUrl);
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const { dispatchGetController } = this.props;
-
+    const {
+      dispatchGetController,
+      dispatchUpdateControllerBySocket,
+      controller,
+    } = this.props;
     const thisPath = this.props.match.params.commCenterPath;
     const prevPath = prevProps.match.params.commCenterPath;
     if (prevPath !== thisPath) {
@@ -99,8 +103,8 @@ const mapDispatchToProps = (dispatch) => ({
   dispatchGetController: (url) => {
     dispatch(getController(url));
   },
-  dispatchUpdateControllerBySocket: (controller, registerControllerValue) => {
-    dispatch(updateControllerBySocket(registerControllerValue));
+  dispatchUpdateControllerBySocket: (controller, data) => {
+    dispatch(updateControllerBySocket(controller, data));
   },
 });
 

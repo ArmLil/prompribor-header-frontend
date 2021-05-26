@@ -12,7 +12,8 @@ export default function App() {
   const controller = useSelector((state) => state.controllerReducer.item);
 
   useEffect(() => {
-    socket.once("registerControllerValue", (data) => {
+    let isMounted = true;
+    const updateControllerListener = (data) => {
       console.log("socket on registerControllerValue");
       console.log(data);
 
@@ -22,8 +23,13 @@ export default function App() {
       ) {
         dispatch(updateControllerBySocket(controller, data));
       }
-    });
-  }, [controller, dispatch, socket]);
+    };
+    socket.on("registerControllerValue", updateControllerListener);
+    return () => {
+      isMounted = false;
+      socket.off("registerControllerValue", updateControllerListener);
+    };
+  }, [socket, controller]);
 
   return (
     <SocketContext.Provider value={socket}>
