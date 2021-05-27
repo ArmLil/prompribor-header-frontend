@@ -65,7 +65,7 @@ export default function JournalsGnsTable() {
               className={classes.headerCell}
               colSpan={3}
             >
-              <p className={classes.p}>ГНС-2</p>
+              <p className={classes.p}>ГНС-1</p>
             </TableCell>
             <TableCell
               align="center"
@@ -80,20 +80,6 @@ export default function JournalsGnsTable() {
               colSpan={3}
             >
               <p className={classes.p}>ГНС-2</p>
-            </TableCell>
-            <TableCell
-              align="center"
-              className={classes.headerCell}
-              rowSpan={2}
-            >
-              <p className={classes.p}>Прим.</p>
-            </TableCell>
-            <TableCell
-              align="center"
-              className={classes.headerCell}
-              colSpan={3}
-            >
-              <p className={classes.p}>ГНС-3</p>
             </TableCell>
             <TableCell
               align="center"
@@ -122,33 +108,12 @@ export default function JournalsGnsTable() {
             <TableCell align="center" className={classes.headerCell}>
               <p className={classes.p}>Обороты</p>
             </TableCell>
-            <TableCell align="center" className={classes.headerCell}>
-              <p className={classes.p}>Рвх.</p>
-            </TableCell>
-            <TableCell align="center" className={classes.headerCell}>
-              <p className={classes.p}>Рвых.</p>
-            </TableCell>
-            <TableCell align="center" className={classes.headerCell}>
-              <p className={classes.p}>Обороты</p>
-            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {commCenters.map((row) => (
             <TableRow>
               <TableCell className={classes.rowCell}>{}</TableCell>
-              <TableCell align="center" className={classes.rowCell}>
-                {}
-              </TableCell>
-              <TableCell align="center" className={classes.rowCell}>
-                {}
-              </TableCell>
-              <TableCell align="center" className={classes.rowCell}>
-                {}
-              </TableCell>
-              <TableCell align="center" className={classes.rowCell}>
-                {}
-              </TableCell>
               <TableCell align="center" className={classes.rowCell}>
                 {}
               </TableCell>
