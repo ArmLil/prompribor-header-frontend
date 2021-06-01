@@ -4,6 +4,8 @@ import ExtMarker from "react-leaflet-enhanced-marker";
 // import PersonPinCircleOutlinedIcon from "@material-ui/icons/PersonPinCircleOutlined";
 import LocalShippingIcon from "@material-ui/icons/LocalShipping";
 import Button from "@material-ui/core/Button";
+import PlaceIcon from "@material-ui/icons/Place";
+import "leaflet/dist/leaflet.css";
 
 // import car from "../../../images/car.jpeg";
 // import Control from 'react-leaflet-control';
@@ -18,6 +20,10 @@ import {
   Marker,
 } from "react-leaflet";
 import { SocketContext } from "../../../socket_api";
+
+import { api } from "../../../api";
+export const API_URL = `http://${api.host}:${api.port}`;
+const IMAGES_URL = `${API_URL}/images/{s}.tile.openstreetmap.org.{z}.{x}.{y}.png`;
 
 const Map = ({ commCenters, history }) => {
   console.log({ history });
@@ -88,8 +94,7 @@ const Map = ({ commCenters, history }) => {
         isMounted = false;
         socket.off("carPostion", carPositionListeners);
       };
-    }, [socket, carPosition]);
-    console.log("CarMarker...");
+    }, [carPosition]);
     // icon={<img src={car} style={{ width: "40px" }} />}
     return (
       <ExtMarker
@@ -103,6 +108,21 @@ const Map = ({ commCenters, history }) => {
     );
   }
 
+  // <Marker
+  //   key={place.name}
+  //   position={place.position}
+  //   eventHandlers={{
+  //     click: () => {
+  //       // showPreview(place);
+  //       history.push("/main/journals");
+  //     },
+  //   }}
+  // >
+  //   {/* show place's title on hover the marker */}
+  //   <Tooltip>{place.name}</Tooltip>
+  // </Marker>
+  //https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
+
   return (
     <div>
       Карта коммуникационных центров
@@ -114,14 +134,19 @@ const Map = ({ commCenters, history }) => {
       >
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url={IMAGES_URL}
         />
         <ChangeView center={defaultPosition} markers={places} />
         <MarkerClusterGroup showCoverageOnHover={true}>
           {places.map((place: Place) => (
-            <Marker
+            <ExtMarker
               key={place.name}
               position={place.position}
+              icon={
+                <PlaceIcon
+                  style={{ fontSize: 30, opacity: "0.95", color: "#4791db" }}
+                />
+              }
               eventHandlers={{
                 click: () => {
                   // showPreview(place);
@@ -129,9 +154,8 @@ const Map = ({ commCenters, history }) => {
                 },
               }}
             >
-              {/* show place's title on hover the marker */}
               <Tooltip>{place.name}</Tooltip>
-            </Marker>
+            </ExtMarker>
           ))}
         </MarkerClusterGroup>
         <Polyline pathOptions={{ color: "blue" }} positions={polyline} />
