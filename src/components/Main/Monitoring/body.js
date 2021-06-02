@@ -32,22 +32,24 @@ export default function Body({ controller }) {
   let groups = [];
   if (controller.registersGroups) {
     controller.registersGroups.forEach((gr, i) => {
-      groups.push(
-        <div className={classes.acordion} key={gr.id}>
-          <Accordion>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography className={classes.heading}>{gr.name}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <GroupTable group={gr} />
-            </AccordionDetails>
-          </Accordion>
-        </div>
-      );
+      console.log({ gr });
+      if (gr.name === "Учет нефтепродукта")
+        groups.push(
+          <div className={classes.acordion} key={gr.id}>
+            <Accordion expanded={true}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography className={classes.heading}>{gr.name}</Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <GroupTable group={gr} />
+              </AccordionDetails>
+            </Accordion>
+          </div>
+        );
     });
   }
 

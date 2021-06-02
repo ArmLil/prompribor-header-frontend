@@ -73,7 +73,7 @@ export default function NestedList({ commCenters }) {
                     <ListItemIcon>
                       <FiberManualRecordIcon style={{ width: "8px" }} />
                     </ListItemIcon>
-                    <ListItemText primary={comm.path}> </ListItemText>
+                    <ListItemText primary={comm.name}> </ListItemText>
                   </ListItem>
                 </Link>
               ))

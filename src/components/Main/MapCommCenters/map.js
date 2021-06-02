@@ -31,9 +31,15 @@ const Map = ({ commCenters, history }) => {
   const places = [];
   const polyline = [];
 
+  polyline.push([commCenters[0].lat, commCenters[0].len]);
+  polyline.push([56.298119030271884, 42.69747903460672]);
+  polyline.push([56.2948327769903, 42.71240785375273]);
+  polyline.push([56.28752100820184, 42.72038724745659]);
+
+  polyline.push([commCenters[1].lat, commCenters[1].len]);
   commCenters.forEach((item, i) => {
     places.push(Object.assign({}, item, { position: [item.lat, item.len] }));
-    polyline.push([item.lat, item.len]);
+    // polyline.push([item.lat, item.len]);
   });
   const defaultPosition: LatLngExpression = [55.755826, 37.6173]; // Paris position
   const showPreview = (place) => {
@@ -131,10 +137,18 @@ const Map = ({ commCenters, history }) => {
         zoom={4}
         className="map__container"
         style={{ height: "550px" }}
+        doubleClickZoom={true}
+        closePopupOnClick={true}
+        dragging={true}
+        zoomSnap={true}
+        zoomDelta={true}
+        trackResize={true}
+        touchZoom={true}
+        scrollWheelZoom={true}
       >
         <TileLayer
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-          url={IMAGES_URL}
+          url="https:{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <ChangeView center={defaultPosition} markers={places} />
         <MarkerClusterGroup showCoverageOnHover={true}>
