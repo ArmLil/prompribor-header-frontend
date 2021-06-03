@@ -1,12 +1,8 @@
 import { Carousel } from "3d-react-carousal";
-import React, { Component } from "react";
+import React from "react";
 import SingleJournal from "./singleJournal";
 
 class ListJournals extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     setTimeout(() => {
       var list_i_left = document.getElementsByClassName("fa fa-arrow-left");
@@ -32,10 +28,8 @@ class ListJournals extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-          <h1 className="App-title"></h1>
+          <h4 className="App-title">Журналы:</h4>
         </header>
-        Журналы:
-        <br />
         <br />
         <Carousel slides={slides} style={{ color: "green" }} />
       </div>

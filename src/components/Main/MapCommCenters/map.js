@@ -3,7 +3,7 @@ import MarkerClusterGroup from "react-leaflet-markercluster";
 import ExtMarker from "react-leaflet-enhanced-marker";
 // import PersonPinCircleOutlinedIcon from "@material-ui/icons/PersonPinCircleOutlined";
 import LocalShippingIcon from "@material-ui/icons/LocalShipping";
-import Button from "@material-ui/core/Button";
+// import Button from "@material-ui/core/Button";
 import PlaceIcon from "@material-ui/icons/Place";
 import "leaflet/dist/leaflet.css";
 
@@ -17,13 +17,13 @@ import {
   Tooltip,
   Polyline,
   useMap,
-  Marker,
+  // Marker,
 } from "react-leaflet";
 import { SocketContext } from "../../../socket_api";
 
 import { api } from "../../../api";
 export const API_URL = `http://${api.host}:${api.port}`;
-const IMAGES_URL = `${API_URL}/images/{s}.tile.openstreetmap.org.{z}.{x}.{y}.png`;
+// const IMAGES_URL = `${API_URL}/images/{s}.tile.openstreetmap.org.{z}.{x}.{y}.png`;
 
 const Map = ({ commCenters, history }) => {
   console.log({ history });
@@ -42,9 +42,9 @@ const Map = ({ commCenters, history }) => {
     // polyline.push([item.lat, item.len]);
   });
   const defaultPosition: LatLngExpression = [55.755826, 37.6173]; // Paris position
-  const showPreview = (place) => {
-    return place.toString();
-  };
+  // const showPreview = (place) => {
+  //   return place.toString();
+  // };
 
   function ChangeView({ center, markers }: IChangeView) {
     const map = useMap();

@@ -130,7 +130,7 @@ export default function SingleJournal({ alt, name }) {
         <div style={styles.child}>
           <h6 style={styles.topTitle}>ЗАПАДНЫЙ ВОЕННЫЙ ОКРУГ</h6>
           <div style={styles.gerb}>
-            <img src={Gerb} />
+            <img src={Gerb} alt="" />
           </div>
           <h6 style={styles.subTitle}>ЖУРНАЛ</h6>
           <p style={styles.text}>{name}</p>

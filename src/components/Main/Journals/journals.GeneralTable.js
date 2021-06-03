@@ -35,7 +35,7 @@ const useStyles = makeStyles({
 export default function JournalsGeneralTable() {
   const classes = useStyles();
 
-  let commCenters = [1, 2, 3, 4, 5];
+  let journalGeneralRows = [1, 2, 3, 4, 5];
 
   return (
     <TableContainer>
@@ -70,7 +70,7 @@ export default function JournalsGeneralTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {commCenters.map((row) => (
+          {journalGeneralRows.map((row) => (
             <TableRow hover key={row.path}>
               <TableCell className={classes.rowCell}>
                 <p className={classes.p}>{}</p>

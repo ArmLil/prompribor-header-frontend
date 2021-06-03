@@ -65,10 +65,6 @@ class GlobalContainer extends Component {
   // <Route path="/mod" component={BoardModerator} />
 
   render() {
-    const {
-      // showModeratorBoard,
-      // showAdminBoard,
-    } = this.state;
     const { user, bodyPhone } = this.props;
     console.log({ user, bodyPhone });
     const PrivateRoute = ({

@@ -10,7 +10,6 @@ import {
   getController,
   updateControllerBySocket,
 } from "../../../actions/controller";
-import { socket, SocketContext } from "../../../socket_api";
 
 const useStyles = (theme: Theme) =>
   createStyles({
@@ -61,11 +60,7 @@ class Monitoring extends Component {
     dispatchGetController(getControllerUrl);
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const {
-      dispatchGetController,
-      dispatchUpdateControllerBySocket,
-      controller,
-    } = this.props;
+    const { dispatchGetController } = this.props;
     const thisPath = this.props.match.params.commCenterPath;
     const prevPath = prevProps.match.params.commCenterPath;
     if (prevPath !== thisPath) {

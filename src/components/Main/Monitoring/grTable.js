@@ -89,7 +89,7 @@ export default function GroupTable({ group }) {
                   </StyledTableCell>
                 </StyledTableRow>
               );
-            }
+            } else return null;
           })}
         </TableBody>
       </Table>
