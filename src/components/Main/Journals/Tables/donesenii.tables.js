@@ -12,6 +12,9 @@ import Typography from "@material-ui/core/Typography";
 import StopRoundedIcon from "@material-ui/icons/StopRounded";
 
 const useStyles = makeStyles({
+  container: {
+    padding: 20,
+  },
   headerCell: {
     padding: 5,
     margin: 0,
@@ -19,11 +22,20 @@ const useStyles = makeStyles({
     fontWeight: "bold",
     fontSize: 14,
   },
+  headerCellEdit: {
+    padding: 5,
+    margin: 0,
+    border: "solid black 2px",
+    fontWeight: "bold",
+    fontSize: 14,
+    width: 20,
+  },
   rowCell: {
     padding: 10,
     margin: 0,
     border: "solid black 1px",
   },
+
   p: {
     margin: 1,
     display: "flex",
@@ -32,64 +44,75 @@ const useStyles = makeStyles({
   },
 });
 
-export default function JournalsGeneralTable() {
+function DoneseniTable({ commCenter }) {
   const classes = useStyles();
 
-  let journalGeneralRows = [1, 2, 3, 4, 5];
+  let rows = [1, 2, 3, 4, 5];
 
   return (
-    <TableContainer>
+    <TableContainer className={classes.container}>
       <Table size="small" aria-label="a dense table">
         <TableHead>
-          <TableRow>
+          <TableRow key="row1">
+            <TableCell className={classes.headerCell} colSpan={5}>
+              <p className={classes.p}>{commCenter.name}</p>
+            </TableCell>
+            <TableCell
+              align="center"
+              className={classes.headerCellEdit}
+              rowSpan={2}
+            >
+              <p className={classes.p}>Редакт.</p>
+            </TableCell>
+            <TableCell
+              align="center"
+              className={classes.headerCellEdit}
+              rowSpan={2}
+            >
+              <p className={classes.p}>Удалить</p>
+            </TableCell>
+          </TableRow>
+          <TableRow key="row2">
             <TableCell className={classes.headerCell}>
               <p className={classes.p}>Дата</p>
             </TableCell>
-            <TableCell align="center" className={classes.headerCell}>
+            <TableCell className={classes.headerCell}>
               <p className={classes.p}>Время</p>
               <p className={classes.p}>(ч. мин.)</p>
             </TableCell>
-            <TableCell align="center" className={classes.headerCell}>
-              <p className={classes.p}>От кого поступило</p>
-              <p className={classes.p}>донесение и распорежение</p>
+            <TableCell className={classes.headerCell}>
+              <p className={classes.p}>Линия</p>
+              <p className={classes.p}>ПМТП</p>
             </TableCell>
             <TableCell align="center" className={classes.headerCell}>
-              <p className={classes.p}>Содержание донесения,</p>
-              <p className={classes.p}>и распорежения</p>
+              <p className={classes.p}>Донесения и распорежения</p>
             </TableCell>
             <TableCell align="center" className={classes.headerCell}>
-              <p className={classes.p}>Кому передано</p>
-              <p className={classes.p}>на исполнение</p>
-            </TableCell>
-            <TableCell align="center" className={classes.headerCell}>
-              <p className={classes.p}>Отметка об исполнении</p>
+              <p className={classes.p}>Примечание</p>
             </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {journalGeneralRows.map((row, index) => (
-            <TableRow hover key={index}>
-              <TableCell className={classes.rowCell}>
-                <p className={classes.p}>{}</p>
+          {rows.map((row, index) => (
+            <TableRow key={index}>
+              <TableCell className={classes.rowCell}>{}</TableCell>
+              <TableCell align="center" className={classes.rowCell}>
+                {}
               </TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                <p className={classes.p}>{}</p>
-                <p className={classes.p}>{}</p>
+                {}
               </TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                <p className={classes.p}>{}</p>
-                <p className={classes.p}>{}</p>
+                {}
               </TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                <p className={classes.p}>{}</p>
-                <p className={classes.p}>{}</p>
+                {}
               </TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                <p className={classes.p}>{}</p>
-                <p className={classes.p}>{}</p>
+                {}
               </TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                <p className={classes.p}>{}</p>
+                {}
               </TableCell>
             </TableRow>
           ))}
@@ -97,4 +120,10 @@ export default function JournalsGeneralTable() {
       </Table>
     </TableContainer>
   );
+}
+
+export default function AvariiTables({ commCenters }) {
+  return commCenters.map((commCenter, index) => {
+    return <DoneseniTable key={index} commCenter={commCenter} />;
+  });
 }

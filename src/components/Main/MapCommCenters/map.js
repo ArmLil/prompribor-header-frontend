@@ -31,12 +31,12 @@ const Map = ({ commCenters, history }) => {
   const places = [];
   const polyline = [];
 
-  polyline.push([commCenters[0].lat, commCenters[0].len]);
+  polyline.push([commCenters[1].lat, commCenters[1].len]);
   polyline.push([56.298119030271884, 42.69747903460672]);
   polyline.push([56.2948327769903, 42.71240785375273]);
   polyline.push([56.28752100820184, 42.72038724745659]);
+  polyline.push([commCenters[0].lat, commCenters[0].len]);
 
-  polyline.push([commCenters[1].lat, commCenters[1].len]);
   commCenters.forEach((item, i) => {
     places.push(Object.assign({}, item, { position: [item.lat, item.len] }));
     // polyline.push([item.lat, item.len]);
@@ -86,18 +86,18 @@ const Map = ({ commCenters, history }) => {
   function CarMarker() {
     const [carPosition, setCarPosition] = useState([56.301, 42.688]);
     useEffect(() => {
-      let isMounted = true;
+      // let isMounted = true;
       const carPositionListeners = (data) => {
         console.log("socket on carPostion");
         console.log(data.latlen);
         console.log("carPosition=", carPosition);
-        if (isMounted && carPosition !== data.latlen) {
+        if (carPosition !== data.latlen) {
           setCarPosition(data.latlen);
         }
       };
       socket.on("carPostion", carPositionListeners);
       return () => {
-        isMounted = false;
+        // isMounted = false;
         socket.off("carPostion", carPositionListeners);
       };
     }, [carPosition]);

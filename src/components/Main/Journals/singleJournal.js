@@ -119,13 +119,18 @@ const styles = {
     color: "black",
     fontSize: "12px",
   },
+  table: {
+    position: "relative",
+    bottom: 10,
+    right: 10,
+  },
 };
 
 export default function SingleJournal({ alt, name }) {
   // <div style={styles.child}></div>
 
   return (
-    <div alt={alt} name={name} style={styles.root}>
+    <div alt={alt} name={name} style={styles.root} id={alt}>
       <div style={styles.bordersTopBottom}>
         <div style={styles.child}>
           <h6 style={styles.topTitle}>ЗАПАДНЫЙ ВОЕННЫЙ ОКРУГ</h6>
