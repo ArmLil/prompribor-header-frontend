@@ -7,7 +7,7 @@ import Journals from "./Journals/journals.index";
 import Controllers from "./Controllers/controllers.index";
 import CommCenters from "./CommCenters/commCenters.index";
 import Registers from "./Registers";
-import LeftBar from "./leftBar.component";
+import LeftBar from "./LeftBar/leftBar.index";
 import Loader from "../Loader";
 
 import { connect } from "react-redux";
@@ -63,7 +63,11 @@ class Main extends Component {
               path="/main/monitoring/:commCenterPath"
               component={Monitoring}
             />
-            <Route exact path="/main/journals" component={Journals} />
+            <Route
+              exact
+              path="/main/journals/:commCenterPath"
+              component={Journals}
+            />
             <Route exact path="/main/controllers" component={Controllers} />
             <Route exact path="/main/comm-centers" component={CommCenters} />
             <Route exact path="/main/registers" component={Registers} />

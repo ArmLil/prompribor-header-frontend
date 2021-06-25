@@ -4,21 +4,17 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Loader from "../../Loader";
 import ListJournals from "./list.journals";
-import JournalsGeneralTable from "./journals.GeneralTable";
+// import JournalsGeneralTable from "./journals.GeneralTable";
 import AvariiTables from "./Tables/avarii.tables";
 import DoneseniiTables from "./Tables/donesenii.tables";
 import NasosiTables from "./Tables/nasosi.tables";
 
 import { connect } from "react-redux";
 import { getCommCenters } from "../../../actions/commCenters";
+import { getController } from "../../../actions/controller";
 
 const useStyles = (theme: Theme) =>
   createStyles({
-    container: {
-      display: "grid",
-      gridTemplateColumns: "repeat(12, 1fr)",
-      gridGap: theme.spacing(3),
-    },
     paper: {
       padding: theme.spacing(1),
       textAlign: "center",
@@ -32,13 +28,33 @@ class Journals extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentJournal: <AvariiTables commCenters={this.props.commCenters} />,
+      currentJournal: <AvariiTables commCenter={""} />,
+      currentCommCenter: "",
     };
   }
   componentDidMount() {
-    //use native js to control Carousal library
+    //use native js to control Carousal library, on change slide we need to change tables
     setTimeout(() => {
+      const commCenterPath = this.props.match.params.commCenterPath;
       const { commCenters } = this.props;
+      let currentCommCenter = commCenters.find((commCenter) => {
+        if (commCenter.path === commCenterPath) {
+          return commCenter;
+        }
+        return null;
+      });
+      this.setState(
+        {
+          currentCommCenter,
+        },
+        () => {
+          this.setState({
+            currentJournal: (
+              <AvariiTables commCenter={this.state.currentCommCenter} />
+            ),
+          });
+        }
+      );
 
       //change arrows styles in library
       let list_i_left = document.getElementsByClassName("fa fa-arrow-left");
@@ -56,26 +72,35 @@ class Journals extends Component {
           let active_journal = document.getElementsByClassName(
             "slider-single preactive"
           );
-          let active_alt =
+          let active_journal_name =
             active_journal[0].childNodes[2].childNodes[0].attributes.name;
-          if (active_alt.nodeValue === "учета донесений и распорежений") {
-            this.setState({
-              currentJournal: <DoneseniiTables commCenters={commCenters} />,
-            });
-          }
           if (
-            active_alt.nodeValue === "учета режимов работы насосных станций"
+            active_journal_name.nodeValue === "учета донесений и распорежений"
           ) {
             this.setState({
-              currentJournal: <NasosiTables commCenters={commCenters} />,
+              currentJournal: (
+                <DoneseniiTables commCenter={this.state.currentCommCenter} />
+              ),
             });
           }
           if (
-            active_alt.nodeValue ===
+            active_journal_name.nodeValue ===
+            "учета режимов работы насосных станций"
+          ) {
+            this.setState({
+              currentJournal: (
+                <NasosiTables commCenter={this.state.currentCommCenter} />
+              ),
+            });
+          }
+          if (
+            active_journal_name.nodeValue ===
             "учета аварий и неисправностей на трубопроводе"
           ) {
             this.setState({
-              currentJournal: <AvariiTables commCenters={commCenters} />,
+              currentJournal: (
+                <AvariiTables commCenter={this.state.currentCommCenter} />
+              ),
             });
           }
         });
@@ -86,26 +111,33 @@ class Journals extends Component {
           let active_journal = document.getElementsByClassName(
             "slider-single proactive"
           );
-          let active_alt =
+          let active_journal_name =
             active_journal[0].childNodes[2].childNodes[0].attributes.name;
-          if (active_alt.nodeValue === "учета донесений и распорежений") {
-            this.setState({
-              currentJournal: <DoneseniiTables commCenters={commCenters} />,
-            });
-          }
           if (
-            active_alt.nodeValue === "учета режимов работы насосных станций"
-          ) {
-            this.setState({
-              currentJournal: <NasosiTables commCenters={commCenters} />,
-            });
-          }
-          if (
-            active_alt.nodeValue ===
+            active_journal_name.nodeValue ===
             "учета аварий и неисправностей на трубопроводе"
           ) {
             this.setState({
-              currentJournal: <AvariiTables commCenters={commCenters} />,
+              currentJournal: (
+                <AvariiTables commCenter={this.state.currentCommCenter} />
+              ),
+            });
+          } else if (
+            active_journal_name.nodeValue ===
+            "учета режимов работы насосных станций"
+          ) {
+            this.setState({
+              currentJournal: (
+                <NasosiTables commCenter={this.state.currentCommCenter} />
+              ),
+            });
+          } else if (
+            active_journal_name.nodeValue === "учета донесений и распорежений"
+          ) {
+            this.setState({
+              currentJournal: (
+                <DoneseniiTables commCenter={this.state.currentCommCenter} />
+              ),
             });
           }
         });
@@ -113,8 +145,41 @@ class Journals extends Component {
     }, 1000);
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const { commCenters } = this.props;
+    const thisPath = this.props.match.params.commCenterPath;
+    const prevPath = prevProps.match.params.commCenterPath;
+    if (prevPath !== thisPath) {
+      let currentCommCenter = commCenters.find((commCenter) => {
+        if (commCenter.path === thisPath) {
+          return commCenter;
+        }
+        return null;
+      });
+      this.setState({
+        currentCommCenter,
+      });
+      let currentJournalName = this.state.currentJournal.type.name;
+      if (currentJournalName === "AvariiTables") {
+        this.setState({
+          currentJournal: <AvariiTables commCenter={currentCommCenter} />,
+        });
+      }
+      if (currentJournalName === "NasosiTables") {
+        this.setState({
+          currentJournal: <NasosiTables commCenter={currentCommCenter} />,
+        });
+      }
+      if (currentJournalName === "DoneseniiTables") {
+        this.setState({
+          currentJournal: <DoneseniiTables commCenter={currentCommCenter} />,
+        });
+      }
+    }
+  }
+
   render() {
-    const { classes, commCenters, error, loading, history } = this.props;
+    const { classes, commCenters, error, loading } = this.props;
 
     commCenters.sort(function (a, b) {
       return a.index - b.index;
@@ -148,15 +213,20 @@ const mapDispatchToProps = (dispatch) => ({
   dispatchGetCommCenters: (url) => {
     dispatch(getCommCenters(url));
   },
+  dispatchGetController: (url) => {
+    dispatch(getController(url));
+  },
 });
 
 function mapStateToProps(state) {
   const { message } = state.message;
   const commCenters = state.commCentersReducer.items;
+  const controller = state.controllerReducer.item;
   const { error, loading } = state.commCentersReducer;
   return {
     message,
     commCenters,
+    controller,
     error,
     loading,
   };

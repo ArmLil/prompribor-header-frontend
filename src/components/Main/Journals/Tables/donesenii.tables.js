@@ -44,7 +44,7 @@ const useStyles = makeStyles({
   },
 });
 
-function DoneseniTable({ commCenter }) {
+function DoneseniiTable({ commCenter }) {
   const classes = useStyles();
 
   let rows = [1, 2, 3, 4, 5];
@@ -122,8 +122,6 @@ function DoneseniTable({ commCenter }) {
   );
 }
 
-export default function AvariiTables({ commCenters }) {
-  return commCenters.map((commCenter, index) => {
-    return <DoneseniTable key={index} commCenter={commCenter} />;
-  });
+export default function DoneseniiTables({ commCenter }) {
+  return <DoneseniiTable commCenter={commCenter} />;
 }

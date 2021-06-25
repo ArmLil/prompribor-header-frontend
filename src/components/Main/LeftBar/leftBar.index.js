@@ -19,13 +19,12 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import DvrOutlinedIcon from "@material-ui/icons/DvrOutlined"; //journals
 import DeviceHubIcon from "@material-ui/icons/DeviceHub"; //controllers
 import LocationOnOutlinedIcon from "@material-ui/icons/LocationOnOutlined"; //map
-// import DvrOutlinedIcon from "@material-ui/icons/DvrOutlined"; //monitoring
 import DnsOutlinedIcon from "@material-ui/icons/DnsOutlined"; //comm centers
 import ListAltOutlinedIcon from "@material-ui/icons/ListAltOutlined"; //registers
 import ListItemMonitor from "./listItemMonitor";
+import ListItemJournals from "./listItemJournals";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -93,35 +92,6 @@ export default function LeftBar({ commCenters }) {
     setOpen(false);
   };
 
-  // <List>
-  //   <Link to={"/main/controllers"} className={classes.link}>
-  //     <ListItem button key="Контролеры">
-  //       <ListItemIcon>
-  //         <DeviceHubIcon />
-  //       </ListItemIcon>
-  //       <ListItemText primary="Контролеры" />
-  //     </ListItem>
-  //   </Link>
-  //
-  //   <Link to={"/main/comm-centers"} className={classes.link}>
-  //     <ListItem button key="Коммуникационные центры">
-  //       <ListItemIcon>
-  //         <DnsOutlinedIcon />
-  //       </ListItemIcon>
-  //       <ListItemText primary="Коммуникационные центры" />
-  //     </ListItem>
-  //   </Link>
-  //
-  //   <Link to={"/main/registers"} className={classes.link}>
-  //     <ListItem button key="Регистры">
-  //       <ListItemIcon>
-  //         <ListAltOutlinedIcon />
-  //       </ListItemIcon>
-  //       <ListItemText primary="Регистры" />
-  //     </ListItem>
-  //   </Link>
-  // </List>
-
   return (
     <div className={classes.root}>
       <Drawer
@@ -170,17 +140,38 @@ export default function LeftBar({ commCenters }) {
             </ListItem>
           </Link>
           <ListItemMonitor commCenters={commCenters} />
-          <Link to={"/main/journals"} className={classes.link}>
-            <ListItem button key="Журналы">
-              <ListItemIcon>
-                <DvrOutlinedIcon />
-              </ListItemIcon>
-              <ListItemText primary="Журналы" />
-            </ListItem>
-          </Link>
+          <ListItemJournals commCenters={commCenters} />
         </List>
 
         <Divider />
+        <List>
+          <Link to={"/main/controllers"} className={classes.link}>
+            <ListItem button key="Контролеры">
+              <ListItemIcon>
+                <DeviceHubIcon />
+              </ListItemIcon>
+              <ListItemText primary="Контролеры" />
+            </ListItem>
+          </Link>
+
+          <Link to={"/main/comm-centers"} className={classes.link}>
+            <ListItem button key="Коммуникационные центры">
+              <ListItemIcon>
+                <DnsOutlinedIcon />
+              </ListItemIcon>
+              <ListItemText primary="Коммуникационные центры" />
+            </ListItem>
+          </Link>
+
+          <Link to={"/main/registers"} className={classes.link}>
+            <ListItem button key="Регистры">
+              <ListItemIcon>
+                <ListAltOutlinedIcon />
+              </ListItemIcon>
+              <ListItemText primary="Регистры" />
+            </ListItem>
+          </Link>
+        </List>
       </Drawer>
     </div>
   );

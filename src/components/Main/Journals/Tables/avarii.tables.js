@@ -50,7 +50,6 @@ function AvariiTable({ commCenter }) {
   const classes = useStyles();
 
   let rows = [1, 2, 3, 4, 5];
-  console.log(commCenter);
   return (
     <TableContainer className={classes.container}>
       <Table size="small" aria-label="a dense table">
@@ -124,8 +123,6 @@ function AvariiTable({ commCenter }) {
   );
 }
 
-export default function AvariiTables({ commCenters }) {
-  return commCenters.map((commCenter, index) => {
-    return <AvariiTable key={index} commCenter={commCenter} />;
-  });
+export default function AvariiTables({ commCenter }) {
+  return <AvariiTable commCenter={commCenter} />;
 }

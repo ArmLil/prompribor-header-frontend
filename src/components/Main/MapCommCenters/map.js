@@ -163,8 +163,9 @@ const Map = ({ commCenters, history }) => {
               }
               eventHandlers={{
                 click: () => {
+                  console.log({ place });
                   // showPreview(place);
-                  history.push("/main/journals");
+                  history.push(`/main/journals/${place.path}`);
                 },
               }}
             >
