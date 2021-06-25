@@ -70,7 +70,7 @@ function NasosiTable({ commCenter }) {
   const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
   const [openWorning, setOpenWorning] = React.useState(false);
 
-  let commCenters = [1, 2, 3, 4, 5];
+  let rows = [1, 2, 3, 4, 5];
 
   const handleAddDialogOpen = () => {
     setOpenAddDialog(true);
@@ -147,7 +147,7 @@ function NasosiTable({ commCenter }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {commCenters.map((row, index) => (
+          {rows.map((row, index) => (
             <TableRow key={index}>
               <TableCell className={classes.rowCell}>{}</TableCell>
               <TableCell align="center" className={classes.rowCell}>
@@ -199,7 +199,7 @@ function NasosiTable({ commCenter }) {
 }
 
 export default function NasosiTables({ commCenter }) {
-  // return commCenters.map((commCenter, index) => {
+  // return rows.map((commCenter, index) => {
   //   return <NasosiTable key={index} commCenter={commCenter} />;
   // });
   return <NasosiTable commCenter={commCenter} />;
