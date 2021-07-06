@@ -42,8 +42,7 @@ export const getController = (url) => (dispatch) => {
         error.toString();
 
       dispatch(fetchControllerFail(message));
-      dispatch(setMessage(message));
-      return Promise.reject();
+      // return Promise.reject();
     }
   );
 };

@@ -28,7 +28,7 @@ export default function commCentersReducer(state = initialState, action) {
       return {
         ...state,
         loading: false,
-        error: action.payload.error,
+        error: action.payload,
         items: [],
       };
     default:

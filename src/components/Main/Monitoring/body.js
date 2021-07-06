@@ -5,6 +5,9 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Box from "@material-ui/core/Box";
+import StopRoundedIcon from "@material-ui/icons/StopRounded";
+
 import GroupTable from "./grTable";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -14,7 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: 10,
       backgroundColor: "#fcfdf4",
       overflowY: "scroll",
-      maxHeight: "74vh",
+      // maxHeight: "74vh",
     },
     acordion: {
       width: "100%",
@@ -24,19 +27,75 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: theme.typography.pxToRem(16),
       fontWeight: theme.typography.fontWeightMedium,
     },
+    title: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "baseline",
+      marginLeft: theme.spacing(3),
+      marginBottom: theme.spacing(1),
+    },
+    titleRoot: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+    subTitle: {
+      marginRight: 10,
+      color: theme.palette.text.secondary,
+    },
   })
 );
 
-export default function Body({ controller }) {
+function ControllerValue({ controller }) {
   const classes = useStyles();
+  const [expanded, setExpanded] = React.useState(true);
   let groups = [];
   if (controller.registersGroups) {
     controller.registersGroups.forEach((gr, i) => {
-      console.log({ gr });
-      // if (gr.name === "Учет нефтепродукта")
       groups.push(
         <div className={classes.acordion} key={gr.id}>
-          <Accordion expanded={true}>
+          <div className={classes.titleRoot}>
+            <div className={classes.firstLayerTitle}>
+              <div className={classes.title}>
+                <Box className={classes.subTitle} style={{ fontSize: 14 }}>
+                  Контролер -
+                </Box>
+                <Box fontWeight="fontWeightMedium" style={{ fontSize: 16 }}>
+                  {controller.name} (ID-{controller.modbusId})
+                </Box>
+              </div>
+              <div className={classes.title}>
+                <Box className={classes.subTitle} style={{ fontSize: 12 }}>
+                  Статус -
+                </Box>
+
+                {controller.status === "offline" ? (
+                  <Box style={{ fontSize: 12 }}>офлайн</Box>
+                ) : (
+                  <Box style={{ fontSize: 12 }}>онлайн</Box>
+                )}
+                <Box>
+                  <StopRoundedIcon
+                    style={{
+                      color:
+                        controller.status === "offline" ? "#d50000" : "#64dd17",
+                      margin: 0,
+                    }}
+                  />
+                </Box>
+              </div>
+            </div>
+            <div className={classes.title}>
+              <Box
+                className={classes.subTitle}
+                style={{ fontSize: 12, marginRight: 10 }}
+              >
+                Описание -
+              </Box>
+              <Box style={{ fontSize: 14 }}>{controller.description}</Box>
+            </div>
+          </div>
+          <Accordion expanded={expanded} onClick={() => setExpanded(!expanded)}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
@@ -54,4 +113,10 @@ export default function Body({ controller }) {
   }
 
   return <div className={classes.root}>{groups}</div>;
+}
+
+export default function Body({ controllersForCommCenter }) {
+  return controllersForCommCenter.map((controller, index) => {
+    return <ControllerValue key={index} controller={controller} />;
+  });
 }

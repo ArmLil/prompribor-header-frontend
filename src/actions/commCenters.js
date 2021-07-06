@@ -24,10 +24,15 @@ export const getCommCenters = (url) => (dispatch) => {
   dispatch(fetchCommCentersBegin());
   return dataService.getData(url).then(
     (response) => {
+      console.log(response);
+      if (response.message) {
+        throw Error(response.massage);
+      }
       dispatch(fetchCommCentersSuccess(response.data));
       return Promise.resolve();
     },
     (error) => {
+      console.log(error);
       const message =
         (error.response &&
           error.response.data &&
@@ -36,8 +41,7 @@ export const getCommCenters = (url) => (dispatch) => {
         error.toString();
 
       dispatch(fetchCommCentersFail(message));
-      dispatch(setMessage(message));
-      return Promise.reject();
+      // return Promise.reject();
     }
   );
 };

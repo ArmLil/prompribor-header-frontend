@@ -4,12 +4,14 @@ import "../node_modules/font-awesome/css/font-awesome.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import GlobalContainer from "./components/global.container";
-import { updateControllerBySocket } from "./actions/controller";
+import { updateControllerBySocket } from "./actions/controllersForCommCenters";
 import { socket, SocketContext } from "./socket_api";
 
 export default function App() {
   const dispatch = useDispatch();
-  const controller = useSelector((state) => state.controllerReducer.item);
+  const controllers = useSelector(
+    (state) => state.controllersForCommCentersReducer.controllers
+  );
 
   useEffect(() => {
     // let isMounted = true;
@@ -17,19 +19,14 @@ export default function App() {
       console.log("socket on registerControllerValue");
       console.log(data);
 
-      if (
-        controller.name !== "" &&
-        controller.modbusId === data.controllerModbusId
-      ) {
-        dispatch(updateControllerBySocket(controller, data));
-      }
+      dispatch(updateControllerBySocket(controllers, data));
     };
     socket.on("registerControllerValue", updateControllerListener);
     return () => {
       // isMounted = false;
       socket.off("registerControllerValue", updateControllerListener);
     };
-  }, [controller, dispatch]);
+  }, [controllers, dispatch]);
 
   return (
     <SocketContext.Provider value={socket}>

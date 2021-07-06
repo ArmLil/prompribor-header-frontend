@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function Title({ controller }) {
+export default function Title({ commCenter }) {
   const classes = useStyles();
   return (
     <div className={classes.root}>
@@ -42,7 +42,7 @@ export default function Title({ controller }) {
               Коммуникационный центр -
             </Box>
             <Box fontWeight="fontWeightMedium" style={{ fontSize: 22 }}>
-              {controller.commCenter.name}
+              {commCenter.name}
             </Box>
           </div>
           <div className={classes.title}>
@@ -50,7 +50,7 @@ export default function Title({ controller }) {
               Статус -
             </Box>
 
-            {controller.commCenter.status === "offline" ? (
+            {commCenter.status === "offline" ? (
               <Box style={{ fontSize: 14 }}>офлайн</Box>
             ) : (
               <Box style={{ fontSize: 14 }}>онлайн</Box>
@@ -59,9 +59,7 @@ export default function Title({ controller }) {
               <StopRoundedIcon
                 style={{
                   color:
-                    controller.commCenter.status === "offline"
-                      ? "#d50000"
-                      : "#64dd17",
+                    commCenter.status === "offline" ? "#d50000" : "#64dd17",
                   margin: 0,
                 }}
               />
@@ -75,53 +73,10 @@ export default function Title({ controller }) {
           >
             Описание -
           </Box>
-          <Box style={{ fontSize: 14 }}>
-            {controller.commCenter.description}
-          </Box>
+          <Box style={{ fontSize: 14 }}>{commCenter.description}</Box>
         </div>
       </div>
       <Divider />
-      <div>
-        <div className={classes.firstLayerTitle}>
-          <div className={classes.title}>
-            <Box className={classes.subTitle} style={{ fontSize: 14 }}>
-              Контролер -
-            </Box>
-            <Box fontWeight="fontWeightMedium" style={{ fontSize: 16 }}>
-              {controller.name} (ID-{controller.modbusId})
-            </Box>
-          </div>
-          <div className={classes.title}>
-            <Box className={classes.subTitle} style={{ fontSize: 12 }}>
-              Статус -
-            </Box>
-
-            {controller.status === "offline" ? (
-              <Box style={{ fontSize: 12 }}>офлайн</Box>
-            ) : (
-              <Box style={{ fontSize: 12 }}>онлайн</Box>
-            )}
-            <Box>
-              <StopRoundedIcon
-                style={{
-                  color:
-                    controller.status === "offline" ? "#d50000" : "#64dd17",
-                  margin: 0,
-                }}
-              />
-            </Box>
-          </div>
-        </div>
-        <div className={classes.title}>
-          <Box
-            className={classes.subTitle}
-            style={{ fontSize: 12, marginRight: 10 }}
-          >
-            Описание -
-          </Box>
-          <Box style={{ fontSize: 14 }}>{controller.description}</Box>
-        </div>
-      </div>
     </div>
   );
 }
