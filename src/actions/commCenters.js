@@ -3,7 +3,6 @@ import {
   FETCH_COMMCENTERS_SUCCESS,
   FETCH_COMMCENTERS_FAIL,
 } from "./types";
-import { setMessage } from "./message";
 import dataService from "../services/data.service";
 
 export const fetchCommCentersBegin = () => ({
@@ -24,7 +23,6 @@ export const getCommCenters = (url) => (dispatch) => {
   dispatch(fetchCommCentersBegin());
   return dataService.getData(url).then(
     (response) => {
-      console.log(response);
       if (response.message) {
         throw Error(response.massage);
       }

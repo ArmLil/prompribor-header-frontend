@@ -35,6 +35,7 @@ class Journals extends Component {
   componentDidMount() {
     //use native js to control Carousal library, on change slide we need to change tables
     setTimeout(() => {
+      console.log("componentDidMount");
       const commCenterPath = this.props.match.params.commCenterPath;
       const { commCenters } = this.props;
       let currentCommCenter = commCenters.find((commCenter) => {
@@ -146,6 +147,7 @@ class Journals extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
+    console.log("componentDidUpdate");
     const { commCenters } = this.props;
     const thisPath = this.props.match.params.commCenterPath;
     const prevPath = prevProps.match.params.commCenterPath;
@@ -180,7 +182,6 @@ class Journals extends Component {
 
   render() {
     const { classes, commCenters, error, loading } = this.props;
-
     commCenters.sort(function (a, b) {
       return a.index - b.index;
     });
@@ -189,7 +190,11 @@ class Journals extends Component {
       return <div>Error! {error}</div>;
     }
 
-    if (loading) {
+    if (
+      loading ||
+      !this.state.currentCommCenter ||
+      !this.state.currentJournal.props.commCenter
+    ) {
       return <Loader />;
     }
 
@@ -213,20 +218,15 @@ const mapDispatchToProps = (dispatch) => ({
   dispatchGetCommCenters: (url) => {
     dispatch(getCommCenters(url));
   },
-  dispatchGetController: (url) => {
-    dispatch(getController(url));
-  },
 });
 
 function mapStateToProps(state) {
   const { message } = state.message;
   const commCenters = state.commCentersReducer.items;
-  const controller = state.controllerReducer.item;
   const { error, loading } = state.commCentersReducer;
   return {
     message,
     commCenters,
-    controller,
     error,
     loading,
   };

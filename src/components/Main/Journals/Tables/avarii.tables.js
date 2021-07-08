@@ -70,8 +70,6 @@ function AvariiTable({ commCenter }) {
   const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
   const [openWorning, setOpenWorning] = React.useState(false);
 
-  let rows = [1, 2, 3, 4, 5];
-
   const handleAddDialogOpen = () => {
     setOpenAddDialog(true);
   };
@@ -85,6 +83,7 @@ function AvariiTable({ commCenter }) {
     setOpenWorning(true);
     // setParameters(Object.assign({}, params.row));
   };
+  console.log(commCenter);
   return (
     <TableContainer className={classes.container}>
       <Tooltip title="Создать новый элемент">
@@ -139,20 +138,22 @@ function AvariiTable({ commCenter }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, index) => (
+          {commCenter.avarii_journal_data.map((row, index) => (
             <TableRow key={index}>
-              <TableCell className={classes.rowCell}>{}</TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                {}
+                {row.date}
               </TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                {}
+                {row.time}
               </TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                {}
+                {row.line}
               </TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                {}
+                {row.avarii}
+              </TableCell>
+              <TableCell align="center" className={classes.rowCell}>
+                {row.note}
               </TableCell>
               <TableCell align="center" className={classes.rowEditDeleteCell}>
                 <IconButton

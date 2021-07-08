@@ -4,7 +4,6 @@ import {
   FETCH_CONTROLLERS_FOR_COMMCENTER_FAIL,
   SOCKET_UPDATE_CONTROLLER,
 } from "./types";
-import { setMessage } from "./message";
 import dataService from "../services/data.service";
 
 export const fetchControllersForCommCenterBegin = () => ({

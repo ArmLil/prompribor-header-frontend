@@ -70,8 +70,6 @@ function DoneseniiTable({ commCenter }) {
   const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
   const [openWorning, setOpenWorning] = React.useState(false);
 
-  let rows = [1, 2, 3, 4, 5];
-
   const handleAddDialogOpen = () => {
     setOpenAddDialog(true);
   };
@@ -140,20 +138,22 @@ function DoneseniiTable({ commCenter }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, index) => (
+          {commCenter.donesenii_journal_data.map((row, index) => (
             <TableRow key={index}>
-              <TableCell className={classes.rowCell}>{}</TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                {}
+                {row.date}
               </TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                {}
+                {row.time}
               </TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                {}
+                {row.line}
               </TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                {}
+                {row.donesenii}
+              </TableCell>
+              <TableCell align="center" className={classes.rowCell}>
+                {row.note}
               </TableCell>
               <TableCell align="center" className={classes.rowEditDeleteCell}>
                 <IconButton

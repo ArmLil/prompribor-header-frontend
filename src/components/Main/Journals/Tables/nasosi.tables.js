@@ -147,26 +147,26 @@ function NasosiTable({ commCenter }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, index) => (
+          {commCenter.nasosi_journal_data.map((row, index) => (
             <TableRow key={index}>
-              <TableCell className={classes.rowCell}>{}</TableCell>
+              <TableCell className={classes.rowCell}>{row.date}</TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                {}
+                {row.time}
               </TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                {}
+                {row.line}
               </TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                {}
+                {row.P_in}
               </TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                {}
+                {row.P_out}
               </TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                {}
+                {row.revs}
               </TableCell>
               <TableCell align="center" className={classes.rowCell}>
-                {}
+                {row.note}
               </TableCell>
               <TableCell align="center" className={classes.rowEditDeleteCell}>
                 <IconButton
