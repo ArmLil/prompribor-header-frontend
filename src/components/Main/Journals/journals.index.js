@@ -5,9 +5,9 @@ import Grid from "@material-ui/core/Grid";
 import Loader from "../../Loader";
 import ListJournals from "./list.journals";
 // import JournalsGeneralTable from "./journals.GeneralTable";
-import AvariiTables from "./Tables/avarii.tables";
-import DoneseniiTables from "./Tables/donesenii.tables";
-import NasosiTables from "./Tables/nasosi.tables";
+import AvariiTables from "./Tables/Avarii/avarii.tables";
+import DoneseniiTables from "./Tables/Donesenii/donesenii.table.index";
+import NasosiTables from "./Tables/Nasosi/nasosi.table.index";
 
 import { connect } from "react-redux";
 import { getCommCenters } from "../../../actions/commCenters";
