@@ -7,9 +7,6 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import ArrowForwardOutlinedIcon from "@material-ui/icons/ArrowForwardOutlined";
-import Typography from "@material-ui/core/Typography";
-import StopRoundedIcon from "@material-ui/icons/StopRounded";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
@@ -69,8 +66,6 @@ function NasosiTable({ commCenter }) {
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
   const [openWorning, setOpenWorning] = React.useState(false);
-
-  let rows = [1, 2, 3, 4, 5];
 
   const handleAddDialogOpen = () => {
     setOpenAddDialog(true);

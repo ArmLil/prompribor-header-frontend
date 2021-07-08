@@ -2,16 +2,26 @@ import React, { Component } from "react";
 import { withStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { ruRU } from "@material-ui/core/locale";
 import Loader from "../../Loader";
 import ListJournals from "./list.journals";
 // import JournalsGeneralTable from "./journals.GeneralTable";
-import AvariiTables from "./Tables/Avarii/avarii.tables";
+import AvariiTables from "./Tables/Avarii/avarii.table.index";
 import DoneseniiTables from "./Tables/Donesenii/donesenii.table.index";
 import NasosiTables from "./Tables/Nasosi/nasosi.table.index";
 
 import { connect } from "react-redux";
 import { getCommCenters } from "../../../actions/commCenters";
-import { getController } from "../../../actions/controller";
+
+const theme = createMuiTheme(
+  {
+    palette: {
+      primary: { main: "#1976d2" },
+    },
+  },
+  ruRU
+);
 
 const useStyles = (theme: Theme) =>
   createStyles({
@@ -199,18 +209,22 @@ class Journals extends Component {
     }
 
     return (
-      <div style={{ margin: 20 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={11}>
-            <Paper className={classes.paper}>
-              <ListJournals />
-            </Paper>
+      <ThemeProvider theme={theme}>
+        <div style={{ margin: 20 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={11}>
+              <Paper className={classes.paper}>
+                <ListJournals />
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper className={classes.paper}>
+                {this.state.currentJournal}
+              </Paper>
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <Paper className={classes.paper}>{this.state.currentJournal}</Paper>
-          </Grid>
-        </Grid>
-      </div>
+        </div>
+      </ThemeProvider>
     );
   }
 }

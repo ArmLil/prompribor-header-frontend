@@ -11,8 +11,6 @@ const initialState = {
   error: null,
 };
 
-const controller = JSON.parse(localStorage.getItem("item"));
-
 export default function controllersForCommCentersReducer(
   state = initialState,
   action

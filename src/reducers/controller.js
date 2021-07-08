@@ -17,8 +17,6 @@ const initialState = {
   error: null,
 };
 
-const controller = JSON.parse(localStorage.getItem("item"));
-
 export default function controllerReducer(state = initialState, action) {
   switch (action.type) {
     case FETCH_CONTROLLER_BEGIN:
