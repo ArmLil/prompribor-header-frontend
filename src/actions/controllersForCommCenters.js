@@ -53,7 +53,6 @@ export const updateControllerBySocket = (
   let newControllers = [];
   controllers.forEach((controller, i) => {
     if (controller.registersGroups && controller.registersGroups.length > 0) {
-      console.log({ controller, registerControllerValue });
       let newController = Object.assign({}, controller);
       let regValue = "";
       let regContrValue = "";

@@ -2,6 +2,7 @@ import {
   FETCH_COMMCENTERS_BEGIN,
   FETCH_COMMCENTERS_SUCCESS,
   FETCH_COMMCENTERS_FAIL,
+  UPDATE_COMMCENTERS,
 } from "../actions/types";
 
 const initialState = {
@@ -30,6 +31,11 @@ export default function commCentersReducer(state = initialState, action) {
         loading: false,
         error: action.payload,
         items: [],
+      };
+    case UPDATE_COMMCENTERS:
+      return {
+        ...state,
+        items: action.payload,
       };
     default:
       return state;

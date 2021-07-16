@@ -235,11 +235,9 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 function mapStateToProps(state) {
-  const { message } = state.message;
   const commCenters = state.commCentersReducer.items;
   const { error, loading } = state.commCentersReducer;
   return {
-    message,
     commCenters,
     error,
     loading,

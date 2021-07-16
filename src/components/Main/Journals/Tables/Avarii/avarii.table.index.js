@@ -22,6 +22,13 @@ import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import LastPageIcon from "@material-ui/icons/LastPage";
 import TableFooter from "@material-ui/core/TableFooter";
+import dataService from "../../../../../services/data.service";
+import { getCommCenters } from "../../../../../actions/commCenters";
+import { addJournalData } from "../../../../../actions/commCenters";
+
+import { useDispatch, useSelector } from "react-redux";
+
+import AddDialog from "./avarii.addDialog";
 
 const useStyles = makeStyles({
   container: {
@@ -162,13 +169,15 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   );
 }
 
-function AvariiTable({ commCenter }) {
+export default function AvariiTables({ commCenter, handleCreateAvarii }) {
   const classes = useStyles();
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
   const [openWorning, setOpenWorning] = React.useState(false);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const dispatch = useDispatch();
+  const commCenters = useSelector((state) => state.commCentersReducer.items);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -197,8 +206,60 @@ function AvariiTable({ commCenter }) {
     setOpenWorning(true);
     // setParameters(Object.assign({}, params.row));
   };
+  const handleAddDialogClose = (params) => {
+    setOpenAddDialog(false);
+    // setParameters(Object.assign({}, params.row));
+  };
+  const handleCreate = (ev, date, time, line, avarii, note) => {
+    // setOpenAddDialog(false);
+    if (date === "") {
+      let today = new Date();
+      let dd = String(today.getDate()).padStart(2, "0");
+      let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+      let yyyy = today.getFullYear();
+
+      today = dd + "-" + mm + "-" + yyyy;
+      date = today;
+    } else {
+      let formateDate = new Date(date);
+      let dd = String(formateDate.getDate()).padStart(2, "0");
+      let mm = String(formateDate.getMonth() + 1).padStart(2, "0"); //January is 0!
+      let yyyy = formateDate.getFullYear();
+      formateDate = dd + "-" + mm + "-" + yyyy;
+      date = formateDate;
+    }
+    if (time === "") {
+      let today = new Date();
+      let hh = today.getHours();
+      let min = today.getMinutes();
+      let currentTime = hh + ":" + min;
+      time = currentTime;
+    }
+    dataService
+      .postData("avarii_journals_data", {
+        date,
+        time,
+        line,
+        avarii,
+        note,
+        commCenterPath: commCenter.path,
+      })
+      .then((result) => {
+        dispatch(
+          // addJournalData(commCenters, commCenterPath, journalName, journalData)
+          addJournalData(commCenters, commCenter.path, "avarii", result.data)
+        );
+        setOpenAddDialog(false);
+      })
+      .catch((err) => console.log({ err }));
+  };
   return (
     <div>
+      <AddDialog
+        handleAddDialogClose={handleAddDialogClose}
+        handleCreate={handleCreate}
+        openAddDialog={openAddDialog}
+      />
       <TableContainer className={classes.container}>
         <Tooltip title="Создать новый элемент">
           <Button
@@ -322,8 +383,4 @@ function AvariiTable({ commCenter }) {
       </TableContainer>
     </div>
   );
-}
-
-export default function AvariiTables({ commCenter }) {
-  return <AvariiTable commCenter={commCenter} />;
 }

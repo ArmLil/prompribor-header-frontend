@@ -2,6 +2,7 @@ import {
   FETCH_COMMCENTERS_BEGIN,
   FETCH_COMMCENTERS_SUCCESS,
   FETCH_COMMCENTERS_FAIL,
+  UPDATE_COMMCENTERS,
 } from "./types";
 import dataService from "../services/data.service";
 
@@ -16,6 +17,11 @@ export const fetchCommCentersSuccess = (payload) => ({
 
 export const fetchCommCentersFail = (payload) => ({
   type: FETCH_COMMCENTERS_FAIL,
+  payload,
+});
+
+export const updateCommCenters = (payload) => ({
+  type: UPDATE_COMMCENTERS,
   payload,
 });
 
@@ -42,4 +48,32 @@ export const getCommCenters = (url) => (dispatch) => {
       // return Promise.reject();
     }
   );
+};
+
+export const addJournalData = (
+  commCenters,
+  commCenterPath,
+  journalName,
+  journalData
+) => (dispatch) => {
+  let newCommCenters = [];
+  commCenters.forEach((commCenter, i) => {
+    if (commCenter.path && commCenter.path === commCenterPath) {
+      let newCommCenter = Object.assign({}, commCenter);
+      if (journalName === "avarii") {
+        newCommCenter.avarii_journal_data.push(journalData);
+      }
+      if (journalName === "donesenii") {
+        newCommCenter.donesenii_journal_data.push(journalData);
+      }
+      if (journalName === "nasosi") {
+        newCommCenter.nasosi_journal_data.push(journalData);
+      }
+      newCommCenters.push(newCommCenter);
+    } else {
+      newCommCenters.push(commCenter);
+    }
+  });
+  console.log({ newCommCenters });
+  dispatch(updateCommCenters(newCommCenters));
 };
