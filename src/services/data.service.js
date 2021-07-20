@@ -10,6 +10,10 @@ class DataService {
     let _url = API_URL + url;
     return axios.post(_url, body);
   }
+  putData(url, body) {
+    let _url = API_URL + url;
+    return axios.put(_url, body);
+  }
 }
 
 export default new DataService();

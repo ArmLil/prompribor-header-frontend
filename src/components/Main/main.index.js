@@ -35,7 +35,9 @@ class Main extends Component {
     }
   }
   render() {
+    console.log("render");
     const { classes, commCenters, error, loading } = this.props;
+    console.log({ commCenters });
     commCenters.sort(function (a, b) {
       return a.index - b.index;
     });

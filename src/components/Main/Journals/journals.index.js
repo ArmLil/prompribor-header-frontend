@@ -159,9 +159,13 @@ class Journals extends Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     console.log("componentDidUpdate");
     const { commCenters } = this.props;
+    const prevCommCenters = prevProps.commCenters;
     const thisPath = this.props.match.params.commCenterPath;
     const prevPath = prevProps.match.params.commCenterPath;
-    if (prevPath !== thisPath) {
+    if (
+      prevPath !== thisPath ||
+      JSON.stringify(commCenters) !== JSON.stringify(prevCommCenters)
+    ) {
       let currentCommCenter = commCenters.find((commCenter) => {
         if (commCenter.path === thisPath) {
           return commCenter;
@@ -191,6 +195,7 @@ class Journals extends Component {
   }
 
   render() {
+    console.log("render");
     const { classes, commCenters, error, loading } = this.props;
     commCenters.sort(function (a, b) {
       return a.index - b.index;

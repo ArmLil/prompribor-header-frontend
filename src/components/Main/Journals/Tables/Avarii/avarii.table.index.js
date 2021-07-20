@@ -1,11 +1,6 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
-import {
-  makeStyles,
-  useTheme,
-  Theme,
-  createStyles,
-} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -17,18 +12,17 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteForeverOutlinedIcon from "@material-ui/icons/DeleteForeverOutlined";
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import TablePagination from "@material-ui/core/TablePagination";
-import FirstPageIcon from "@material-ui/icons/FirstPage";
-import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
-import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import LastPageIcon from "@material-ui/icons/LastPage";
 import TableFooter from "@material-ui/core/TableFooter";
 import dataService from "../../../../../services/data.service";
 import { getCommCenters } from "../../../../../actions/commCenters";
 import { addJournalData } from "../../../../../actions/commCenters";
+import { editJournalData } from "../../../../../actions/commCenters";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import AddDialog from "./avarii.addDialog";
+import EditDialog from "./avarii.editDialog";
+import TablePaginationActions from "../tablePaginationActions";
 
 const useStyles = makeStyles({
   container: {
@@ -79,105 +73,21 @@ const useStyles = makeStyles({
   },
 });
 
-const useStyles1 = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      flexShrink: 0,
-      marginLeft: theme.spacing(2.5),
-    },
-  })
-);
-
-interface TablePaginationActionsProps {
-  count: number;
-  page: number;
-  rowsPerPage: number;
-  onChangePage: (
-    event: React.MouseEvent<HTMLButtonElement>,
-    newPage: number
-  ) => void;
-}
-
-function TablePaginationActions(props: TablePaginationActionsProps) {
-  const classes = useStyles1();
-  const theme = useTheme();
-  const { count, page, rowsPerPage, onChangePage } = props;
-
-  const handleFirstPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onChangePage(event, 0);
-  };
-
-  const handleBackButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onChangePage(event, page - 1);
-  };
-
-  const handleNextButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onChangePage(event, page + 1);
-  };
-
-  const handleLastPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
-
-  return (
-    <div className={classes.root}>
-      <IconButton
-        onClick={handleFirstPageButtonClick}
-        disabled={page === 0}
-        aria-label="first page"
-      >
-        {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
-      </IconButton>
-      <IconButton
-        onClick={handleBackButtonClick}
-        disabled={page === 0}
-        aria-label="previous page"
-      >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowRight />
-        ) : (
-          <KeyboardArrowLeft />
-        )}
-      </IconButton>
-      <IconButton
-        onClick={handleNextButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="next page"
-      >
-        {theme.direction === "rtl" ? (
-          <KeyboardArrowLeft />
-        ) : (
-          <KeyboardArrowRight />
-        )}
-      </IconButton>
-      <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="last page"
-      >
-        {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
-      </IconButton>
-    </div>
-  );
-}
-
-export default function AvariiTables({ commCenter, handleCreateAvarii }) {
+export default function AvariiTables({ commCenter }) {
   const classes = useStyles();
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
-  const [openUpdateDialog, setOpenUpdateDialog] = React.useState(false);
+  const [openEditDialog, setOpenEditDialog] = React.useState(false);
+  const [parameters, setParameters] = React.useState({});
   const [openWorning, setOpenWorning] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const dispatch = useDispatch();
   const commCenters = useSelector((state) => state.commCentersReducer.items);
+
+  React.useEffect(() => {
+    const setParams = () => {};
+    setParams();
+  }, [commCenter]);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -197,21 +107,56 @@ export default function AvariiTables({ commCenter, handleCreateAvarii }) {
     setOpenAddDialog(true);
   };
 
-  const handleUpdateDialogOpen = (params) => {
-    // setParameters(Object.assign({}, params.row));
-    setOpenUpdateDialog(true);
+  const handleDeleteWorningOpen = (parameters) => {
+    setOpenWorning(true);
+    // setParameters(Object.assign({}, parameters.row));
   };
 
-  const handleDeleteWorningOpen = (params) => {
-    setOpenWorning(true);
-    // setParameters(Object.assign({}, params.row));
+  const handleEditDialogOpen = (parameters) => {
+    setParameters(Object.assign({}, parameters));
+    setOpenEditDialog(true);
   };
-  const handleAddDialogClose = (params) => {
+
+  const handleAddDialogClose = () => {
     setOpenAddDialog(false);
-    // setParameters(Object.assign({}, params.row));
   };
+  const handleEditDialogClose = (parameters) => {
+    setOpenEditDialog(false);
+  };
+
+  const handleEdit = (ev, date, time, line, avarii, note, paramsId) => {
+    console.log("handleEdit", date, time, line, avarii, note, paramsId);
+    if (date !== "") {
+      let formateDate = new Date(date);
+      let dd = String(formateDate.getDate()).padStart(2, "0");
+      let mm = String(formateDate.getMonth() + 1).padStart(2, "0"); //January is 0!
+      let yyyy = formateDate.getFullYear();
+      formateDate = dd + "-" + mm + "-" + yyyy;
+      date = formateDate;
+    }
+    let putBody = { date };
+    if (time) putBody.time = time;
+    if (line) putBody.line = line;
+    if (avarii) putBody.avarii = avarii;
+    if (note) putBody.note = note;
+    putBody.commCenterPath = commCenter.path;
+    dataService
+      .putData(`avarii_journals_data/${paramsId}`, putBody)
+      .then((result) => {
+        console.log({ result });
+        dispatch(
+          // editJournalData(commCenters, commCenterPath, journalName, journalData)
+          editJournalData(commCenters, commCenter.path, "avarii", result.data)
+        );
+        setOpenEditDialog(false);
+      })
+      .catch((err) => console.log({ err }));
+  };
+
   const handleCreate = (ev, date, time, line, avarii, note) => {
     // setOpenAddDialog(false);
+    console.log("handleCreate", date);
+
     if (date === "") {
       let today = new Date();
       let dd = String(today.getDate()).padStart(2, "0");
@@ -253,12 +198,19 @@ export default function AvariiTables({ commCenter, handleCreateAvarii }) {
       })
       .catch((err) => console.log({ err }));
   };
+
   return (
     <div>
       <AddDialog
         handleAddDialogClose={handleAddDialogClose}
         handleCreate={handleCreate}
         openAddDialog={openAddDialog}
+      />
+      <EditDialog
+        handleEditDialogClose={handleEditDialogClose}
+        handleEdit={handleEdit}
+        openEditDialog={openEditDialog}
+        params={parameters}
       />
       <TableContainer className={classes.container}>
         <Tooltip title="Создать новый элемент">
@@ -338,8 +290,8 @@ export default function AvariiTables({ commCenter, handleCreateAvarii }) {
                       aria-label="edit"
                       color="primary"
                       className={classes.iconButton}
-                      onClick={(params) => {
-                        handleUpdateDialogOpen(params);
+                      onClick={() => {
+                        handleEditDialogOpen(row);
                       }}
                     >
                       <EditOutlinedIcon />
@@ -353,7 +305,9 @@ export default function AvariiTables({ commCenter, handleCreateAvarii }) {
                       aria-label="delete"
                       color="secondary"
                       className={classes.iconButton}
-                      onClick={(params) => handleDeleteWorningOpen(params)}
+                      onClick={(parameters) =>
+                        handleDeleteWorningOpen(parameters)
+                      }
                     >
                       <DeleteForeverOutlinedIcon />
                     </IconButton>

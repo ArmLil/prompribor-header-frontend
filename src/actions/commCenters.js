@@ -77,3 +77,54 @@ export const addJournalData = (
   console.log({ newCommCenters });
   dispatch(updateCommCenters(newCommCenters));
 };
+
+export const editJournalData = (
+  commCenters,
+  commCenterPath,
+  journalName,
+  journalData
+) => (dispatch) => {
+  let newCommCenters = [];
+  commCenters.forEach((commCenter, i) => {
+    if (commCenter.path && commCenter.path === commCenterPath) {
+      let newCommCenter = Object.assign({}, commCenter);
+      console.log('journalName === "avarii"');
+      if (journalName === "avarii") {
+        let newAvarii_journal_data = newCommCenter.avarii_journal_data.map(
+          (row, i) => {
+            if (row.id === journalData.id) {
+              return journalData;
+            } else return row;
+          }
+        );
+        newCommCenter.avarii_journal_data = newAvarii_journal_data;
+        console.log({ newCommCenter });
+      }
+      if (journalName === "donesenii") {
+        let newDonesenii_journal_data = newCommCenter.donesenii_journal_data.map(
+          (row, i) => {
+            if (row.id === journalData.id) {
+              return journalData;
+            } else return row;
+          }
+        );
+        newCommCenter.donesenii_journal_data = newDonesenii_journal_data;
+      }
+      if (journalName === "nasosi") {
+        let newNasosi_journal_data = newCommCenter.nasosi_journal_data.map(
+          (row, i) => {
+            if (row.id === journalData.id) {
+              return journalData;
+            } else return row;
+          }
+        );
+        newCommCenter.nasosi_journal_data = newNasosi_journal_data;
+      }
+      newCommCenters.push(newCommCenter);
+    } else {
+      newCommCenters.push(commCenter);
+    }
+  });
+  console.log({ newCommCenters });
+  dispatch(updateCommCenters(newCommCenters));
+};
