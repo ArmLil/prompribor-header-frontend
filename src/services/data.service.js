@@ -14,6 +14,10 @@ class DataService {
     let _url = API_URL + url;
     return axios.put(_url, body);
   }
+  deleteData(url, body) {
+    let _url = API_URL + url;
+    return axios.delete(_url);
+  }
 }
 
 export default new DataService();

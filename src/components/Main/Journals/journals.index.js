@@ -32,6 +32,14 @@ const useStyles = (theme: Theme) =>
       whiteSpace: "nowrap",
       marginBottom: theme.spacing(1),
     },
+    paperJournal: {
+      padding: theme.spacing(1),
+      textAlign: "center",
+      color: theme.palette.text.secondary,
+      whiteSpace: "nowrap",
+      marginBottom: theme.spacing(1),
+      // maxWidth: "180vh",
+    },
   });
 
 class Journals extends Component {
@@ -223,7 +231,7 @@ class Journals extends Component {
               </Paper>
             </Grid>
             <Grid item xs={12}>
-              <Paper className={classes.paper}>
+              <Paper className={classes.paperJournal}>
                 {this.state.currentJournal}
               </Paper>
             </Grid>

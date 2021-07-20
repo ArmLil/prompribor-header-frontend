@@ -40,7 +40,9 @@ label {
   height: 100vh;
 }
 
-html,
+html {
+  overflow-x: scroll;
+}
 body {
   height: 100%;
 }

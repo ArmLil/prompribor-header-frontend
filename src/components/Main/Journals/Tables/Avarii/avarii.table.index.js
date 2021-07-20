@@ -17,12 +17,14 @@ import dataService from "../../../../../services/data.service";
 import { getCommCenters } from "../../../../../actions/commCenters";
 import { addJournalData } from "../../../../../actions/commCenters";
 import { editJournalData } from "../../../../../actions/commCenters";
+import { deleteJournalData } from "../../../../../actions/commCenters";
 
 import { useDispatch, useSelector } from "react-redux";
 
 import AddDialog from "./avarii.addDialog";
 import EditDialog from "./avarii.editDialog";
 import TablePaginationActions from "../tablePaginationActions";
+import WorningDialog from "../WorningDialog";
 
 const useStyles = makeStyles({
   container: {
@@ -54,9 +56,18 @@ const useStyles = makeStyles({
     width: 20,
   },
   rowCell: {
-    padding: 10,
+    padding: 5,
     margin: 0,
     border: "solid black 1px",
+    maxWidth: 280,
+  },
+  rowP: {
+    overflow: "scroll",
+    margin: 0,
+    padding: 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   rowEditDeleteCell: {
     padding: 5,
@@ -109,7 +120,28 @@ export default function AvariiTables({ commCenter }) {
 
   const handleDeleteWorningOpen = (parameters) => {
     setOpenWorning(true);
-    // setParameters(Object.assign({}, parameters.row));
+    setParameters(Object.assign({}, parameters));
+  };
+
+  const handleDeleteWorningClose = (action, parameters) => {
+    setOpenWorning(false);
+    if (action === "submit") {
+      dataService
+        .deleteData(`avarii_journals_data/${parameters.id}`)
+        .then((result) => {
+          console.log({ result });
+          dispatch(
+            // editJournalData(commCenters, commCenterPath, journalName, journalData)
+            deleteJournalData(
+              commCenters,
+              commCenter.path,
+              "avarii",
+              parameters.id
+            )
+          );
+        })
+        .catch((err) => console.log({ err }));
+    }
   };
 
   const handleEditDialogOpen = (parameters) => {
@@ -125,7 +157,6 @@ export default function AvariiTables({ commCenter }) {
   };
 
   const handleEdit = (ev, date, time, line, avarii, note, paramsId) => {
-    console.log("handleEdit", date, time, line, avarii, note, paramsId);
     if (date !== "") {
       let formateDate = new Date(date);
       let dd = String(formateDate.getDate()).padStart(2, "0");
@@ -154,9 +185,6 @@ export default function AvariiTables({ commCenter }) {
   };
 
   const handleCreate = (ev, date, time, line, avarii, note) => {
-    // setOpenAddDialog(false);
-    console.log("handleCreate", date);
-
     if (date === "") {
       let today = new Date();
       let dd = String(today.getDate()).padStart(2, "0");
@@ -211,6 +239,11 @@ export default function AvariiTables({ commCenter }) {
         handleEdit={handleEdit}
         openEditDialog={openEditDialog}
         params={parameters}
+      />
+      <WorningDialog
+        openWorning={openWorning}
+        parameters={parameters}
+        handleClose={handleDeleteWorningClose}
       />
       <TableContainer className={classes.container}>
         <Tooltip title="Создать новый элемент">
@@ -277,10 +310,10 @@ export default function AvariiTables({ commCenter }) {
                     {row.line}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    {row.avarii}
+                    <p className={classes.rowP}>{row.avarii}</p>
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    {row.note}
+                    <p className={classes.rowP}>{row.note}</p>
                   </TableCell>
                   <TableCell
                     align="center"
@@ -305,9 +338,7 @@ export default function AvariiTables({ commCenter }) {
                       aria-label="delete"
                       color="secondary"
                       className={classes.iconButton}
-                      onClick={(parameters) =>
-                        handleDeleteWorningOpen(parameters)
-                      }
+                      onClick={() => handleDeleteWorningOpen(row)}
                     >
                       <DeleteForeverOutlinedIcon />
                     </IconButton>
