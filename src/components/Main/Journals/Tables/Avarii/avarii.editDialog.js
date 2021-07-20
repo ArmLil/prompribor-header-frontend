@@ -39,11 +39,13 @@ export default function FormDialog({
   openEditDialog,
   params,
 }) {
+  console.log({ params });
   const classes = useStyles();
   const [date, setDate] = React.useState(params.date || "");
   const [time, setTime] = React.useState(params.time || "");
-  const [line, setLine] = React.useState(params.line || "");
+  const [fromWho, setFromWho] = React.useState(params.fromWho || "");
   const [avarii, setAvarii] = React.useState(params.avarii || "");
+  const [executor, setExecutor] = React.useState(params.executor || "");
   const [note, setNote] = React.useState(params.note || "");
   const [avarii_shrink, setAvarii_shrink] = React.useState(false);
   const [avarii_error, setAvarii_error] = React.useState(false);
@@ -59,10 +61,12 @@ export default function FormDialog({
         }
         if (params.time) setTime(params.time);
         else setTime("");
-        if (params.line) setLine(params.line);
-        else setLine("");
+        if (params.fromWho) setFromWho(params.fromWho);
+        else setFromWho("");
         if (params.avarii) setAvarii(params.avarii);
         else setAvarii("");
+        if (params.executor) setExecutor(params.executor);
+        else setExecutor("");
         if (params.note) setNote(params.note);
         else setNote("");
       }
@@ -75,11 +79,14 @@ export default function FormDialog({
   const handleChangeTime = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTime(event.target.value);
   };
-  const handleChangeLine = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLine(event.target.value);
+  const handleChangeFromWho = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFromWho(event.target.value);
   };
   const handleChangeAvarii = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAvarii(event.target.value);
+  };
+  const handleChangeExecutor = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setExecutor(event.target.value);
   };
   const handleChangeNote = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNote(event.target.value);
@@ -125,10 +132,10 @@ export default function FormDialog({
             }}
           />
           <TextField
-            id="line"
-            value={line}
-            onChange={handleChangeLine}
-            label="Линия ПМТП"
+            id="fromWho"
+            value={fromWho}
+            onChange={handleChangeFromWho}
+            label="От кого поступила информация об аварии"
             style={{ padding: 8 }}
             margin="dense"
           />
@@ -140,12 +147,22 @@ export default function FormDialog({
               // setAvarii_shrink(true);
             }}
             multiline
-            label="Аварии и неисправности"
+            label="Содержание (место, вероятная причина аварии)"
             style={{ padding: 8 }}
             margin="dense"
             required
             helperText={avarii_helperText}
             error={avarii_error}
+          />
+          <TextField
+            id="executor"
+            value={executor}
+            onChange={handleChangeExecutor}
+            multiline
+            label="Исполнитель"
+            helperText="не обязательно"
+            style={{ padding: 8 }}
+            margin="dense"
           />
           <TextField
             id="note"
@@ -172,7 +189,16 @@ export default function FormDialog({
               } else {
                 setAvarii_error(false);
               }
-              handleEdit(ev, date, time, line, avarii, note, params.id);
+              handleEdit(
+                ev,
+                date,
+                time,
+                fromWho,
+                avarii,
+                executor,
+                note,
+                params.id
+              );
             }}
             color="primary"
           >

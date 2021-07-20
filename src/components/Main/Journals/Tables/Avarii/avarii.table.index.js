@@ -156,7 +156,16 @@ export default function AvariiTables({ commCenter }) {
     setOpenEditDialog(false);
   };
 
-  const handleEdit = (ev, date, time, line, avarii, note, paramsId) => {
+  const handleEdit = (
+    ev,
+    date,
+    time,
+    fromWho,
+    avarii,
+    executor,
+    note,
+    paramsId
+  ) => {
     if (date !== "") {
       let formateDate = new Date(date);
       let dd = String(formateDate.getDate()).padStart(2, "0");
@@ -167,8 +176,9 @@ export default function AvariiTables({ commCenter }) {
     }
     let putBody = { date };
     if (time) putBody.time = time;
-    if (line) putBody.line = line;
+    if (fromWho) putBody.fromWho = fromWho;
     if (avarii) putBody.avarii = avarii;
+    if (executor) putBody.executor = executor;
     if (note) putBody.note = note;
     putBody.commCenterPath = commCenter.path;
     dataService
@@ -184,7 +194,8 @@ export default function AvariiTables({ commCenter }) {
       .catch((err) => console.log({ err }));
   };
 
-  const handleCreate = (ev, date, time, line, avarii, note) => {
+  const handleCreate = (ev, date, time, fromWho, avarii, executor, note) => {
+    console.log({ date, time, fromWho, avarii, executor, note });
     if (date === "") {
       let today = new Date();
       let dd = String(today.getDate()).padStart(2, "0");
@@ -212,8 +223,9 @@ export default function AvariiTables({ commCenter }) {
       .postData("avarii_journals_data", {
         date,
         time,
-        line,
+        fromWho,
         avarii,
+        executor,
         note,
         commCenterPath: commCenter.path,
       })
@@ -259,7 +271,7 @@ export default function AvariiTables({ commCenter }) {
         <Table stickyHeader size="small" aria-label="sticky table">
           <TableHead>
             <TableRow key="row1">
-              <TableCell className={classes.headerCell} colSpan={7}>
+              <TableCell className={classes.headerCell} colSpan={8}>
                 <p className={classes.p}>{commCenter.name}</p>
               </TableCell>
             </TableRow>
@@ -272,14 +284,20 @@ export default function AvariiTables({ commCenter }) {
                 <p className={classes.p}>(ч. мин.)</p>
               </TableCell>
               <TableCell className={classes.headerCell}>
-                <p className={classes.p}>Линия</p>
-                <p className={classes.p}>ПМТП</p>
+                <p className={classes.p}>От кого поступила </p>
+                <p className={classes.p}>информация об аварии</p>
               </TableCell>
               <TableCell align="center" className={classes.headerCell}>
-                <p className={classes.p}>Аварии и неисправности</p>
+                <p className={classes.p}>Содержание</p>
+                <p className={classes.p}>(место, вероятная причина аварии)</p>
               </TableCell>
               <TableCell align="center" className={classes.headerCell}>
-                <p className={classes.p}>Примечание</p>
+                <p className={classes.p}>Кому передано</p>
+                <p className={classes.p}>на исполнение</p>
+              </TableCell>
+              <TableCell align="center" className={classes.headerCell}>
+                <p className={classes.p}>Отметка</p>
+                <p className={classes.p}>об устранении</p>
               </TableCell>
               <TableCell align="center" className={classes.headerCellEdit}>
                 <p className={classes.p}>Редакт.</p>
@@ -307,10 +325,13 @@ export default function AvariiTables({ commCenter }) {
                     {row.time}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    {row.line}
+                    {row.fromWho}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
                     <p className={classes.rowP}>{row.avarii}</p>
+                  </TableCell>
+                  <TableCell align="center" className={classes.rowCell}>
+                    <p className={classes.rowP}>{row.executor}</p>
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
                     <p className={classes.rowP}>{row.note}</p>

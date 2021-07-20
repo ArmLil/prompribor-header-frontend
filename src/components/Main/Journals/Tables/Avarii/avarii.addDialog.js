@@ -41,11 +41,12 @@ export default function FormDialog({
   const classes = useStyles();
   const [date, setDate] = React.useState("");
   const [time, setTime] = React.useState("");
-  const [line, setLine] = React.useState("");
+  const [fromWho, setFromWho] = React.useState("");
   const [avarii, setAvarii] = React.useState("");
   const [avarii_shrink, setAvarii_shrink] = React.useState(false);
   const [avarii_error, setAvarii_error] = React.useState(false);
   const [avarii_helperText, setAvarii_helperText] = React.useState("");
+  const [executor, setExecutor] = React.useState("");
   const [note, setNote] = React.useState("");
 
   const handleChangeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,11 +55,14 @@ export default function FormDialog({
   const handleChangeTime = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTime(event.target.value);
   };
-  const handleChangeLine = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setLine(event.target.value);
+  const handleChangeFromWho = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFromWho(event.target.value);
   };
   const handleChangeAvarii = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAvarii(event.target.value);
+  };
+  const handleChangeExecutor = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setExecutor(event.target.value);
   };
   const handleChangeNote = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNote(event.target.value);
@@ -69,8 +73,9 @@ export default function FormDialog({
         open={openAddDialog}
         onClose={() => {
           setTime("");
-          setLine("");
+          setFromWho("");
           setAvarii("");
+          setExecutor("");
           setNote("");
           handleAddDialogClose();
         }}
@@ -112,10 +117,10 @@ export default function FormDialog({
             helperText="не обязательно (текущяя время может заполняться автоматически)"
           />
           <TextField
-            id="line"
-            value={line}
-            onChange={handleChangeLine}
-            label="Линия ПМТП"
+            id="fromWho"
+            value={fromWho}
+            onChange={handleChangeFromWho}
+            label="От кого поступила информация об аварии"
             style={{ padding: 8 }}
             margin="dense"
           />
@@ -127,7 +132,7 @@ export default function FormDialog({
               // setAvarii_shrink(true);
             }}
             multiline
-            label="Аварии и неисправности"
+            label="Содержание (место, вероятная причина аварии)"
             style={{ padding: 8 }}
             margin="dense"
             required
@@ -135,11 +140,21 @@ export default function FormDialog({
             error={avarii_error}
           />
           <TextField
+            id="executor"
+            value={executor}
+            onChange={handleChangeExecutor}
+            multiline
+            label="Исполнитель"
+            helperText="не обязательно"
+            style={{ padding: 8 }}
+            margin="dense"
+          />
+          <TextField
             id="note"
             value={note}
             onChange={handleChangeNote}
             multiline
-            label="Примечание"
+            label="Отметка об устранении"
             helperText="не обязательно"
             style={{ padding: 8 }}
             margin="dense"
@@ -159,10 +174,11 @@ export default function FormDialog({
               } else {
                 setAvarii_error(false);
               }
-              handleCreate(ev, date, time, line, avarii, note);
+              handleCreate(ev, date, time, fromWho, avarii, executor, note);
               setTime("");
-              setLine("");
+              setFromWho("");
               setAvarii("");
+              setExecutor("");
               setNote("");
             }}
             color="primary"
