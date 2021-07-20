@@ -67,7 +67,13 @@ export default function FormDialog({
     <div>
       <Dialog
         open={openAddDialog}
-        onClose={handleAddDialogClose}
+        onClose={() => {
+          setTime("");
+          setLine("");
+          setAvarii("");
+          setNote("");
+          handleAddDialogClose();
+        }}
         PaperComponent={PaperComponent}
         aria-labelledby="form-dialog-title"
         className={classes.root}
@@ -154,6 +160,10 @@ export default function FormDialog({
                 setAvarii_error(false);
               }
               handleCreate(ev, date, time, line, avarii, note);
+              setTime("");
+              setLine("");
+              setAvarii("");
+              setNote("");
             }}
             color="primary"
           >
