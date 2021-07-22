@@ -141,7 +141,6 @@ export const deleteJournalData = (
     if (commCenter.path && commCenter.path === commCenterPath) {
       let newCommCenter = Object.assign({}, commCenter);
       if (journalName === "avarii") {
-        console.log('journalName === "avarii"');
         let newAvarii_journal_data = newCommCenter.avarii_journal_data.filter(
           (row, i) => row.id !== dataId
         );

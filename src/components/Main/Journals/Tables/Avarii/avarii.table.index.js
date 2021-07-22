@@ -214,8 +214,11 @@ export default function AvariiTables({ commCenter }) {
     }
     if (time === "") {
       let today = new Date();
-      let hh = today.getHours();
-      let min = today.getMinutes();
+      let hh = String(today.getHours());
+      let min = String(today.getMinutes());
+
+      if (hh.length === 1) hh = "0" + hh;
+      if (min.length === 1) min = "0" + min;
       let currentTime = hh + ":" + min;
       time = currentTime;
     }
