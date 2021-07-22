@@ -72,6 +72,7 @@ export default function FormDialog({
       <Dialog
         open={openAddDialog}
         onClose={() => {
+          setDate("");
           setTime("");
           setFromWho("");
           setAvarii("");
@@ -175,6 +176,7 @@ export default function FormDialog({
                 setAvarii_error(false);
               }
               handleCreate(ev, date, time, fromWho, avarii, executor, note);
+              setDate("");
               setTime("");
               setFromWho("");
               setAvarii("");

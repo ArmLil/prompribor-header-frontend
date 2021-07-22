@@ -39,7 +39,6 @@ export default function FormDialog({
   openEditDialog,
   params,
 }) {
-  console.log({ params });
   const classes = useStyles();
   const [date, setDate] = React.useState(params.date || "");
   const [time, setTime] = React.useState(params.time || "");
@@ -54,7 +53,6 @@ export default function FormDialog({
   React.useEffect(() => {
     const setParams = () => {
       if (params.date) {
-        console.log("useeffect, if params", params);
         if (date === "") {
           var newdate = params.date.split("-").reverse().join("-");
           setDate(newdate);

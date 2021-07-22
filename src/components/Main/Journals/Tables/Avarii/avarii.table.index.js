@@ -166,15 +166,8 @@ export default function AvariiTables({ commCenter }) {
     note,
     paramsId
   ) => {
-    if (date !== "") {
-      let formateDate = new Date(date);
-      let dd = String(formateDate.getDate()).padStart(2, "0");
-      let mm = String(formateDate.getMonth() + 1).padStart(2, "0"); //January is 0!
-      let yyyy = formateDate.getFullYear();
-      formateDate = dd + "-" + mm + "-" + yyyy;
-      date = formateDate;
-    }
-    let putBody = { date };
+    let putBody = {};
+    if (date) putBody.date = date;
     if (time) putBody.time = time;
     if (fromWho) putBody.fromWho = fromWho;
     if (avarii) putBody.avarii = avarii;
@@ -195,7 +188,6 @@ export default function AvariiTables({ commCenter }) {
   };
 
   const handleCreate = (ev, date, time, fromWho, avarii, executor, note) => {
-    console.log({ date, time, fromWho, avarii, executor, note });
     if (date === "") {
       let today = new Date();
       let dd = String(today.getDate()).padStart(2, "0");

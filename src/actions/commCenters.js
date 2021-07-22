@@ -74,7 +74,6 @@ export const addJournalData = (
       newCommCenters.push(commCenter);
     }
   });
-  console.log({ newCommCenters });
   dispatch(updateCommCenters(newCommCenters));
 };
 
@@ -88,7 +87,6 @@ export const editJournalData = (
   commCenters.forEach((commCenter, i) => {
     if (commCenter.path && commCenter.path === commCenterPath) {
       let newCommCenter = Object.assign({}, commCenter);
-      console.log('journalName === "avarii"');
       if (journalName === "avarii") {
         let newAvarii_journal_data = newCommCenter.avarii_journal_data.map(
           (row, i) => {
@@ -98,7 +96,6 @@ export const editJournalData = (
           }
         );
         newCommCenter.avarii_journal_data = newAvarii_journal_data;
-        console.log({ newCommCenter });
       }
       if (journalName === "donesenii") {
         let newDonesenii_journal_data = newCommCenter.donesenii_journal_data.map(
@@ -125,7 +122,6 @@ export const editJournalData = (
       newCommCenters.push(commCenter);
     }
   });
-  console.log({ newCommCenters });
   dispatch(updateCommCenters(newCommCenters));
 };
 
@@ -135,7 +131,6 @@ export const deleteJournalData = (
   journalName,
   dataId
 ) => (dispatch) => {
-  console.log({ dataId });
   let newCommCenters = [];
   commCenters.forEach((commCenter, i) => {
     if (commCenter.path && commCenter.path === commCenterPath) {
@@ -145,7 +140,6 @@ export const deleteJournalData = (
           (row, i) => row.id !== dataId
         );
         newCommCenter.avarii_journal_data = newAvarii_journal_data;
-        console.log({ newCommCenter });
       }
       if (journalName === "donesenii") {
         let newDonesenii_journal_data = newCommCenter.donesenii_journal_data.filter(
@@ -153,7 +147,7 @@ export const deleteJournalData = (
         );
         newCommCenter.donesenii_journal_data = newDonesenii_journal_data;
       }
-      if (journalName !== "nasosi") {
+      if (journalName === "nasosi") {
         let newNasosi_journal_data = newCommCenter.nasosi_journal_data.filter(
           (row, i) => row.id !== dataId
         );
@@ -164,6 +158,5 @@ export const deleteJournalData = (
       newCommCenters.push(commCenter);
     }
   });
-  console.log({ newCommCenters });
   dispatch(updateCommCenters(newCommCenters));
 };

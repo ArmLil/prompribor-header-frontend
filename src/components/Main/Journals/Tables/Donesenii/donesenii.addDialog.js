@@ -74,6 +74,7 @@ export default function FormDialog({
       <Dialog
         open={openAddDialog}
         onClose={() => {
+          setDate("");
           setTime("");
           setFromWho("");
           setDonesenii("");
@@ -177,6 +178,7 @@ export default function FormDialog({
                 setDonesenii_error(false);
               }
               handleCreate(ev, date, time, fromWho, donesenii, executor, note);
+              setDate("");
               setTime("");
               setFromWho("");
               setDonesenii("");

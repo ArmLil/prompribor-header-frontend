@@ -42,13 +42,14 @@ export default function FormDialog({
   const classes = useStyles();
   const [date, setDate] = React.useState(params.date || "");
   const [time, setTime] = React.useState(params.time || "");
-  const [fromWho, setFromWho] = React.useState(params.fromWho || "");
-  const [donesenii, setDonesenii] = React.useState(params.donesenii || "");
-  const [executor, setExecutor] = React.useState(params.executor || "");
+  const [line, setLine] = React.useState(params.line || "");
+  const [P_in, setP_in] = React.useState(params.P_in || "");
+  const [P_out, setP_out] = React.useState(params.P_out || "");
+  const [revs, setRevs] = React.useState(params.revs || "");
   const [note, setNote] = React.useState(params.note || "");
-  const [donesenii_shrink, setDonesenii_shrink] = React.useState(false);
-  const [donesenii_error, setDonesenii_error] = React.useState(false);
-  const [donesenii_helperText, setDonesenii_helperText] = React.useState("");
+  const [nasosi_shrink, setNasosi_shrink] = React.useState(false);
+  const [nasosi_error, setNasosi_error] = React.useState(false);
+  const [nasosi_helperText, setNasosi_helperText] = React.useState("");
 
   React.useEffect(() => {
     const setParams = () => {
@@ -59,12 +60,13 @@ export default function FormDialog({
         }
         if (params.time) setTime(params.time);
         else setTime("");
-        if (params.fromWho) setFromWho(params.fromWho);
-        else setFromWho("");
-        if (params.donesenii) setDonesenii(params.donesenii);
-        else setDonesenii("");
-        if (params.executor) setExecutor(params.executor);
-        else setExecutor("");
+        if (params.line) setLine(params.line);
+        else setLine("");
+        if (params.P_in) setP_in(params.P_in);
+        if (params.P_out) setP_out(params.P_out);
+        else setP_out("");
+        if (params.revs) setRevs(params.revs);
+        else setRevs("");
         if (params.note) setNote(params.note);
         else setNote("");
       }
@@ -77,16 +79,17 @@ export default function FormDialog({
   const handleChangeTime = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTime(event.target.value);
   };
-  const handleChangeFromWho = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFromWho(event.target.value);
+  const handleChangeLine = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLine(event.target.value);
   };
-  const handleChangeDonesenii = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setDonesenii(event.target.value);
+  const handleChangeP_in = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setP_in(event.target.value);
   };
-  const handleChangeExecutor = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setExecutor(event.target.value);
+  const handleChangeP_out = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setP_out(event.target.value);
+  };
+  const handleChangeRevs = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRevs(event.target.value);
   };
   const handleChangeNote = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNote(event.target.value);
@@ -101,7 +104,7 @@ export default function FormDialog({
         className={classes.root}
       >
         <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-          Донесение, распоряжение
+          Режим работы насосных станций
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -132,34 +135,49 @@ export default function FormDialog({
             }}
           />
           <TextField
-            id="fromWho"
-            value={fromWho}
-            onChange={handleChangeFromWho}
-            label="От кого поступило донесение, распоряжение"
+            id="line"
+            value={line}
+            onChange={handleChangeLine}
+            label="Линия ПМТП"
             style={{ padding: 8 }}
             margin="dense"
           />
           <TextField
-            id="donesenii"
-            value={donesenii}
-            onChange={handleChangeDonesenii}
+            id="P_in"
+            value={P_in}
+            onChange={handleChangeP_in}
             onClick={() => {
-              // setDonesenii_shrink(true);
+              // setNasosi_shrink(true);
             }}
             multiline
-            label="Содержание донесения, распоряжения"
+            label="Рвх."
             style={{ padding: 8 }}
             margin="dense"
             required
-            helperText={donesenii_helperText}
-            error={donesenii_error}
+            helperText={nasosi_helperText}
+            error={nasosi_error}
           />
           <TextField
-            id="executor"
-            value={executor}
-            onChange={handleChangeExecutor}
+            id="P_out"
+            value={P_out}
+            onChange={handleChangeP_out}
+            onClick={() => {
+              // setNasosi_shrink(true);
+            }}
             multiline
-            label="Исполнитель"
+            label="Рвых."
+            style={{ padding: 8 }}
+            margin="dense"
+            required
+            helperText={nasosi_helperText}
+            error={nasosi_error}
+          />
+          <TextField
+            id="revs"
+            value={revs}
+            onChange={handleChangeRevs}
+            multiline
+            label="Обороты"
             helperText="не обязательно"
             style={{ padding: 8 }}
             margin="dense"
@@ -181,21 +199,22 @@ export default function FormDialog({
           </Button>
           <Button
             onClick={(ev) => {
-              if (donesenii === "") {
-                setDonesenii_shrink(true);
-                setDonesenii_error(true);
-                setDonesenii_helperText("поле обязательно для заполнения");
+              if (P_in === "" || P_out === "" || revs === "") {
+                setNasosi_shrink(true);
+                setNasosi_error(true);
+                setNasosi_helperText("поле обязательно для заполнения");
                 return;
               } else {
-                setDonesenii_error(false);
+                setNasosi_error(false);
               }
               handleEdit(
                 ev,
                 date,
                 time,
-                fromWho,
-                donesenii,
-                executor,
+                line,
+                P_in,
+                P_out,
+                revs,
                 note,
                 params.id
               );

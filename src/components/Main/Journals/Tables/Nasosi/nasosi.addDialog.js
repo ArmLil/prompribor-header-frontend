@@ -34,59 +34,39 @@ function PaperComponent(props: PaperProps) {
 }
 
 export default function FormDialog({
-  handleEditDialogClose,
-  handleEdit,
-  openEditDialog,
-  params,
+  handleAddDialogClose,
+  handleCreate,
+  openAddDialog,
 }) {
   const classes = useStyles();
-  const [date, setDate] = React.useState(params.date || "");
-  const [time, setTime] = React.useState(params.time || "");
-  const [fromWho, setFromWho] = React.useState(params.fromWho || "");
-  const [donesenii, setDonesenii] = React.useState(params.donesenii || "");
-  const [executor, setExecutor] = React.useState(params.executor || "");
-  const [note, setNote] = React.useState(params.note || "");
-  const [donesenii_shrink, setDonesenii_shrink] = React.useState(false);
-  const [donesenii_error, setDonesenii_error] = React.useState(false);
-  const [donesenii_helperText, setDonesenii_helperText] = React.useState("");
+  const [date, setDate] = React.useState("");
+  const [time, setTime] = React.useState("");
+  const [line, setLine] = React.useState("");
+  const [P_in, setP_in] = React.useState("");
+  const [P_out, setP_out] = React.useState("");
+  const [nasosi_shrink, setNasosi_shrink] = React.useState(false);
+  const [nasosi_error, setNasosi_error] = React.useState(false);
+  const [nasosi_helperText, setNasosi_helperText] = React.useState("");
+  const [revs, setRevs] = React.useState("");
+  const [note, setNote] = React.useState("");
 
-  React.useEffect(() => {
-    const setParams = () => {
-      if (params.date) {
-        if (date === "") {
-          var newdate = params.date.split("-").reverse().join("-");
-          setDate(newdate);
-        }
-        if (params.time) setTime(params.time);
-        else setTime("");
-        if (params.fromWho) setFromWho(params.fromWho);
-        else setFromWho("");
-        if (params.donesenii) setDonesenii(params.donesenii);
-        else setDonesenii("");
-        if (params.executor) setExecutor(params.executor);
-        else setExecutor("");
-        if (params.note) setNote(params.note);
-        else setNote("");
-      }
-    };
-    setParams();
-  }, [params]);
   const handleChangeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDate(event.target.value);
   };
   const handleChangeTime = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTime(event.target.value);
   };
-  const handleChangeFromWho = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFromWho(event.target.value);
+  const handleChangeLine = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLine(event.target.value);
   };
-  const handleChangeDonesenii = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setDonesenii(event.target.value);
+  const handleChangeP_in = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setP_in(event.target.value);
   };
-  const handleChangeExecutor = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setExecutor(event.target.value);
+  const handleChangeP_out = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setP_out(event.target.value);
+  };
+  const handleChangeRevs = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRevs(event.target.value);
   };
   const handleChangeNote = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNote(event.target.value);
@@ -94,18 +74,27 @@ export default function FormDialog({
   return (
     <div>
       <Dialog
-        open={openEditDialog}
-        onClose={handleEditDialogClose}
+        open={openAddDialog}
+        onClose={() => {
+          setDate("");
+          setTime("");
+          setLine("");
+          setP_in("");
+          setP_out("");
+          setRevs("");
+          setNote("");
+          handleAddDialogClose();
+        }}
         PaperComponent={PaperComponent}
         aria-labelledby="form-dialog-title"
         className={classes.root}
       >
         <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-          Донесение, распоряжение
+          Режим работы насосных станций
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Пожалуйста, редактируйте необходимые поля.
+            Для создания нового элемента, пожалуйста, заполните поля.
           </DialogContentText>
           <TextField
             margin="dense"
@@ -118,6 +107,7 @@ export default function FormDialog({
             InputLabelProps={{
               shrink: true,
             }}
+            helperText="не обязательно (текущяя дата может заполняться автоматически)"
           />
           <TextField
             margin="dense"
@@ -130,37 +120,57 @@ export default function FormDialog({
             InputLabelProps={{
               shrink: true,
             }}
+            helperText="не обязательно (текущяя время может заполняться автоматически)"
           />
           <TextField
-            id="fromWho"
-            value={fromWho}
-            onChange={handleChangeFromWho}
-            label="От кого поступило донесение, распоряжение"
+            id="line"
+            value={line}
+            onChange={handleChangeLine}
+            label="Линия ПМТП"
             style={{ padding: 8 }}
             margin="dense"
+            helperText={nasosi_helperText}
+            error={nasosi_error}
           />
           <TextField
-            id="donesenii"
-            value={donesenii}
-            onChange={handleChangeDonesenii}
+            id="P_in"
+            value={P_in}
+            onChange={handleChangeP_in}
             onClick={() => {
-              // setDonesenii_shrink(true);
+              // setNasosi_shrink(true);
             }}
             multiline
-            label="Содержание донесения, распоряжения"
+            label="Рвх."
             style={{ padding: 8 }}
             margin="dense"
             required
-            helperText={donesenii_helperText}
-            error={donesenii_error}
+            helperText={nasosi_helperText}
+            error={nasosi_error}
           />
           <TextField
-            id="executor"
-            value={executor}
-            onChange={handleChangeExecutor}
+            id="P_out"
+            value={P_out}
+            onChange={handleChangeP_out}
+            onClick={() => {
+              // setNasosi_shrink(true);
+            }}
             multiline
-            label="Исполнитель"
-            helperText="не обязательно"
+            label="Рвых."
+            style={{ padding: 8 }}
+            margin="dense"
+            required
+            helperText={nasosi_helperText}
+            error={nasosi_error}
+          />
+          <TextField
+            id="revs"
+            value={revs}
+            onChange={handleChangeRevs}
+            multiline
+            label="Обороты"
+            required
+            helperText={nasosi_helperText}
+            error={nasosi_error}
             style={{ padding: 8 }}
             margin="dense"
           />
@@ -176,29 +186,27 @@ export default function FormDialog({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleEditDialogClose} color="primary">
+          <Button onClick={handleAddDialogClose} color="primary">
             Отменить
           </Button>
           <Button
             onClick={(ev) => {
-              if (donesenii === "") {
-                setDonesenii_shrink(true);
-                setDonesenii_error(true);
-                setDonesenii_helperText("поле обязательно для заполнения");
+              if (P_in === "" || P_out === "" || revs === "") {
+                setNasosi_shrink(true);
+                setNasosi_error(true);
+                setNasosi_helperText("поле обязательно для заполнения");
                 return;
               } else {
-                setDonesenii_error(false);
+                setNasosi_error(false);
               }
-              handleEdit(
-                ev,
-                date,
-                time,
-                fromWho,
-                donesenii,
-                executor,
-                note,
-                params.id
-              );
+              handleCreate(ev, date, time, line, P_in, P_out, revs, note);
+              setDate("");
+              setTime("");
+              setLine("");
+              setP_in("");
+              setP_out("");
+              setRevs("");
+              setNote("");
             }}
             color="primary"
           >
