@@ -21,8 +21,8 @@ import { deleteJournalData } from "../../../../../actions/commCenters";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import AddDialog from "./nasosi.addDialog";
-import EditDialog from "./nasosi.editDialog";
+import AddDialog from "./fuel.addDialog";
+import EditDialog from "./fuel.editDialog";
 import TablePaginationActions from "../tablePaginationActions";
 import WorningDialog from "../WorningDialog";
 
@@ -31,7 +31,9 @@ const useStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     maxHeight: 440,
+    // maxWidth: "90vw",
   },
+
   addButton: {
     width: 20,
     margin: 5,
@@ -60,14 +62,6 @@ const useStyles = makeStyles({
     margin: 0,
     border: "solid black 1px",
     maxWidth: 280,
-  },
-  rowP: {
-    overflow: "scroll",
-    margin: 0,
-    padding: 0,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
   },
   rowEditDeleteCell: {
     padding: 5,
@@ -127,7 +121,7 @@ export default function FuelTables({ commCenter }) {
     setOpenWorning(false);
     if (action === "submit") {
       dataService
-        .deleteData(`nasosi_journals_data/${parameters.id}`)
+        .deleteData(`fuel_journals_data/${parameters.id}`)
         .then((result) => {
           console.log({ result });
           dispatch(
@@ -135,7 +129,7 @@ export default function FuelTables({ commCenter }) {
             deleteJournalData(
               commCenters,
               commCenter.path,
-              "nasosi",
+              "fuel",
               parameters.id
             )
           );
@@ -181,12 +175,12 @@ export default function FuelTables({ commCenter }) {
     if (note) putBody.note = note;
     putBody.commCenterPath = commCenter.path;
     dataService
-      .putData(`nasosi_journals_data/${paramsId}`, putBody)
+      .putData(`fuel_journals_data/${paramsId}`, putBody)
       .then((result) => {
         console.log({ result });
         dispatch(
           // editJournalData(commCenters, commCenterPath, journalName, journalData)
-          editJournalData(commCenters, commCenter.path, "nasosi", result.data)
+          editJournalData(commCenters, commCenter.path, "fuel", result.data)
         );
         setOpenEditDialog(false);
       })
@@ -232,7 +226,7 @@ export default function FuelTables({ commCenter }) {
       time = currentTime;
     }
     dataService
-      .postData("nasosi_journals_data", {
+      .postData("fuel_journals_data", {
         date,
         time,
         temperature,
@@ -247,7 +241,7 @@ export default function FuelTables({ commCenter }) {
       .then((result) => {
         dispatch(
           // addJournalData(commCenters, commCenterPath, journalName, journalData)
-          addJournalData(commCenters, commCenter.path, "nasosi", result.data)
+          addJournalData(commCenters, commCenter.path, "fuel", result.data)
         );
         setOpenAddDialog(false);
       })
@@ -283,42 +277,52 @@ export default function FuelTables({ commCenter }) {
             Создать
           </Button>
         </Tooltip>
-        <Table stickyHeader size="small" aria-label="sticky table">
+        <Table
+          stickyHeader
+          size="small"
+          aria-label="sticky table"
+          className={classes.table}
+        >
           <TableHead>
             <TableRow key="row1">
-              <TableCell className={classes.headerCell} colSpan={9}>
+              <TableCell className={classes.headerCell} colSpan={11}>
                 <p className={classes.p}>{commCenter.name}</p>
               </TableCell>
             </TableRow>
             <TableRow key="row2">
-              <TableCell className={classes.headerCell}>
+              <TableCell className={classes.headerCell} width="5%">
                 <p className={classes.p}>Дата</p>
               </TableCell>
-              <TableCell className={classes.headerCell}>
+              <TableCell className={classes.headerCell} width="5%">
                 <p className={classes.p}>Время</p>
                 <p className={classes.p}>(ч. мин.)</p>
               </TableCell>
-              <TableCell className={classes.headerCell}>
+              <TableCell className={classes.headerCell} width="10%">
                 <p className={classes.p}>Температура</p>
-                <p className={classes.p}>°С</p>
+                <p className={classes.p}>(°С)</p>
+              </TableCell>
+              <TableCell className={classes.headerCell} width="30px">
+                <p className={classes.p}>Плотность</p>
+                <p className={classes.p}>(кг/м3)</p>
               </TableCell>
               <TableCell align="center" className={classes.headerCell}>
-                <p className={classes.p}>Плотность (кг/м3)</p>
+                <p className={classes.p}>Текущий объемный</p>
+                <p className={classes.p}>расход (м3/ч)</p>
               </TableCell>
               <TableCell align="center" className={classes.headerCell}>
-                <p className={classes.p}>Текущий объемный расход(м3/ч)</p>
+                <p className={classes.p}>Текущий массовый</p>
+                <p className={classes.p}>расход(кг/ч)</p>
               </TableCell>
               <TableCell align="center" className={classes.headerCell}>
-                <p className={classes.p}>Текущий массовый расход(кг/ч)</p>
+                <p className={classes.p}>Сумматор объема</p>
+                <p className={classes.p}> (литры)</p>
               </TableCell>
               <TableCell align="center" className={classes.headerCell}>
-                <p className={classes.p}>Сумматор объема (литры)</p>
+                <p className={classes.p}>Сумматор массы</p>
+                <p className={classes.p}> (кг)</p>
               </TableCell>
               <TableCell align="center" className={classes.headerCell}>
-                <p className={classes.p}>Сумматор массы (кг)</p>
-              </TableCell>
-              <TableCell align="center" className={classes.headerCell}>
-                <p className={classes.p}>Примечание</p>
+                <p className={classes.p}>Примеч.</p>
               </TableCell>
               <TableCell align="center" className={classes.headerCellEdit}>
                 <p className={classes.p}>Редакт.</p>
@@ -329,7 +333,7 @@ export default function FuelTables({ commCenter }) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {commCenter.nasosi_journal_data
+            {commCenter.fuel_journal_data
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row, index) => (
                 <TableRow
@@ -402,7 +406,7 @@ export default function FuelTables({ commCenter }) {
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={3}
-                count={commCenter.nasosi_journal_data.length}
+                count={commCenter.fuel_journal_data.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{

@@ -10,6 +10,7 @@ import ListJournals from "./list.journals";
 import AvariiTables from "./Tables/Avarii/avarii.table.index";
 import DoneseniiTables from "./Tables/Donesenii/donesenii.table.index";
 import NasosiTables from "./Tables/Nasosi/nasosi.table.index";
+import FuelTables from "./Tables/Fuel/fuel.table.index";
 
 import { connect } from "react-redux";
 import { getCommCenters } from "../../../actions/commCenters";
@@ -38,7 +39,6 @@ const useStyles = (theme: Theme) =>
       color: theme.palette.text.secondary,
       whiteSpace: "nowrap",
       marginBottom: theme.spacing(1),
-      // maxWidth: "180vh",
     },
   });
 
@@ -122,6 +122,16 @@ class Journals extends Component {
               ),
             });
           }
+          if (
+            active_journal_name.nodeValue ===
+            "учёта параметров процесса транспортирования горючего"
+          ) {
+            this.setState({
+              currentJournal: (
+                <FuelTables commCenter={this.state.currentCommCenter} />
+              ),
+            });
+          }
         });
       }
       let slider_right = document.getElementsByClassName("slider-right");
@@ -156,6 +166,15 @@ class Journals extends Component {
             this.setState({
               currentJournal: (
                 <DoneseniiTables commCenter={this.state.currentCommCenter} />
+              ),
+            });
+          } else if (
+            active_journal_name.nodeValue ===
+            "учёта параметров процесса транспортирования горючего"
+          ) {
+            this.setState({
+              currentJournal: (
+                <FuelTables commCenter={this.state.currentCommCenter} />
               ),
             });
           }
@@ -199,6 +218,11 @@ class Journals extends Component {
           currentJournal: <DoneseniiTables commCenter={currentCommCenter} />,
         });
       }
+      if (currentJournalName === "FuelTables") {
+        this.setState({
+          currentJournal: <FuelTables commCenter={currentCommCenter} />,
+        });
+      }
     }
   }
 
@@ -224,7 +248,7 @@ class Journals extends Component {
     return (
       <ThemeProvider theme={theme}>
         <div style={{ margin: 20 }}>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} style={{ width: "90vw" }}>
             <Grid item xs={11}>
               <Paper className={classes.paper}>
                 <ListJournals />

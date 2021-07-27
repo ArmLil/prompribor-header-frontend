@@ -20,6 +20,11 @@ class ListJournals extends React.Component {
         name={"учета донесений и распорежений"}
         id={"doneseni"}
       />,
+      <SingleJournal
+        alt={1}
+        name={"учёта параметров процесса транспортирования горючего"}
+        id={"fuel"}
+      />,
     ];
     return (
       <div className="App">

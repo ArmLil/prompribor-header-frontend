@@ -81,7 +81,7 @@ export default function FormDialog({
   ) => {
     setTotal_volume(event.target.value);
   };
-  const handleChangeCurrent_mass = (
+  const handleChangeTotal_mass = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setTotal_mass(event.target.value);
@@ -197,7 +197,7 @@ export default function FormDialog({
           <TextField
             id="total_volume"
             value={total_volume}
-            onChange={handleChangetTotal_volume}
+            onChange={handleChangeTotal_volume}
             multiline
             label="Сумматор объема"
             required
@@ -209,9 +209,9 @@ export default function FormDialog({
           <TextField
             id="total_mass"
             value={total_mass}
-            onChange={handleChangetTotal_mass}
+            onChange={handleChangeTotal_mass}
             multiline
-            label="Сумматор объема"
+            label="Сумматор массы"
             required
             helperText={fuel_helperText}
             error={fuel_error}

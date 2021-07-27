@@ -96,6 +96,7 @@ const styles = {
     right: 0,
     color: "black",
     fontSize: "16px",
+    fontWeight: "bold",
   },
   text: {
     position: "absolute",
@@ -104,6 +105,8 @@ const styles = {
     right: 0,
     color: "black",
     fontSize: "70%",
+    fontWeight: "bold",
+    whiteSpace: "initial",
   },
   footerText1: {
     position: "absolute",

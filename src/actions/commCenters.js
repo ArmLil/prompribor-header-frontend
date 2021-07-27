@@ -69,6 +69,9 @@ export const addJournalData = (
       if (journalName === "nasosi") {
         newCommCenter.nasosi_journal_data.push(journalData);
       }
+      if (journalName === "fuel") {
+        newCommCenter.fuel_journal_data.push(journalData);
+      }
       newCommCenters.push(newCommCenter);
     } else {
       newCommCenters.push(commCenter);
@@ -117,6 +120,16 @@ export const editJournalData = (
         );
         newCommCenter.nasosi_journal_data = newNasosi_journal_data;
       }
+      if (journalName === "fuel") {
+        let newFuel_journal_data = newCommCenter.fuel_journal_data.map(
+          (row, i) => {
+            if (row.id === journalData.id) {
+              return journalData;
+            } else return row;
+          }
+        );
+        newCommCenter.fuel_journal_data = newFuel_journal_data;
+      }
       newCommCenters.push(newCommCenter);
     } else {
       newCommCenters.push(commCenter);
@@ -152,6 +165,12 @@ export const deleteJournalData = (
           (row, i) => row.id !== dataId
         );
         newCommCenter.nasosi_journal_data = newNasosi_journal_data;
+      }
+      if (journalName === "fuel") {
+        let newFuel_journal_data = newCommCenter.fuel_journal_data.filter(
+          (row, i) => row.id !== dataId
+        );
+        newCommCenter.fuel_journal_data = newFuel_journal_data;
       }
       newCommCenters.push(newCommCenter);
     } else {

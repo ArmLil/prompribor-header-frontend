@@ -49,10 +49,10 @@ export default function FormDialog({
   const [current_volume, setCurrent_volume] = React.useState(
     params.current_volume || ""
   );
-  const [current_mass, setsetCurrent_mass] = React.useState(
+  const [current_mass, setCurrent_mass] = React.useState(
     params.current_mass || ""
   );
-  const [total_volume, setsetTotal_volume] = React.useState(
+  const [total_volume, setTotal_volume] = React.useState(
     params.total_volume || ""
   );
   const [total_mass, setTotal_mass] = React.useState(params.total_mass || "");
@@ -173,8 +173,8 @@ export default function FormDialog({
             }}
           />
           <TextField
-            id="line"
-            value={line}
+            id="temperature"
+            value={temperature}
             onChange={handleChangeTemperature}
             label="Температура"
             style={{ padding: 8 }}
@@ -223,7 +223,7 @@ export default function FormDialog({
           <TextField
             id="total_volume"
             value={total_volume}
-            onChange={handleChangetTotal_volume}
+            onChange={handleChangeTotal_volume}
             multiline
             label="Сумматор объема"
             helperText="не обязательно"
@@ -233,7 +233,7 @@ export default function FormDialog({
           <TextField
             id="total_mass"
             value={total_mass}
-            onChange={handleChangetTotal_mass}
+            onChange={handleChangeTotal_mass}
             multiline
             label="Сумматор объема"
             helperText="не обязательно"
@@ -272,6 +272,7 @@ export default function FormDialog({
               handleEdit(
                 ev,
                 date,
+                time,
                 temperature,
                 density,
                 current_volume,
