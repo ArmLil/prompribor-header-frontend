@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
       }),
       top: 56,
       backgroundColor: "#fbfbfb",
+      height: "90%",
     },
     drawerClose: {
       transition: theme.transitions.create("width", {
@@ -62,6 +63,7 @@ const useStyles = makeStyles((theme: Theme) =>
       },
       top: 56,
       backgroundColor: "#fbfbfb",
+      height: "90%",
     },
     toolbar: {
       display: "flex",
@@ -91,6 +93,33 @@ export default function LeftBar({ commCenters }) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  // <List>
+  //   <Link to={"/main/controllers"} className={classes.link}>
+  //     <ListItem button key="Контролеры">
+  //       <ListItemIcon>
+  //         <DeviceHubIcon />
+  //       </ListItemIcon>
+  //       <ListItemText primary="Контролеры" />
+  //     </ListItem>
+  //   </Link>
+  //   <Link to={"/main/registers"} className={classes.link}>
+  //     <ListItem button key="Регистры">
+  //       <ListItemIcon>
+  //         <ListAltOutlinedIcon />
+  //       </ListItemIcon>
+  //       <ListItemText primary="Регистры" />
+  //     </ListItem>
+  //   </Link>
+  //   <Link to={"/main/comm-centers"} className={classes.link}>
+  //     <ListItem button key="Коммуникационные центры">
+  //       <ListItemIcon>
+  //         <DnsOutlinedIcon />
+  //       </ListItemIcon>
+  //       <ListItemText primary="Коммуникационные центры" />
+  //     </ListItem>
+  //   </Link>
+  // </List>
 
   return (
     <div className={classes.root}>
@@ -144,34 +173,6 @@ export default function LeftBar({ commCenters }) {
         </List>
 
         <Divider />
-        <List>
-          <Link to={"/main/controllers"} className={classes.link}>
-            <ListItem button key="Контролеры">
-              <ListItemIcon>
-                <DeviceHubIcon />
-              </ListItemIcon>
-              <ListItemText primary="Контролеры" />
-            </ListItem>
-          </Link>
-
-          <Link to={"/main/comm-centers"} className={classes.link}>
-            <ListItem button key="Коммуникационные центры">
-              <ListItemIcon>
-                <DnsOutlinedIcon />
-              </ListItemIcon>
-              <ListItemText primary="Коммуникационные центры" />
-            </ListItem>
-          </Link>
-
-          <Link to={"/main/registers"} className={classes.link}>
-            <ListItem button key="Регистры">
-              <ListItemIcon>
-                <ListAltOutlinedIcon />
-              </ListItemIcon>
-              <ListItemText primary="Регистры" />
-            </ListItem>
-          </Link>
-        </List>
       </Drawer>
     </div>
   );

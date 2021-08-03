@@ -43,7 +43,7 @@ const useStyles = makeStyles({
     alignSelf: "flex-end",
   },
   headerCell: {
-    padding: 5,
+    // padding: 5,
     margin: 0,
     border: "solid black 1px",
     fontWeight: "bold",
@@ -58,10 +58,11 @@ const useStyles = makeStyles({
     width: 20,
   },
   rowCell: {
-    padding: 5,
+    // padding: 5,
     margin: 0,
     border: "solid black 1px",
     maxWidth: 280,
+    whiteSpace: "initial",
   },
   rowEditDeleteCell: {
     padding: 5,
@@ -71,7 +72,7 @@ const useStyles = makeStyles({
     padding: 5,
   },
   p: {
-    margin: 1,
+    margin: 0,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -290,18 +291,18 @@ export default function FuelTables({ commCenter }) {
               </TableCell>
             </TableRow>
             <TableRow key="row2">
-              <TableCell className={classes.headerCell} width="5%">
+              <TableCell className={classes.headerCell}>
                 <p className={classes.p}>Дата</p>
               </TableCell>
-              <TableCell className={classes.headerCell} width="5%">
+              <TableCell className={classes.headerCell}>
                 <p className={classes.p}>Время</p>
                 <p className={classes.p}>(ч. мин.)</p>
               </TableCell>
-              <TableCell className={classes.headerCell} width="10%">
+              <TableCell className={classes.headerCell}>
                 <p className={classes.p}>Температура</p>
                 <p className={classes.p}>(°С)</p>
               </TableCell>
-              <TableCell className={classes.headerCell} width="30px">
+              <TableCell className={classes.headerCell}>
                 <p className={classes.p}>Плотность</p>
                 <p className={classes.p}>(кг/м3)</p>
               </TableCell>
@@ -322,7 +323,12 @@ export default function FuelTables({ commCenter }) {
                 <p className={classes.p}> (кг)</p>
               </TableCell>
               <TableCell align="center" className={classes.headerCell}>
-                <p className={classes.p}>Примеч.</p>
+                <p
+                  className={classes.p}
+                  style={{ marginLeft: "55px", marginRight: "50px" }}
+                >
+                  Примеч.
+                </p>
               </TableCell>
               <TableCell align="center" className={classes.headerCellEdit}>
                 <p className={classes.p}>Редакт.</p>

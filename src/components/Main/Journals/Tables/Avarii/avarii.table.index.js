@@ -41,7 +41,7 @@ const useStyles = makeStyles({
     alignSelf: "flex-end",
   },
   headerCell: {
-    padding: 5,
+    // padding: 5,
     margin: 0,
     border: "solid black 1px",
     fontWeight: "bold",
@@ -56,10 +56,11 @@ const useStyles = makeStyles({
     width: 20,
   },
   rowCell: {
-    padding: 5,
+    // padding: 5,
     margin: 0,
     border: "solid black 1px",
     maxWidth: 280,
+    whiteSpace: "initial",
   },
   rowP: {
     overflow: "scroll",
@@ -282,7 +283,11 @@ export default function AvariiTables({ commCenter }) {
                 <p className={classes.p}>От кого поступила </p>
                 <p className={classes.p}>информация об аварии</p>
               </TableCell>
-              <TableCell align="center" className={classes.headerCell}>
+              <TableCell
+                align="center"
+                className={classes.headerCell}
+                style={{ marginLeft: "15px", marginRight: "10px" }}
+              >
                 <p className={classes.p}>Содержание</p>
                 <p className={classes.p}>(место, вероятная причина аварии)</p>
               </TableCell>

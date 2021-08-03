@@ -249,12 +249,12 @@ class Journals extends Component {
       <ThemeProvider theme={theme}>
         <div style={{ margin: 20 }}>
           <Grid container spacing={2} style={{ width: "90vw" }}>
-            <Grid item xs={11}>
+            <Grid item xs={10}>
               <Paper className={classes.paper}>
                 <ListJournals />
               </Paper>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={11}>
               <Paper className={classes.paperJournal}>
                 {this.state.currentJournal}
               </Paper>

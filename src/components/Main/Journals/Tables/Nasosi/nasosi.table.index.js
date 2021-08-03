@@ -59,7 +59,8 @@ const useStyles = makeStyles({
     padding: 5,
     margin: 0,
     border: "solid black 1px",
-    maxWidth: 280,
+    // maxWidth: 280,
+    whiteSpace: "initial",
   },
   rowP: {
     overflow: "scroll",
