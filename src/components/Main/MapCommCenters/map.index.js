@@ -28,11 +28,18 @@ const useStyles = (theme: Theme) =>
 
 class MapCommCenters extends Component {
   render() {
-    const { classes, commCenters, error, loading, history } = this.props;
+    const {
+      classes,
+      commCenters,
+      error,
+      loading,
+      history,
+      mapPolylinePoints,
+    } = this.props;
 
-    commCenters.sort(function (a, b) {
-      return a.index - b.index;
-    });
+    // commCenters.sort(function (a, b) {
+    //   return a.index - b.index;
+    // });
 
     if (error) {
       return <div>Error! {error}</div>;
@@ -46,7 +53,11 @@ class MapCommCenters extends Component {
         <Grid container spacing={2}>
           <Grid item xs={11}>
             <Paper className={classes.paper} style={{ backgroundColor: "" }}>
-              <Map commCenters={commCenters} history={history} />
+              <Map
+                commCenters={commCenters}
+                history={history}
+                mapPolylinePoints={mapPolylinePoints}
+              />
             </Paper>
           </Grid>
           <Grid item xs={10}>
@@ -68,10 +79,12 @@ const mapDispatchToProps = (dispatch) => ({
 function mapStateToProps(state) {
   const { message } = state.message;
   const commCenters = state.commCentersReducer.items;
+  const mapPolylinePoints = state.commCentersReducer.mapPolylinePoints;
   const { error, loading } = state.commCentersReducer;
   return {
     message,
     commCenters,
+    mapPolylinePoints,
     error,
     loading,
   };

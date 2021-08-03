@@ -32,6 +32,7 @@ export const getCommCenters = (url) => (dispatch) => {
       if (response.message) {
         throw Error(response.massage);
       }
+      console.log("response.data====", response.data);
       dispatch(fetchCommCentersSuccess(response.data));
       return Promise.resolve();
     },

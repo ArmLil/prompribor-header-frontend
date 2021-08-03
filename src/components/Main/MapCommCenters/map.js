@@ -25,17 +25,14 @@ import { api } from "../../../api";
 export const API_URL = `http://${api.host}:${api.port}`;
 // const IMAGES_URL = `${API_URL}/images/{s}.tile.openstreetmap.org.{z}.{x}.{y}.png`;
 
-const Map = ({ commCenters, history }) => {
-  console.log({ history }, { commCenters });
+const Map = ({ commCenters, history, mapPolylinePoints }) => {
+  console.log({ history }, { commCenters }, { mapPolylinePoints });
   const socket = useContext(SocketContext);
   const places = [];
   const polyline = [];
-
-  polyline.push([commCenters[0].lat, commCenters[0].len]);
-  polyline.push([56.298119030271884, 42.69747903460672]);
-  polyline.push([56.2948327769903, 42.71240785375273]);
-  polyline.push([56.28752100820184, 42.72038724745659]);
-  polyline.push([commCenters[1].lat, commCenters[1].len]);
+  mapPolylinePoints.forEach((point, i) => {
+    polyline.push([point.lat, point.len]);
+  });
 
   commCenters.forEach((item, i) => {
     places.push(Object.assign({}, item, { position: [item.lat, item.len] }));
@@ -151,28 +148,26 @@ const Map = ({ commCenters, history }) => {
           url="https:{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <ChangeView center={defaultPosition} markers={places} />
-        <MarkerClusterGroup showCoverageOnHover={true}>
-          {places.map((place: Place) => (
-            <ExtMarker
-              key={place.name}
-              position={place.position}
-              icon={
-                <PlaceIcon
-                  style={{ fontSize: 30, opacity: "0.95", color: "#4791db" }}
-                />
-              }
-              eventHandlers={{
-                click: () => {
-                  console.log({ place });
-                  // showPreview(place);
-                  history.push(`/main/journals/${place.path}`);
-                },
-              }}
-            >
-              <Tooltip>{place.name}</Tooltip>
-            </ExtMarker>
-          ))}
-        </MarkerClusterGroup>
+        {places.map((place: Place) => (
+          <ExtMarker
+            key={place.name}
+            position={place.position}
+            icon={
+              <PlaceIcon
+                style={{ fontSize: 30, opacity: "0.95", color: "#4791db" }}
+              />
+            }
+            eventHandlers={{
+              click: () => {
+                console.log({ place });
+                // showPreview(place);
+                history.push(`/main/journals/${place.path}`);
+              },
+            }}
+          >
+            <Tooltip>{place.name}</Tooltip>
+          </ExtMarker>
+        ))}
         <Polyline pathOptions={{ color: "blue" }} positions={polyline} />
         <CarMarker />
       </MapContainer>
