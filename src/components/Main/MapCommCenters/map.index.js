@@ -35,6 +35,7 @@ class MapCommCenters extends Component {
       loading,
       history,
       mapPolylinePoints,
+      bridge,
     } = this.props;
 
     // commCenters.sort(function (a, b) {
@@ -57,6 +58,7 @@ class MapCommCenters extends Component {
                 commCenters={commCenters}
                 history={history}
                 mapPolylinePoints={mapPolylinePoints}
+                bridge={bridge}
               />
             </Paper>
           </Grid>
@@ -80,11 +82,13 @@ function mapStateToProps(state) {
   const { message } = state.message;
   const commCenters = state.commCentersReducer.items;
   const mapPolylinePoints = state.commCentersReducer.mapPolylinePoints;
+  const bridge = state.commCentersReducer.bridge;
   const { error, loading } = state.commCentersReducer;
   return {
     message,
     commCenters,
     mapPolylinePoints,
+    bridge,
     error,
     loading,
   };

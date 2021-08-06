@@ -9,6 +9,7 @@ const initialState = {
   items: [],
   loading: false,
   mapPolylinePoints: [],
+  bridge: [],
   error: null,
 };
 
@@ -26,6 +27,7 @@ export default function commCentersReducer(state = initialState, action) {
         loading: false,
         items: action.payload.commCenters.rows,
         mapPolylinePoints: action.payload.commCenters.mapPolylinePoints.rows,
+        bridge: action.payload.bridge,
       };
     case FETCH_COMMCENTERS_FAIL:
       return {
@@ -34,6 +36,7 @@ export default function commCentersReducer(state = initialState, action) {
         error: action.payload,
         items: [],
         mapPolylinePoints: [],
+        bridge: [],
       };
     case UPDATE_COMMCENTERS:
       return {
