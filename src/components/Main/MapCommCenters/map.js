@@ -13,7 +13,9 @@ import "leaflet/dist/leaflet.css";
 
 import fuelMarker from "../../../images/fuelMarker.png";
 import explosions from "../../../images/explosions.png";
-import sklad from "../../../images/sklad.jpg";
+// import sklad from "../../../images/sklad1.jpg";
+import sklad from "../../../images/sklad2.png";
+
 import ParamsTable from "./paramsTable";
 // import car from "../../../images/car.jpeg";
 // import Control from 'react-leaflet-control';
@@ -288,14 +290,14 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
         />
         <ExtMarker
           key={"sklad"}
-          position={[56.1852, 42.86807]}
+          position={[56.19104, 42.85698]}
           icon={
             <img
               src={sklad}
               style={{
-                width: "150px",
+                width: "120px",
                 marginTop: "15px",
-                transform: "rotate(-20deg)",
+                transform: "rotate(0deg)",
                 opacity: 0.75,
               }}
             />

@@ -5,6 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import GlobalContainer from "./components/global.container";
 import { updateControllerBySocket } from "./actions/controllersForCommCenters";
+import { updateCommCentersBySocket } from "./actions/commCenters";
 import { addJournalData } from "./actions/commCenters";
 import { socket, SocketContext } from "./socket_api";
 
@@ -19,9 +20,10 @@ export default function App() {
     // let isMounted = true;
     const updateControllerListener = (data) => {
       console.log("socket on registerControllerValue");
-      console.log(data);
+      console.log(data, commCenters);
 
       dispatch(updateControllerBySocket(controllers, data));
+      dispatch(updateCommCentersBySocket(commCenters, data));
     };
     socket.on("registerControllerValue", updateControllerListener);
     return () => {
@@ -29,6 +31,21 @@ export default function App() {
       socket.off("registerControllerValue", updateControllerListener);
     };
   }, [controllers, dispatch]);
+
+  useEffect(() => {
+    // let isMounted = true;
+    const updateComCentersListener = (data) => {
+      console.log("socket on registerControllerValue");
+      console.log(data, commCenters);
+
+      dispatch(updateCommCentersBySocket(commCenters, data));
+    };
+    socket.on("registerControllerValue", updateComCentersListener);
+    return () => {
+      // isMounted = false;
+      socket.off("registerControllerValue", updateComCentersListener);
+    };
+  }, [commCenters, dispatch]);
 
   useEffect(() => {
     const updateCommCentersFuelData = (data) => {

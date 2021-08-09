@@ -312,15 +312,15 @@ export default function FuelTables({ commCenter }) {
               </TableCell>
               <TableCell align="center" className={classes.headerCell}>
                 <p className={classes.p}>Текущий массовый</p>
-                <p className={classes.p}>расход(кг/ч)</p>
+                <p className={classes.p}>расход(т/ч)</p>
               </TableCell>
               <TableCell align="center" className={classes.headerCell}>
                 <p className={classes.p}>Сумматор объема</p>
-                <p className={classes.p}> (литры)</p>
+                <p className={classes.p}> (м3)</p>
               </TableCell>
               <TableCell align="center" className={classes.headerCell}>
                 <p className={classes.p}>Сумматор массы</p>
-                <p className={classes.p}> (кг)</p>
+                <p className={classes.p}> (тонны)</p>
               </TableCell>
               <TableCell align="center" className={classes.headerCell}>
                 <p

@@ -84,7 +84,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function LeftBar({ commCenters }) {
   const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);

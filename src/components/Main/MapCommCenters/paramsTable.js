@@ -1,116 +1,184 @@
-import ArrowRightAltSharpIcon from "@material-ui/icons/ArrowRightAltSharp"; //right
+import ArrowRightAltSharpIcon from "@material-ui/icons/ArrowRightAltSharp";
 
 export default function ParamsTable(data) {
-  console.log(data.commCenter.tablePosition);
+  // console.log(data.commCenter);
   let commCenter = data.commCenter;
   let lineStyle = {
-    width: "35px",
-    height: "0",
+    width: "30px",
     borderTop: "2px solid green",
     position: "relative",
   };
-  let tableStyle = { border: "2px solid green", margin: 1 };
+  let titleStyle = {
+    border: "1px solid black",
+    height: 20,
+    fontSize: 10,
+    fontWeight: "bolder",
+    backgroundColor: "#FDD495E6",
+    color: "black",
+  };
+
   if (commCenter.tablePosition === "right") {
-    tableStyle = Object.assign(tableStyle, {
+    titleStyle = Object.assign({}, titleStyle, {
       position: "relative",
-      left: 95,
-      top: 10,
+      left: 80,
+      bottom: 30,
     });
-    lineStyle = Object.assign(lineStyle, {
+    lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
       left: 62,
-      top: 0,
+      top: 25,
       // transform: "rotate(180deg)",
     });
   } else if (commCenter.tablePosition === "top") {
-    tableStyle = Object.assign(tableStyle, {
+    titleStyle = Object.assign({}, titleStyle, {
       position: "relative",
-      bottom: 33,
+      bottom: 170,
     });
-    lineStyle = Object.assign(lineStyle, {
+    lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
-      left: 40,
-      bottom: 23,
-      width: "23px",
+      left: 38,
+      top: 3,
+      width: "25px",
       transform: "rotate(90deg)",
     });
   } else if (commCenter.tablePosition === "left") {
-    tableStyle = Object.assign(tableStyle, {
+    titleStyle = Object.assign({}, titleStyle, {
       position: "relative",
-      right: 95,
-      top: 10,
+      right: "81%",
+      bottom: 40,
     });
-    lineStyle = Object.assign(lineStyle, {
+    lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
-      left: 3,
-      bottom: 0,
+      left: 18,
+      top: 22,
+      width: "20px",
     });
   } else if (commCenter.tablePosition === "bottom") {
-    tableStyle = Object.assign(tableStyle, { position: "relative", top: 60 });
-    lineStyle = Object.assign(lineStyle, {
+    titleStyle = Object.assign({}, titleStyle, {
+      position: "relative",
+      top: 60,
+    });
+    lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
       left: 39,
-      top: 25,
+      top: 45,
       width: "23px",
       transform: "rotate(90deg)",
     });
   } else if (commCenter.tablePosition === "bottom-left") {
-    tableStyle = Object.assign(tableStyle, {
+    titleStyle = Object.assign({}, titleStyle, {
       position: "relative",
       right: 50,
       top: 50,
     });
-    lineStyle = Object.assign(lineStyle, {
+    lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
       left: 5,
-      top: 17,
+      top: 40,
+      width: "30px",
       transform: "rotate(145deg)",
     });
   } else if (commCenter.tablePosition === "top-left") {
-    tableStyle = Object.assign(tableStyle, {
+    titleStyle = Object.assign({}, titleStyle, {
       position: "relative",
-      right: 40,
-      bottom: 20,
+      right: 80,
+      bottom: 130,
     });
-    lineStyle = Object.assign(lineStyle, {
+    lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
-      left: 12,
-      bottom: 15,
-      transform: "rotate(27deg)",
+      left: 20,
+      top: 5,
+      transform: "rotate(58deg)",
       width: "32px",
     });
   } else if (commCenter.tablePosition === "top-right") {
-    tableStyle = Object.assign(tableStyle, {
+    titleStyle = Object.assign({}, titleStyle, {
       position: "relative",
-      left: 30,
-      bottom: 20,
+      left: 80,
+      bottom: 130,
     });
-    lineStyle = Object.assign(lineStyle, {
+    lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
       left: 55,
-      bottom: 16,
-      transform: "rotate(153deg)",
+      top: 5,
+      transform: "rotate(135deg)",
       width: "30px",
     });
   } else if (commCenter.tablePosition === "bottom-right") {
-    tableStyle = Object.assign(tableStyle, {
+    titleStyle = Object.assign({}, titleStyle, {
       position: "relative",
-      left: 50,
+      left: 80,
       top: 50,
     });
-    lineStyle = Object.assign(lineStyle, {
+    lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
       left: 55,
-      top: 18,
+      top: 40,
       transform: "rotate(27deg)",
       width: "38px",
     });
   }
+  let fuelStyle = Object.assign({}, {}, titleStyle, {
+    height: "95px",
+    backgroundColor: "#fbcbb4c4",
+  });
+  let nasosiStyle = Object.assign({}, titleStyle, {
+    height: "50px",
+    backgroundColor: "#f4d9909c",
+  });
+  // <div style={lineStyle}></div>
+  let pStyle = { padding: 0, margin: 0, color: "black" };
+  let fuelController = [];
+  let nasosiController = [];
+  let P_out,
+    P_in,
+    revs,
+    temperature,
+    density,
+    current_volume,
+    currentMass,
+    total_volume,
+    total_mass;
+  commCenter.controllers.forEach((contr, i) => {
+    contr.registers.forEach((reg, i) => {
+      if (reg.name === "revs") revs = reg.Registers_Controllers_values.value;
+      if (reg.name === "P_in") P_in = reg.Registers_Controllers_values.value;
+      if (reg.name === "P_out") P_out = reg.Registers_Controllers_values.value;
+      if (reg.name === "temperature")
+        temperature = reg.Registers_Controllers_values.value;
+      if (reg.name === "density")
+        density = reg.Registers_Controllers_values.value;
+      if (reg.name === "current_volume")
+        current_volume = reg.Registers_Controllers_values.value;
+      if (reg.name === "currentMass")
+        currentMass = reg.Registers_Controllers_values.value;
+      if (reg.name === "total_volume")
+        total_volume = reg.Registers_Controllers_values.value;
+      if (reg.name === "total_mass")
+        total_mass = reg.Registers_Controllers_values.value;
+    });
+  });
 
   return (
-    <div style={{ padding: 0 }}>
-      <div style={tableStyle}>{commCenter.name}</div>
+    <div style={{ width: "110px" }}>
       <div style={lineStyle}></div>
+      <div style={titleStyle}>
+        <p>{commCenter.name}</p>
+      </div>
+
+      <div style={nasosiStyle}>
+        <p style={pStyle}> Pвх, {P_in} (МПа)</p>
+        <p style={pStyle}> Pвых, {P_out} (МПа)</p>
+        <p style={pStyle}>n, {revs} (об/мин)</p>
+      </div>
+      <div style={fuelStyle}>
+        <p style={pStyle}>Q, {current_volume} (м3/ч)</p>
+        <p style={pStyle}>ρ, {density} (кг/м3)</p>
+        <p style={pStyle}> t, {temperature} (°C)</p>
+        <p style={pStyle}> V, {total_volume} (м3)</p>
+        <p style={pStyle}> m, {currentMass} (т/ч)</p>
+        <p style={pStyle}> M, {total_mass} (тонны)</p>
+      </div>
     </div>
   );
 }
