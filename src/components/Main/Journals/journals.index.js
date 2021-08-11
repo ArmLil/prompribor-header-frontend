@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { withStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import { ruRU } from "@material-ui/core/locale";
 import Loader from "../../Loader";
 import ListJournals from "./list.journals";
@@ -15,7 +15,7 @@ import FuelTables from "./Tables/Fuel/fuel.table.index";
 import { connect } from "react-redux";
 import { getCommCenters } from "../../../actions/commCenters";
 
-const theme = createMuiTheme(
+const theme = createTheme(
   {
     palette: {
       primary: { main: "#1976d2" },
@@ -94,7 +94,7 @@ class Journals extends Component {
           let active_journal_name =
             active_journal[0].childNodes[2].childNodes[0].attributes.name;
           if (
-            active_journal_name.nodeValue === "учета донесений и распорежений"
+            active_journal_name.nodeValue === "учета донесений и распоряжений"
           ) {
             this.setState({
               currentJournal: (
@@ -161,7 +161,7 @@ class Journals extends Component {
               ),
             });
           } else if (
-            active_journal_name.nodeValue === "учета донесений и распорежений"
+            active_journal_name.nodeValue === "учета донесений и распоряжений"
           ) {
             this.setState({
               currentJournal: (

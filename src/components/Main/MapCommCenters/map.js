@@ -169,6 +169,8 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
   //   attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
   //   url="https:{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
   // />
+  // <CarMarker />
+
   console.log("render");
   return (
     <div>
@@ -337,7 +339,6 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
           }}
           positions={polyline}
         />
-        <CarMarker />
         <Description position="bottomright"></Description>
       </MapContainer>
     </div>
