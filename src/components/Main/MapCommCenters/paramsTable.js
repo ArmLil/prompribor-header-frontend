@@ -1,5 +1,3 @@
-import ArrowRightAltSharpIcon from "@material-ui/icons/ArrowRightAltSharp";
-
 export default function ParamsTable(data) {
   // console.log(data.commCenter);
   let commCenter = data.commCenter;
@@ -128,8 +126,6 @@ export default function ParamsTable(data) {
   });
   // <div style={lineStyle}></div>
   let pStyle = { padding: 0, margin: 0, color: "black" };
-  let fuelController = [];
-  let nasosiController = [];
   let P_out,
     P_in,
     revs,

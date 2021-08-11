@@ -60,6 +60,7 @@ export default function FormDialog({
   };
   const handleChangeAvarii = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAvarii(event.target.value);
+    setAvarii_error(false);
   };
   const handleChangeExecutor = (event: React.ChangeEvent<HTMLInputElement>) => {
     setExecutor(event.target.value);
@@ -139,6 +140,9 @@ export default function FormDialog({
             required
             helperText={avarii_helperText}
             error={avarii_error}
+            InputLabelProps={{
+              shrink: avarii_shrink,
+            }}
           />
           <TextField
             id="executor"

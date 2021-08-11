@@ -14,7 +14,6 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableFooter from "@material-ui/core/TableFooter";
 import dataService from "../../../../../services/data.service";
-import { getCommCenters } from "../../../../../actions/commCenters";
 import { addJournalData } from "../../../../../actions/commCenters";
 import { editJournalData } from "../../../../../actions/commCenters";
 import { deleteJournalData } from "../../../../../actions/commCenters";

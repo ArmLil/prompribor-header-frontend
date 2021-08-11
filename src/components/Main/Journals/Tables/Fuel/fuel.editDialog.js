@@ -94,7 +94,7 @@ export default function FormDialog({
       }
     };
     setParams();
-  }, [params]);
+  }, [date, params]);
   const handleChangeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDate(event.target.value);
   };

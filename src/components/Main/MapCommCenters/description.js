@@ -33,6 +33,7 @@ function Content() {
     <div style={rootStyle}>
       <div style={{ alignSelf: "flex-start" }}>
         <img
+          alt=""
           src={fuelMarker}
           style={{
             width: "15px",
@@ -44,6 +45,7 @@ function Content() {
       <div style={{ alignSelf: "flex-start" }}>
         <img
           src={explosions}
+          alt=""
           style={{
             width: "15px",
             margin: "5px",
@@ -54,6 +56,7 @@ function Content() {
       <div style={{ alignSelf: "flex-start" }}>
         <img
           src={most}
+          alt=""
           style={{
             width: "20px",
             margin: "5px",
@@ -64,6 +67,7 @@ function Content() {
       <div style={{ alignSelf: "flex-start" }}>
         <img
           src={sklad}
+          alt=""
           style={{
             width: "30px",
             margin: "5px",

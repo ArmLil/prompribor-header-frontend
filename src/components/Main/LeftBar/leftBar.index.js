@@ -19,10 +19,10 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import DeviceHubIcon from "@material-ui/icons/DeviceHub"; //controllers
+// import DeviceHubIcon from "@material-ui/icons/DeviceHub"; //controllers
 import LocationOnOutlinedIcon from "@material-ui/icons/LocationOnOutlined"; //map
-import DnsOutlinedIcon from "@material-ui/icons/DnsOutlined"; //comm centers
-import ListAltOutlinedIcon from "@material-ui/icons/ListAltOutlined"; //registers
+// import DnsOutlinedIcon from "@material-ui/icons/DnsOutlined"; //comm centers
+// import ListAltOutlinedIcon from "@material-ui/icons/ListAltOutlined"; //registers
 import ListItemMonitor from "./listItemMonitor";
 import ListItemJournals from "./listItemJournals";
 const drawerWidth = 240;

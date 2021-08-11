@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { withStyles, createStyles, Theme } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -8,8 +8,7 @@ import { connect } from "react-redux";
 import { getCommCenters } from "../../../actions/commCenters";
 
 import Map from "./map";
-import CommCentersTable from "./commCentersTable";
-import Description from "./description";
+// import CommCentersTable from "./commCentersTable";
 
 const useStyles = (theme: Theme) =>
   createStyles({

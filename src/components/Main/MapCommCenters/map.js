@@ -1,13 +1,9 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
-import MarkerClusterGroup from "react-leaflet-markercluster";
+import React, { useState, useEffect, useContext } from "react";
+// import MarkerClusterGroup from "react-leaflet-markercluster";
 import ExtMarker from "react-leaflet-enhanced-marker";
 // import PersonPinCircleOutlinedIcon from "@material-ui/icons/PersonPinCircleOutlined";
 import LocalShippingIcon from "@material-ui/icons/LocalShipping";
 import ArrowRightAltSharpIcon from "@material-ui/icons/ArrowRightAltSharp"; //right
-import RedoSharpIcon from "@material-ui/icons/RedoSharp"; //rightTurn
-import RemoveSharpIcon from "@material-ui/icons/RemoveSharp";
-// import Button from "@material-ui/core/Button";
-import PlaceIcon from "@material-ui/icons/Place";
 
 import "leaflet/dist/leaflet.css";
 
@@ -15,7 +11,6 @@ import fuelMarker from "../../../images/fuelMarker.png";
 import explosions from "../../../images/explosions.png";
 // import sklad from "../../../images/sklad1.jpg";
 import sklad from "../../../images/sklad2.png";
-import most from "../../../images/most.jpg";
 
 import ParamsTable from "./paramsTable";
 import Description from "./description";
@@ -26,12 +21,9 @@ import { latLngBounds } from "leaflet";
 import {
   MapContainer,
   TileLayer,
-  Tooltip,
   useMap,
   Polyline,
-  Popup,
   // Marker,
-  LayersControl,
 } from "react-leaflet";
 import { SocketContext } from "../../../socket_api";
 
@@ -39,24 +31,16 @@ import { api } from "../../../api";
 export const API_URL = `http://${api.host}:${api.port}`;
 // const IMAGES_URL = `${API_URL}/images/{s}.tile.openstreetmap.org.{z}.{x}.{y}.png`;
 
-const POSITION_CLASSES = {
-  bottomleft: "leaflet-bottom leaflet-left",
-  bottomright: "leaflet-bottom leaflet-right",
-  topleft: "leaflet-top leaflet-left",
-  topright: "leaflet-top leaflet-right",
-};
-
-const { BaseLayer, Overlay } = LayersControl;
 const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
   console.log({ history }, { commCenters }, { mapPolylinePoints }, { bridge });
   const socket = useContext(SocketContext);
   const places = [];
   const polyline = [];
 
-  const [draggable, setDraggable] = useState(false);
-  const toggleDraggable = useCallback(() => {
-    setDraggable((d) => !d);
-  }, []);
+  // const [draggable, setDraggable] = useState(false);
+  // const toggleDraggable = useCallback(() => {
+  //   setDraggable((d) => !d);
+  // }, []);
   mapPolylinePoints.forEach((point, i) => {
     polyline.push([point.lat, point.len]);
   });
@@ -214,6 +198,7 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
             position={place.position}
             icon={
               <img
+                alt=""
                 src={fuelMarker}
                 style={{
                   width: "20px",
@@ -275,6 +260,7 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
                 }
               ></ExtMarker>
             );
+          return null;
         })}
         {bridge.map((typeArray, index) => {
           typeArray.sort(function (a, b) {
@@ -308,6 +294,7 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
           icon={
             <img
               src={explosions}
+              alt=""
               style={{
                 width: "40px",
                 marginTop: "15px",
@@ -321,6 +308,7 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
           icon={
             <img
               src={sklad}
+              alt=""
               style={{
                 width: "120px",
                 marginTop: "15px",

@@ -46,7 +46,6 @@ export default function FormDialog({
   const [avarii, setAvarii] = React.useState(params.avarii || "");
   const [executor, setExecutor] = React.useState(params.executor || "");
   const [note, setNote] = React.useState(params.note || "");
-  const [avarii_shrink, setAvarii_shrink] = React.useState(false);
   const [avarii_error, setAvarii_error] = React.useState(false);
   const [avarii_helperText, setAvarii_helperText] = React.useState("");
 
@@ -70,7 +69,7 @@ export default function FormDialog({
       }
     };
     setParams();
-  }, [params]);
+  }, [date, params]);
   const handleChangeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDate(event.target.value);
   };
@@ -180,7 +179,6 @@ export default function FormDialog({
           <Button
             onClick={(ev) => {
               if (avarii === "") {
-                setAvarii_shrink(true);
                 setAvarii_error(true);
                 setAvarii_helperText("поле обязательно для заполнения");
                 return;
