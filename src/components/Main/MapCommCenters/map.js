@@ -5,7 +5,7 @@ import ExtMarker from "react-leaflet-enhanced-marker";
 import LocalShippingIcon from "@material-ui/icons/LocalShipping";
 import ArrowRightAltSharpIcon from "@material-ui/icons/ArrowRightAltSharp"; //right
 import RedoSharpIcon from "@material-ui/icons/RedoSharp"; //rightTurn
-
+import RemoveSharpIcon from "@material-ui/icons/RemoveSharp";
 // import Button from "@material-ui/core/Button";
 import PlaceIcon from "@material-ui/icons/Place";
 
@@ -15,8 +15,10 @@ import fuelMarker from "../../../images/fuelMarker.png";
 import explosions from "../../../images/explosions.png";
 // import sklad from "../../../images/sklad1.jpg";
 import sklad from "../../../images/sklad2.png";
+import most from "../../../images/most.jpg";
 
 import ParamsTable from "./paramsTable";
+import Description from "./description";
 // import car from "../../../images/car.jpeg";
 // import Control from 'react-leaflet-control';
 // import L, { LatLng, latLngBounds, FeatureGroup } from "leaflet";
@@ -29,6 +31,7 @@ import {
   Polyline,
   Popup,
   // Marker,
+  LayersControl,
 } from "react-leaflet";
 import { SocketContext } from "../../../socket_api";
 
@@ -36,6 +39,14 @@ import { api } from "../../../api";
 export const API_URL = `http://${api.host}:${api.port}`;
 // const IMAGES_URL = `${API_URL}/images/{s}.tile.openstreetmap.org.{z}.{x}.{y}.png`;
 
+const POSITION_CLASSES = {
+  bottomleft: "leaflet-bottom leaflet-left",
+  bottomright: "leaflet-bottom leaflet-right",
+  topleft: "leaflet-top leaflet-left",
+  topright: "leaflet-top leaflet-right",
+};
+
+const { BaseLayer, Overlay } = LayersControl;
 const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
   console.log({ history }, { commCenters }, { mapPolylinePoints }, { bridge });
   const socket = useContext(SocketContext);
@@ -54,10 +65,18 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
     places.push(Object.assign({}, item, { position: [item.lat, item.len] }));
     // polyline.push([item.lat, item.len]);
   });
-  const defaultPosition: LatLngExpression = [55.755826, 37.6173]; // Paris position
+  const defaultPosition: LatLngExpression = [55.755826, 37.6173]; // Moscow position
   // const showPreview = (place) => {
   //   return place.toString();
   // };
+  let changeViewMarkers = [
+    { lat: Number(places[0].lat) - 0.001, len: Number(places[0].len) + 0.005 },
+    {
+      lat: Number(places[places.length - 1].lat) - 0.005,
+      len: Number(places[places.length - 1].len) + 0.005,
+    },
+  ];
+  changeViewMarkers = changeViewMarkers.concat(places);
 
   function ChangeView({ center, markers }: IChangeView) {
     const map = useMap();
@@ -146,29 +165,47 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
   //     style={{ fontSize: 30, opacity: "0.95", color: "#4791db" }}
   //   />
   // }
+  // <TileLayer
+  //   attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+  //   url="https:{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+  // />
   console.log("render");
   return (
     <div>
-      Карта ГНС-ов
+      Автоматизированная система мониторинга сборно-разборного трубопровода
       <MapContainer
         center={defaultPosition}
-        zoom={4}
+        zoom={8}
         className="map__container"
-        style={{ height: "75vh" }}
+        style={{ height: "80vh", zIndex: 3 }}
         doubleClickZoom={true}
         closePopupOnClick={true}
         dragging={true}
-        zoomSnap={true}
         zoomDelta={true}
-        trackResize={true}
+        trackResize={false}
         touchZoom={true}
         scrollWheelZoom={true}
       >
         <TileLayer
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          attribution=""
           url="https:{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <ChangeView center={defaultPosition} markers={places} />
+
+        <ChangeView center={defaultPosition} markers={changeViewMarkers} />
+        {places.map((place: Place) => (
+          <ExtMarker
+            key={place.path}
+            position={place.position}
+            icon={<ParamsTable commCenter={place} />}
+            eventHandlers={{
+              click: () => {
+                console.log("second");
+                // showPreview(place);
+                history.push(`/main/monitoring/${place.path}`);
+              },
+            }}
+          ></ExtMarker>
+        ))}
         {places.map((place: Place) => (
           <ExtMarker
             key={place.name}
@@ -191,21 +228,9 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
             }}
           ></ExtMarker>
         ))}
-        {places.map((place: Place) => (
-          <ExtMarker
-            key={place.name}
-            position={place.position}
-            icon={<ParamsTable commCenter={place} />}
-            eventHandlers={{
-              click: () => {
-                console.log({ place });
-                // showPreview(place);
-                history.push(`/main/journals/${place.path}`);
-              },
-            }}
-          ></ExtMarker>
-        ))}
+
         {mapPolylinePoints.map((point: Place) => {
+          //arrows
           let direction = null;
           if (point.type === "right") {
             direction = "rotate(0deg)";
@@ -290,7 +315,7 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
         />
         <ExtMarker
           key={"sklad"}
-          position={[56.19104, 42.85698]}
+          position={[56.19089, 42.85704]}
           icon={
             <img
               src={sklad}
@@ -313,6 +338,7 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
           positions={polyline}
         />
         <CarMarker />
+        <Description position="bottomright"></Description>
       </MapContainer>
     </div>
   );

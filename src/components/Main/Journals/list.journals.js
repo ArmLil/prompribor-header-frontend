@@ -17,7 +17,7 @@ class ListJournals extends React.Component {
       />,
       <SingleJournal
         alt={3}
-        name={"учета донесений и распорежений"}
+        name={"учета донесений и распоряжений"}
         id={"doneseni"}
       />,
       <SingleJournal

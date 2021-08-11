@@ -9,6 +9,7 @@ import { getCommCenters } from "../../../actions/commCenters";
 
 import Map from "./map";
 import CommCentersTable from "./commCentersTable";
+import Description from "./description";
 
 const useStyles = (theme: Theme) =>
   createStyles({
@@ -26,7 +27,7 @@ const useStyles = (theme: Theme) =>
     },
   });
 
-class MapCommCenters extends Component {
+class MapCommCenters extends React.Component {
   render() {
     const {
       classes,
@@ -49,22 +50,24 @@ class MapCommCenters extends Component {
     if (loading) {
       return <Loader />;
     }
+
+    // <Grid item xs={10}>
+    //   <Paper className={classes.paper}>
+    //     <CommCentersTable commCenters={commCenters} />
+    //   </Paper>
+    // </Grid>
     return (
       <div style={{ margin: 20 }}>
         <Grid container spacing={2}>
-          <Grid item xs={11}>
-            <Paper className={classes.paper} style={{ backgroundColor: "" }}>
+          <Grid item xs={12} style={{ zIndex: 2 }}>
+            <Paper className={classes.paper} style={{ zIndex: 2 }}>
               <Map
                 commCenters={commCenters}
                 history={history}
                 mapPolylinePoints={mapPolylinePoints}
                 bridge={bridge}
+                style={{ zIndex: 1 }}
               />
-            </Paper>
-          </Grid>
-          <Grid item xs={10}>
-            <Paper className={classes.paper}>
-              <CommCentersTable commCenters={commCenters} />
             </Paper>
           </Grid>
         </Grid>

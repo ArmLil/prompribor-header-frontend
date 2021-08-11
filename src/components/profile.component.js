@@ -13,7 +13,7 @@ class Profile extends Component {
     return (
       <div className="bodyPhone pt-3" style={{ height: "91vh" }}>
         <div className="container ">
-          <header className="jumbotron container">
+          <header className="jumbotron container" style={{ opacity: "0.88" }}>
             <h4 className="mb-4">
               <strong>Профиль</strong>
             </h4>
@@ -27,7 +27,7 @@ class Profile extends Component {
               <strong>е-майл:</strong> {currentUser.email}
             </p>
             <strong>
-              {currentUser.roleAdmin ? "права: админ" : "права: гость"}
+              {currentUser.roleAdmin ? "права: админ" : "права: админ"}
             </strong>
           </header>
         </div>
