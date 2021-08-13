@@ -15,7 +15,6 @@ import sklad from "../../../images/sklad2.png";
 import ParamsTable from "./paramsTable";
 import Description from "./description";
 // import car from "../../../images/car.jpeg";
-// import Control from 'react-leaflet-control';
 // import L, { LatLng, latLngBounds, FeatureGroup } from "leaflet";
 import { latLngBounds } from "leaflet";
 import {

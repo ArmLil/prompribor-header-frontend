@@ -286,10 +286,10 @@ export default function NasosiTables({ commCenter }) {
                 <p className={classes.p}>ПМТП</p>
               </TableCell>
               <TableCell align="center" className={classes.headerCell}>
-                <p className={classes.p}>Рвх.</p>
+                <p className={classes.p}>Рвх. (Мпа)</p>
               </TableCell>
               <TableCell align="center" className={classes.headerCell}>
-                <p className={classes.p}>Рвых.</p>
+                <p className={classes.p}>Рвых. (Мпа)</p>
               </TableCell>
               <TableCell align="center" className={classes.headerCell}>
                 <p className={classes.p}>Обороты</p>

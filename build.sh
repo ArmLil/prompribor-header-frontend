@@ -7,7 +7,7 @@ PACKAGE_PATH=${CURRENT_PATH}/tmp/${PACKAGE_NAME}
 FRONTEND_PATH=${PACKAGE_PATH}/var/www/sysmon/frontend
 DIST_PATH=${CURRENT_PATH}/build
 
-npm i
+npm install
 npm run build
 
 mkdir -p ${PACKAGE_PATH}
