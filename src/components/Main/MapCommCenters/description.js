@@ -40,7 +40,7 @@ function Content() {
             margin: "5px",
           }}
         />
-        - газонаполнительная станция
+        - Гарнизон Насосных Станций
       </div>
       <div style={{ alignSelf: "flex-start" }}>
         <img
