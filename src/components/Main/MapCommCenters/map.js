@@ -9,7 +9,7 @@ import "leaflet/dist/leaflet.css";
 
 import fuelMarker from "../../../images/fuelMarker.png";
 import explosions from "../../../images/explosions.png";
-// import sklad from "../../../images/sklad1.jpg";
+import bureya from "../../../images/bureya.png";
 import sklad from "../../../images/sklad2.png";
 
 import ParamsTable from "./paramsTable";
@@ -23,6 +23,7 @@ import {
   useMap,
   Polyline,
   // Marker,
+  Tooltip,
 } from "react-leaflet";
 import { SocketContext } from "../../../socket_api";
 
@@ -53,10 +54,10 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
   //   return place.toString();
   // };
   let changeViewMarkers = [
-    { lat: Number(places[0].lat) - 0.001, len: Number(places[0].len) + 0.005 },
+    { lat: Number(places[0].lat) - 0.002, len: Number(places[0].len) - 0.04 },
     {
-      lat: Number(places[places.length - 1].lat) - 0.005,
-      len: Number(places[places.length - 1].len) + 0.005,
+      lat: Number(places[places.length - 1].lat) + 0.004,
+      len: Number(places[places.length - 1].len) + 0.003,
     },
   ];
   changeViewMarkers = changeViewMarkers.concat(places);
@@ -177,20 +178,47 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
         />
 
         <ChangeView center={defaultPosition} markers={changeViewMarkers} />
-        {places.map((place: Place) => (
-          <ExtMarker
-            key={place.path}
-            position={place.position}
-            icon={<ParamsTable commCenter={place} />}
-            eventHandlers={{
-              click: () => {
-                console.log("second");
-                // showPreview(place);
-                history.push(`/main/monitoring/${place.path}`);
-              },
-            }}
-          ></ExtMarker>
-        ))}
+        {places.map((place: Place) => {
+          let tooltipDirection = "top";
+          let tooltipStyle = {};
+          if (place.tablePosition === "top-left") {
+            tooltipDirection = "top-right";
+          }
+          if (place.tablePosition === "top-right") {
+            tooltipDirection = "top-left";
+          }
+          if (place.tablePosition === "bottom-left") {
+            tooltipDirection = "bottom-right";
+          }
+          if (place.tablePosition === "bottom-right") {
+            tooltipDirection = "bottom-left";
+            tooltipStyle = { position: "relative", bottom: 10 };
+          }
+          return (
+            <ExtMarker
+              key={place.path}
+              position={place.position}
+              icon={<ParamsTable commCenter={place} />}
+              eventHandlers={{
+                click: () => {
+                  console.log("second");
+                  // showPreview(place);
+                  history.push(`/main/monitoring/${place.path}`);
+                },
+              }}
+            >
+              <Tooltip
+                direction={"top"}
+                offset={[0, -12]}
+                opacity={0.8}
+                permanent
+                style={{}}
+              >
+                {place.name}
+              </Tooltip>
+            </ExtMarker>
+          );
+        })}
         {places.map((place: Place) => (
           <ExtMarker
             key={place.name}
@@ -313,6 +341,22 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
                 marginTop: "15px",
                 transform: "rotate(0deg)",
                 opacity: 0.75,
+              }}
+            />
+          }
+        />
+        <ExtMarker
+          key={"sklad"}
+          position={[56.18619, 42.87393]}
+          icon={
+            <img
+              src={bureya}
+              alt=""
+              style={{
+                width: "100px",
+                marginTop: "15px",
+                transform: "rotate(0deg)",
+                opacity: 1,
               }}
             />
           }

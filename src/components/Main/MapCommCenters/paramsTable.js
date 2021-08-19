@@ -2,7 +2,7 @@ export default function ParamsTable(data) {
   // console.log(data.commCenter);
   let commCenter = data.commCenter;
   let lineStyle = {
-    width: "30px",
+    width: "15px",
     borderTop: "2px solid green",
     position: "relative",
   };
@@ -18,12 +18,12 @@ export default function ParamsTable(data) {
   if (commCenter.tablePosition === "right") {
     titleStyle = Object.assign({}, titleStyle, {
       position: "relative",
-      left: 80,
+      left: 76,
       bottom: 30,
     });
     lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
-      left: 62,
+      left: 60,
       top: 25,
       // transform: "rotate(180deg)",
     });
@@ -34,86 +34,86 @@ export default function ParamsTable(data) {
     });
     lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
-      left: 38,
-      top: 3,
-      width: "25px",
+      left: 44,
+      top: 5,
+      width: "15px",
       transform: "rotate(90deg)",
     });
   } else if (commCenter.tablePosition === "left") {
     titleStyle = Object.assign({}, titleStyle, {
       position: "relative",
-      right: "81%",
+      right: 85,
       bottom: 40,
     });
     lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
-      left: 18,
-      top: 22,
-      width: "20px",
+      left: 24,
+      top: 24,
+      width: "15px",
     });
   } else if (commCenter.tablePosition === "bottom") {
     titleStyle = Object.assign({}, titleStyle, {
       position: "relative",
-      top: 60,
+      top: 50,
     });
     lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
-      left: 39,
-      top: 45,
-      width: "23px",
+      left: 42,
+      top: 43,
+      width: "15px",
       transform: "rotate(90deg)",
     });
   } else if (commCenter.tablePosition === "bottom-left") {
     titleStyle = Object.assign({}, titleStyle, {
       position: "relative",
       right: 50,
-      top: 50,
+      top: 40,
     });
     lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
-      left: 5,
-      top: 40,
-      width: "30px",
+      left: 25,
+      top: 38,
+      width: "18px",
       transform: "rotate(145deg)",
     });
   } else if (commCenter.tablePosition === "top-left") {
     titleStyle = Object.assign({}, titleStyle, {
       position: "relative",
       right: 80,
-      bottom: 130,
+      bottom: 160,
     });
     lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
-      left: 20,
-      top: 5,
-      transform: "rotate(58deg)",
-      width: "32px",
+      left: 28,
+      top: 8,
+      transform: "rotate(50deg)",
+      width: "18px",
     });
   } else if (commCenter.tablePosition === "top-right") {
     titleStyle = Object.assign({}, titleStyle, {
       position: "relative",
-      left: 80,
-      bottom: 130,
+      left: 70,
+      bottom: 140,
     });
     lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
       left: 55,
-      top: 5,
+      top: 10,
       transform: "rotate(135deg)",
-      width: "30px",
+      width: "18px",
     });
   } else if (commCenter.tablePosition === "bottom-right") {
     titleStyle = Object.assign({}, titleStyle, {
       position: "relative",
-      left: 80,
-      top: 50,
+      left: 30,
+      top: 45,
     });
     lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
       left: 55,
-      top: 40,
-      transform: "rotate(27deg)",
-      width: "38px",
+      top: 38,
+      transform: "rotate(45deg)",
+      width: "18px",
     });
   }
   let fuelStyle = Object.assign({}, {}, titleStyle, {
@@ -124,7 +124,6 @@ export default function ParamsTable(data) {
     height: "50px",
     backgroundColor: "#f4d9909c",
   });
-  // <div style={lineStyle}></div>
   let pStyle = { padding: 0, margin: 0, color: "black" };
   let P_out,
     P_in,
@@ -158,9 +157,6 @@ export default function ParamsTable(data) {
   return (
     <div style={{ width: "110px" }}>
       <div style={lineStyle}></div>
-      <div style={titleStyle}>
-        <p>{commCenter.name}</p>
-      </div>
 
       <div style={nasosiStyle}>
         <p style={pStyle}> Pвх, {P_in} (МПа)</p>
