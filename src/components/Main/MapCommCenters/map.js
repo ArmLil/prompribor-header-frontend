@@ -11,6 +11,8 @@ import fuelMarker from "../../../images/fuelMarker.png";
 import explosions from "../../../images/explosions.png";
 import bureya from "../../../images/bureya.png";
 import sklad from "../../../images/sklad2.png";
+import triangle1 from "../../../images/triangle1.png";
+import triangle2 from "../../../images/triangle2.png";
 
 import ParamsTable from "./paramsTable";
 import Description from "./description";
@@ -354,6 +356,75 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
               alt=""
               style={{
                 width: "100px",
+                marginTop: "15px",
+                transform: "rotate(0deg)",
+                opacity: 0.9,
+              }}
+            />
+          }
+        />
+
+        <ExtMarker
+          key={"sklad"}
+          position={[56.1856, 42.86942]}
+          name="NS-5"
+          icon={
+            <img
+              src={triangle2}
+              alt=""
+              style={{
+                width: "25px",
+                marginTop: "15px",
+                transform: "rotate(0deg)",
+                opacity: 1,
+              }}
+            />
+          }
+        />
+        <ExtMarker
+          key={"sklad"}
+          position={[56.18419, 42.90058]}
+          name="NS-1"
+          icon={
+            <img
+              src={triangle1}
+              alt=""
+              style={{
+                width: "25px",
+                marginTop: "15px",
+                transform: "rotate(0deg)",
+                opacity: 1,
+              }}
+            />
+          }
+        />
+        <ExtMarker
+          key={"sklad"}
+          position={[56.18968, 42.88698]}
+          name="NS-3"
+          icon={
+            <img
+              src={triangle1}
+              alt=""
+              style={{
+                width: "25px",
+                marginTop: "15px",
+                transform: "rotate(0deg)",
+                opacity: 1,
+              }}
+            />
+          }
+        />
+        <ExtMarker
+          key={"sklad"}
+          position={[56.19042, 42.85264]}
+          name="NS-7"
+          icon={
+            <img
+              src={triangle1}
+              alt=""
+              style={{
+                width: "25px",
                 marginTop: "15px",
                 transform: "rotate(0deg)",
                 opacity: 1,
