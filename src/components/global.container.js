@@ -86,7 +86,7 @@ class GlobalContainer extends Component {
             style={{ backgroundColor: "#040406", opacity: "", top: 0 }}
           >
             <Link to={"/"} className="navbar-brand">
-              СисМон-Нефтепровод
+              СМТ тпр-1
             </Link>
             <div className="navbar-nav mr-auto">
               {user && (
