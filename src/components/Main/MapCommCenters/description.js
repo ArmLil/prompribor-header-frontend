@@ -1,7 +1,8 @@
 import fuelMarker from "../../../images/fuelMarker.png";
 import explosions from "../../../images/explosions.png";
 // import sklad from "../../../images/sklad1.jpg";
-import sklad from "../../../images/sklad2.png";
+import sklad from "../../../images/sklad1.png";
+import bureya from "../../../images/bureya.png";
 import most from "../../../images/most.jpg";
 import RemoveSharpIcon from "@material-ui/icons/RemoveSharp";
 
@@ -40,7 +41,7 @@ function Content() {
             margin: "5px",
           }}
         />
-        - Гарнизон Насосных Станций
+        - Насосная Станция
       </div>
       <div style={{ alignSelf: "flex-start" }}>
         <img
@@ -53,7 +54,7 @@ function Content() {
         />
         - взрыв на мосту
       </div>
-      <div style={{ alignSelf: "flex-start" }}>
+      <div style={{ alignSelf: "flex-start", marginBottom: 2 }}>
         <img
           src={most}
           alt=""
@@ -76,6 +77,7 @@ function Content() {
         />
         - склад горючего
       </div>
+
       <div style={{ alignSelf: "flex-start" }}>
         <RemoveSharpIcon
           style={{

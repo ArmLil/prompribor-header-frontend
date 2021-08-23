@@ -3,14 +3,13 @@ import React, { useState, useEffect, useContext } from "react";
 import ExtMarker from "react-leaflet-enhanced-marker";
 // import PersonPinCircleOutlinedIcon from "@material-ui/icons/PersonPinCircleOutlined";
 import LocalShippingIcon from "@material-ui/icons/LocalShipping";
-import ArrowRightAltSharpIcon from "@material-ui/icons/ArrowRightAltSharp"; //right
 
 import "leaflet/dist/leaflet.css";
 
 import fuelMarker from "../../../images/fuelMarker.png";
 import explosions from "../../../images/explosions.png";
 import bureya from "../../../images/bureya.png";
-import sklad from "../../../images/sklad2.png";
+import sklad from "../../../images/sklad1.png";
 import triangle1 from "../../../images/triangle1.png";
 import triangle2 from "../../../images/triangle2.png";
 
@@ -25,6 +24,7 @@ import {
   useMap,
   Polyline,
   // Marker,
+  SVGOverlay,
   Tooltip,
 } from "react-leaflet";
 import { SocketContext } from "../../../socket_api";
@@ -32,7 +32,100 @@ import { SocketContext } from "../../../socket_api";
 import { api } from "../../../api";
 export const API_URL = `http://${api.host}:${api.port}`;
 // const IMAGES_URL = `${API_URL}/images/{s}.tile.openstreetmap.org.{z}.{x}.{y}.png`;
-
+function BureyaSign() {
+  return (
+    <div>
+      <img
+        src={bureya}
+        alt=""
+        style={{
+          width: "100px",
+          marginTop: "15px",
+          transform: "rotate(0deg)",
+          opacity: 0.9,
+        }}
+      />
+      <div
+        style={{
+          position: "relative",
+          top: 2,
+          left: 1,
+          width: 90,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            opasity: 1,
+            fontWeight: "bolder",
+            backgroundColor: "white",
+            justifyContent: "center",
+            padding: 0,
+          }}
+        >
+          <p
+            style={{
+              margin: 0,
+              fontWeight: "bolder",
+              fontSize: 14,
+            }}
+          >
+            КДП
+          </p>
+          <p
+            style={{
+              fontStyle: "italic",
+              fontSize: 12,
+              margin: 0,
+              marginLeft: 5,
+              position: "relative",
+              top: 3,
+              fontWeight: "bold",
+            }}
+          >
+            тпр-1
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+function SkladSign() {
+  return (
+    <div>
+      <img
+        src={sklad}
+        alt=""
+        style={{
+          width: "145px",
+          marginTop: "15px",
+          transform: "rotate(-0deg)",
+          opacity: 1,
+        }}
+      />
+      <div
+        style={{
+          position: "relative",
+          top: 0,
+          left: 1,
+          width: 90,
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            opasity: 1,
+            fontWeight: "bolder",
+            backgroundColor: "white",
+            justifyContent: "center",
+            width: "143px",
+            height: 13,
+          }}
+        ></div>
+      </div>
+    </div>
+  );
+}
 const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
   console.log({ history }, { commCenters }, { mapPolylinePoints }, { bridge });
   const socket = useContext(SocketContext);
@@ -56,10 +149,10 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
   //   return place.toString();
   // };
   let changeViewMarkers = [
-    { lat: Number(places[0].lat) - 0.002, len: Number(places[0].len) - 0.04 },
+    { lat: Number(places[0].lat) - 0.006, len: Number(places[0].len) - 0.04 },
     {
-      lat: Number(places[places.length - 1].lat) + 0.004,
-      len: Number(places[places.length - 1].len) + 0.003,
+      lat: Number(places[places.length - 1].lat) - 0.001,
+      len: Number(places[places.length - 1].len) + 0.02,
     },
   ];
   changeViewMarkers = changeViewMarkers.concat(places);
@@ -181,7 +274,37 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
 
         <ChangeView center={defaultPosition} markers={changeViewMarkers} />
         {places.map((place: Place) => {
+          let placeName = "";
+          let nameArr = place.name.split("-");
+          let NameDiv = () => {
+            return (
+              <div style={{ display: "flex", opasity: 1, fontWeight: "bold" }}>
+                <p
+                  style={{
+                    margin: 0,
+                    padding: 0,
+                    fontSize: 13,
+                  }}
+                >
+                  {nameArr[0]}
+                </p>
+
+                <p
+                  style={{
+                    fontSize: 11,
+                    margin: 0,
+                    padding: 0,
+                    position: "relative",
+                    top: 2,
+                  }}
+                >
+                  -{nameArr[1]}
+                </p>
+              </div>
+            );
+          };
           let tooltipDirection = "top";
+          let tooltipOffset = [0, -12];
           let tooltipStyle = {};
           if (place.tablePosition === "top-left") {
             tooltipDirection = "top-right";
@@ -196,9 +319,15 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
             tooltipDirection = "bottom-left";
             tooltipStyle = { position: "relative", bottom: 10 };
           }
+          if (place.path === "GNS5") {
+            tooltipOffset = [9, -12];
+          }
+          if (place.path === "GNS6") {
+            tooltipOffset = [-4, -12];
+          }
           return (
             <ExtMarker
-              key={place.path}
+              key={place.name}
               position={place.position}
               icon={<ParamsTable commCenter={place} />}
               eventHandlers={{
@@ -211,19 +340,18 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
             >
               <Tooltip
                 direction={"top"}
-                offset={[0, -12]}
-                opacity={0.8}
+                offset={tooltipOffset}
+                opacity={1}
                 permanent
-                style={{}}
               >
-                {place.name}
+                {<NameDiv />}
               </Tooltip>
             </ExtMarker>
           );
         })}
         {places.map((place: Place) => (
           <ExtMarker
-            key={place.name}
+            key={place.len}
             position={place.position}
             icon={
               <img
@@ -245,52 +373,6 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
           ></ExtMarker>
         ))}
 
-        {mapPolylinePoints.map((point: Place) => {
-          //arrows
-          let direction = null;
-          if (point.type === "right") {
-            direction = "rotate(0deg)";
-          }
-          if (point.type === "left") {
-            direction = "rotate(180deg)";
-          }
-          if (point.type === "upLeft") {
-            direction = "rotate(-135deg)";
-          }
-          if (point.type === "downLeft") {
-            direction = "rotate(135deg)";
-          }
-          if (point.type === "downRight") {
-            direction = "rotate(45deg)";
-          }
-          if (point.type === "upRight") {
-            direction = "rotate(-45deg)";
-          }
-          if (point.type === "up") {
-            direction = "rotate(-90deg)";
-          }
-          if (point.type === "down") {
-            direction = "rotate(90deg)";
-          }
-          if (direction)
-            return (
-              <ExtMarker
-                key={point.index}
-                position={[point.lat, point.len]}
-                icon={
-                  <ArrowRightAltSharpIcon
-                    style={{
-                      fontSize: "20px",
-                      marginTop: "15px",
-                      transform: direction,
-                      color: "yellow",
-                    }}
-                  />
-                }
-              ></ExtMarker>
-            );
-          return null;
-        })}
         {bridge.map((typeArray, index) => {
           typeArray.sort(function (a, b) {
             return a.index - b.index;
@@ -333,47 +415,25 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
         />
         <ExtMarker
           key={"sklad"}
-          position={[56.19089, 42.85704]}
-          icon={
-            <img
-              src={sklad}
-              alt=""
-              style={{
-                width: "120px",
-                marginTop: "15px",
-                transform: "rotate(0deg)",
-                opacity: 0.75,
-              }}
-            />
-          }
-        />
-        <ExtMarker
-          key={"sklad"}
-          position={[56.18619, 42.87393]}
-          icon={
-            <img
-              src={bureya}
-              alt=""
-              style={{
-                width: "100px",
-                marginTop: "15px",
-                transform: "rotate(0deg)",
-                opacity: 0.9,
-              }}
-            />
-          }
-        />
+          position={[56.19097, 42.85788]}
+          icon={<SkladSign />}
+        ></ExtMarker>
 
         <ExtMarker
-          key={"sklad"}
-          position={[56.1856, 42.86942]}
-          name="NS-5"
+          key="bureya sign"
+          position={[56.18607, 42.87419]}
+          icon={<BureyaSign />}
+        ></ExtMarker>
+
+        <ExtMarker
+          key={"NS-5"}
+          position={[56.18538, 42.87239]}
           icon={
             <img
               src={triangle2}
               alt=""
               style={{
-                width: "25px",
+                width: "30px",
                 marginTop: "15px",
                 transform: "rotate(0deg)",
                 opacity: 1,
@@ -382,15 +442,14 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
           }
         />
         <ExtMarker
-          key={"sklad"}
-          position={[56.18419, 42.90058]}
-          name="NS-1"
+          key={"NS-1"}
+          position={[56.18397, 42.89947]}
           icon={
             <img
               src={triangle1}
               alt=""
               style={{
-                width: "25px",
+                width: "30px",
                 marginTop: "15px",
                 transform: "rotate(0deg)",
                 opacity: 1,
@@ -399,15 +458,14 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
           }
         />
         <ExtMarker
-          key={"sklad"}
-          position={[56.18968, 42.88698]}
-          name="NS-3"
+          key={"NS-3"}
+          position={[56.18961, 42.88659]}
           icon={
             <img
               src={triangle1}
               alt=""
               style={{
-                width: "25px",
+                width: "30px",
                 marginTop: "15px",
                 transform: "rotate(0deg)",
                 opacity: 1,
@@ -416,15 +474,14 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
           }
         />
         <ExtMarker
-          key={"sklad"}
-          position={[56.19042, 42.85264]}
-          name="NS-7"
+          key={"NS-7"}
+          position={[56.19018, 42.85516]}
           icon={
             <img
               src={triangle1}
               alt=""
               style={{
-                width: "25px",
+                width: "30px",
                 marginTop: "15px",
                 transform: "rotate(0deg)",
                 opacity: 1,

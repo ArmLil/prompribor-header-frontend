@@ -48,9 +48,30 @@ class Home extends Component {
             className="jumbotron"
             style={{ opacity: "0.88", overflowY: "scroll", height: "80vh" }}
           >
-            <h3>{this.state.content}</h3>
+            <div style={{ display: "flex" }}>
+              <h4
+                style={{
+                  marginBottom: 0,
+                }}
+              >
+                {this.state.content[0]}
+              </h4>
+              <p
+                style={{
+                  fontStyle: "italic",
+                  fontSize: 15,
+                  marginLeft: 5,
+                  marginBottom: 0,
+                  marginTop: 0,
+                  position: "relative",
+                  top: 3,
+                  fontWeight: "bold",
+                }}
+              >
+                {this.state.content[1]}
+              </p>
+            </div>
             <br></br>
-
             <h5>
               Автоматизированная система мониторинга сборно-разборного
               трубопровода

@@ -6,17 +6,16 @@ export default function ParamsTable(data) {
     borderTop: "2px solid green",
     position: "relative",
   };
-  let titleStyle = {
+  let tableStyle = {
     border: "1px solid black",
-    height: 20,
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: "bolder",
     backgroundColor: "#FDD495E6",
     color: "black",
   };
 
   if (commCenter.tablePosition === "right") {
-    titleStyle = Object.assign({}, titleStyle, {
+    tableStyle = Object.assign({}, tableStyle, {
       position: "relative",
       left: 76,
       bottom: 30,
@@ -28,7 +27,7 @@ export default function ParamsTable(data) {
       // transform: "rotate(180deg)",
     });
   } else if (commCenter.tablePosition === "top") {
-    titleStyle = Object.assign({}, titleStyle, {
+    tableStyle = Object.assign({}, tableStyle, {
       position: "relative",
       bottom: 170,
     });
@@ -40,7 +39,7 @@ export default function ParamsTable(data) {
       transform: "rotate(90deg)",
     });
   } else if (commCenter.tablePosition === "left") {
-    titleStyle = Object.assign({}, titleStyle, {
+    tableStyle = Object.assign({}, tableStyle, {
       position: "relative",
       right: 85,
       bottom: 40,
@@ -52,7 +51,7 @@ export default function ParamsTable(data) {
       width: "15px",
     });
   } else if (commCenter.tablePosition === "bottom") {
-    titleStyle = Object.assign({}, titleStyle, {
+    tableStyle = Object.assign({}, tableStyle, {
       position: "relative",
       top: 50,
     });
@@ -64,10 +63,10 @@ export default function ParamsTable(data) {
       transform: "rotate(90deg)",
     });
   } else if (commCenter.tablePosition === "bottom-left") {
-    titleStyle = Object.assign({}, titleStyle, {
+    tableStyle = Object.assign({}, tableStyle, {
       position: "relative",
-      right: 50,
-      top: 40,
+      right: 52,
+      top: 42,
     });
     lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
@@ -77,7 +76,7 @@ export default function ParamsTable(data) {
       transform: "rotate(145deg)",
     });
   } else if (commCenter.tablePosition === "top-left") {
-    titleStyle = Object.assign({}, titleStyle, {
+    tableStyle = Object.assign({}, tableStyle, {
       position: "relative",
       right: 80,
       bottom: 160,
@@ -90,10 +89,10 @@ export default function ParamsTable(data) {
       width: "18px",
     });
   } else if (commCenter.tablePosition === "top-right") {
-    titleStyle = Object.assign({}, titleStyle, {
+    tableStyle = Object.assign({}, tableStyle, {
       position: "relative",
       left: 70,
-      bottom: 140,
+      bottom: 150,
     });
     lineStyle = Object.assign({}, lineStyle, {
       position: "relative",
@@ -103,7 +102,7 @@ export default function ParamsTable(data) {
       width: "18px",
     });
   } else if (commCenter.tablePosition === "bottom-right") {
-    titleStyle = Object.assign({}, titleStyle, {
+    tableStyle = Object.assign({}, tableStyle, {
       position: "relative",
       left: 30,
       top: 45,
@@ -116,12 +115,12 @@ export default function ParamsTable(data) {
       width: "18px",
     });
   }
-  let fuelStyle = Object.assign({}, {}, titleStyle, {
-    height: "95px",
+  let fuelStyle = Object.assign({}, {}, tableStyle, {
+    height: "100px",
     backgroundColor: "#fbcbb4c4",
   });
-  let nasosiStyle = Object.assign({}, titleStyle, {
-    height: "50px",
+  let nasosiStyle = Object.assign({}, tableStyle, {
+    height: "52px",
     backgroundColor: "#f4d9909c",
   });
   let pStyle = { padding: 0, margin: 0, color: "black" };
@@ -131,7 +130,7 @@ export default function ParamsTable(data) {
     temperature,
     density,
     current_volume,
-    currentMass,
+    current_mass,
     total_volume,
     total_mass;
   commCenter.controllers.forEach((contr, i) => {
@@ -145,8 +144,8 @@ export default function ParamsTable(data) {
         density = reg.Registers_Controllers_values.value;
       if (reg.name === "current_volume")
         current_volume = reg.Registers_Controllers_values.value;
-      if (reg.name === "currentMass")
-        currentMass = reg.Registers_Controllers_values.value;
+      if (reg.name === "current_mass")
+        current_mass = reg.Registers_Controllers_values.value;
       if (reg.name === "total_volume")
         total_volume = reg.Registers_Controllers_values.value;
       if (reg.name === "total_mass")
@@ -155,9 +154,8 @@ export default function ParamsTable(data) {
   });
 
   return (
-    <div style={{ width: "110px" }}>
+    <div style={{ width: "105px" }}>
       <div style={lineStyle}></div>
-
       <div style={nasosiStyle}>
         <p style={pStyle}> Pвх, {P_in} (МПа)</p>
         <p style={pStyle}> Pвых, {P_out} (МПа)</p>
@@ -168,7 +166,7 @@ export default function ParamsTable(data) {
         <p style={pStyle}>ρ, {density} (кг/м3)</p>
         <p style={pStyle}> t, {temperature} (°C)</p>
         <p style={pStyle}> V, {total_volume} (м3)</p>
-        <p style={pStyle}> m, {currentMass} (т/ч)</p>
+        <p style={pStyle}> m, {current_mass} (т/ч)</p>
         <p style={pStyle}> M, {total_mass} (тонны)</p>
       </div>
     </div>

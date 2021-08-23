@@ -85,8 +85,26 @@ class GlobalContainer extends Component {
             className="navbar navbar-expand navbar-dark  sticky-top"
             style={{ backgroundColor: "#040406", opacity: "", top: 0 }}
           >
-            <Link to={"/"} className="navbar-brand">
-              СМТ тпр-1
+            <Link to={"/"} className="navbar-brand" style={{ display: "flex" }}>
+              <h5
+                style={{
+                  marginBottom: 0,
+                  marginLeft: 20,
+                }}
+              >
+                СМТ
+              </h5>{" "}
+              <p
+                style={{
+                  fontStyle: "italic",
+                  fontSize: 15,
+                  marginLeft: 5,
+                  marginBottom: 0,
+                  marginTop: 0,
+                }}
+              >
+                тпр-1
+              </p>
             </Link>
             <div className="navbar-nav mr-auto">
               {user && (
