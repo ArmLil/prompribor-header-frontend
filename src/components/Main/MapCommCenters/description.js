@@ -2,7 +2,6 @@ import fuelMarker from "../../../images/fuelMarker.png";
 import explosions from "../../../images/explosions.png";
 // import sklad from "../../../images/sklad1.jpg";
 import sklad from "../../../images/sklad1.png";
-import bureya from "../../../images/bureya.png";
 import most from "../../../images/most.jpg";
 import RemoveSharpIcon from "@material-ui/icons/RemoveSharp";
 

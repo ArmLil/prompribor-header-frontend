@@ -24,7 +24,6 @@ import {
   useMap,
   Polyline,
   // Marker,
-  SVGOverlay,
   Tooltip,
 } from "react-leaflet";
 import { SocketContext } from "../../../socket_api";
@@ -61,6 +60,7 @@ function BureyaSign() {
             backgroundColor: "white",
             justifyContent: "center",
             padding: 0,
+            borderRadius: "10%",
           }}
         >
           <p
@@ -68,6 +68,7 @@ function BureyaSign() {
               margin: 0,
               fontWeight: "bolder",
               fontSize: 14,
+              color: "black",
             }}
           >
             КДП
@@ -81,6 +82,7 @@ function BureyaSign() {
               position: "relative",
               top: 3,
               fontWeight: "bold",
+              color: "black",
             }}
           >
             тпр-1
@@ -274,7 +276,6 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
 
         <ChangeView center={defaultPosition} markers={changeViewMarkers} />
         {places.map((place: Place) => {
-          let placeName = "";
           let nameArr = place.name.split("-");
           let NameDiv = () => {
             return (
