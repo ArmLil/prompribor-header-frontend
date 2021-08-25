@@ -170,7 +170,6 @@ export default function FuelTables() {
     dataService
       .putData(`fuel_journals_data/${paramsId}`, putBody)
       .then((result) => {
-        console.log({ result });
         dispatch(editJournalData(commCenter, "fuel", result.data));
         setOpenEditDialog(false);
       })
