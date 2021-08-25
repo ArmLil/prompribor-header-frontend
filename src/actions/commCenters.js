@@ -28,7 +28,7 @@ export const updateCommCenters = (payload) => ({
 export const updateCommCentersBySocket = (commCenters, data) => (dispatch) => {
   console.log(commCenters, data);
   let newCommCenters = [...commCenters];
-  console.log({ newCommCenters });
+  // console.log({ newCommCenters });
   newCommCenters.forEach((commCenter, i) => {
     commCenter.controllers.forEach((contr, i) => {
       contr.registers.forEach((reg, i) => {

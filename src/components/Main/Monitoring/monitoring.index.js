@@ -57,6 +57,7 @@ class Monitoring extends Component {
     this.state = {};
   }
   componentDidMount() {
+    console.log(this.props.match.params);
     const commCenterPath = this.props.match.params.commCenterPath;
     const { dispatchGetControllersForCommCenter } = this.props;
     const getControllerUrl = `controllers/getRegGroupsRegistersValues/${commCenterPath}`;
@@ -78,7 +79,7 @@ class Monitoring extends Component {
       controllersForCommCenter,
       error,
       loading,
-      commCenters,
+      mapCommCenters,
     } = this.props;
     if (error) {
       return <div>Error! {error}</div>;
@@ -88,7 +89,7 @@ class Monitoring extends Component {
       return <Loader />;
     }
 
-    const commCenter = commCenters.find(
+    const commCenter = mapCommCenters.find(
       (el) => el.path === this.props.match.params.commCenterPath
     );
 
@@ -127,14 +128,14 @@ function mapStateToProps(state) {
   const controllersForCommCenter =
     state.controllersForCommCentersReducer.controllers;
   const { error, loading } = state.controllersForCommCentersReducer;
-  const commCenters = state.commCentersReducer.items;
+  const mapCommCenters = state.mapCommCentersReducer.items;
   return {
     message,
     controller,
     error,
     loading,
     controllersForCommCenter,
-    commCenters,
+    mapCommCenters,
   };
 }
 export default connect(

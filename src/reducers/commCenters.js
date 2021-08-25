@@ -39,6 +39,7 @@ export default function commCentersReducer(state = initialState, action) {
         bridge: [],
       };
     case UPDATE_COMMCENTERS:
+      console.log(action, action.payload);
       return {
         ...state,
         items: action.payload,

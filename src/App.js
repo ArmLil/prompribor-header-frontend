@@ -20,17 +20,28 @@ export default function App() {
     // let isMounted = true;
     const updateControllerListener = (data) => {
       console.log("socket on registerControllerValue");
-      console.log(data, commCenters);
 
       dispatch(updateControllerBySocket(controllers, data));
-      dispatch(updateCommCentersBySocket(commCenters, data));
     };
     socket.on("registerControllerValue", updateControllerListener);
     return () => {
       // isMounted = false;
       socket.off("registerControllerValue", updateControllerListener);
     };
-  }, [commCenters, controllers, dispatch]);
+  }, [controllers, dispatch]);
+
+  useEffect(() => {
+    const updateCommCenterListener = (data) => {
+      console.log("socket on updateMapCommCenters");
+      console.log(data);
+
+      dispatch(updateCommCentersBySocket(commCenters, data));
+    };
+    socket.on("updateMapCommCenters", updateCommCenterListener);
+    return () => {
+      socket.off("updateMapCommCenters", updateCommCenterListener);
+    };
+  }, [commCenters, dispatch]);
 
   useEffect(() => {
     const updateCommCentersFuelData = (data) => {

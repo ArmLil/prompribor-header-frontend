@@ -1,5 +1,6 @@
 export default function ParamsTable(data) {
-  // console.log(data.commCenter);
+  // console.log(data.commCenter.controllers[1].registers);
+
   let commCenter = data.commCenter;
   let lineStyle = {
     width: "15px",
@@ -123,7 +124,14 @@ export default function ParamsTable(data) {
     height: "52px",
     backgroundColor: "#f4d9909c",
   });
-  let pStyle = { padding: 0, margin: 0, color: "black" };
+  let pStyle = {
+    padding: 0,
+    margin: 0,
+    color: "black",
+    // display: "flex",
+    // flexDirection: "row",
+    // justifyContent: "space-around",
+  };
   let P_out,
     P_in,
     revs,
@@ -152,7 +160,7 @@ export default function ParamsTable(data) {
         total_mass = reg.Registers_Controllers_values.value;
     });
   });
-
+  console.log({ temperature });
   return (
     <div style={{ width: "105px" }}>
       <div style={lineStyle}></div>
@@ -167,7 +175,7 @@ export default function ParamsTable(data) {
         <p style={pStyle}> t, {temperature} (°C)</p>
         <p style={pStyle}> V, {total_volume} (м3)</p>
         <p style={pStyle}> m, {current_mass} (т/ч)</p>
-        <p style={pStyle}> M, {total_mass} (тонны)</p>
+        <p style={pStyle}> M, {total_mass} (т)</p>
       </div>
     </div>
   );

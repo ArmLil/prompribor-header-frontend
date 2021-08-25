@@ -14,9 +14,9 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableFooter from "@material-ui/core/TableFooter";
 import dataService from "../../../../../services/data.service";
-import { addJournalData } from "../../../../../actions/commCenters";
-import { editJournalData } from "../../../../../actions/commCenters";
-import { deleteJournalData } from "../../../../../actions/commCenters";
+import { addJournalData } from "../../../../../actions/currentCommCenter";
+import { editJournalData } from "../../../../../actions/currentCommCenter";
+import { deleteJournalData } from "../../../../../actions/currentCommCenter";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -84,7 +84,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function DoneseniiTables({ commCenter }) {
+export default function DoneseniiTables() {
   const classes = useStyles();
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
@@ -93,7 +93,9 @@ export default function DoneseniiTables({ commCenter }) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const dispatch = useDispatch();
-  const commCenters = useSelector((state) => state.commCentersReducer.items);
+  const commCenter = useSelector(
+    (state) => state.currentCommCenterReducer.item
+  );
 
   React.useEffect(() => {
     const setParams = () => {};
@@ -129,16 +131,7 @@ export default function DoneseniiTables({ commCenter }) {
       dataService
         .deleteData(`donesenii_journals_data/${parameters.id}`)
         .then((result) => {
-          console.log({ result });
-          dispatch(
-            // editJournalData(commCenters, commCenterPath, journalName, journalData)
-            deleteJournalData(
-              commCenters,
-              commCenter.path,
-              "donesenii",
-              parameters.id
-            )
-          );
+          dispatch(deleteJournalData(commCenter, "donesenii", parameters.id));
         })
         .catch((err) => console.log({ err }));
     }
@@ -177,16 +170,7 @@ export default function DoneseniiTables({ commCenter }) {
     dataService
       .putData(`donesenii_journals_data/${paramsId}`, putBody)
       .then((result) => {
-        console.log({ result });
-        dispatch(
-          // editJournalData(commCenters, commCenterPath, journalName, journalData)
-          editJournalData(
-            commCenters,
-            commCenter.path,
-            "donesenii",
-            result.data
-          )
-        );
+        dispatch(editJournalData(commCenter, "donesenii", result.data));
         setOpenEditDialog(false);
       })
       .catch((err) => console.log({ err }));
@@ -230,10 +214,7 @@ export default function DoneseniiTables({ commCenter }) {
         commCenterPath: commCenter.path,
       })
       .then((result) => {
-        dispatch(
-          // addJournalData(commCenters, commCenterPath, journalName, journalData)
-          addJournalData(commCenters, commCenter.path, "donesenii", result.data)
-        );
+        dispatch(addJournalData(commCenter, "donesenii", result.data));
         setOpenAddDialog(false);
       })
       .catch((err) => console.log({ err }));

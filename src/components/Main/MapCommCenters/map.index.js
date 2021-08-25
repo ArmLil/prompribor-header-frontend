@@ -30,7 +30,7 @@ class MapCommCenters extends React.Component {
   render() {
     const {
       classes,
-      commCenters,
+      mapCommCenters,
       error,
       loading,
       history,
@@ -61,7 +61,7 @@ class MapCommCenters extends React.Component {
           <Grid item xs={12} style={{ zIndex: 2 }}>
             <Paper className={classes.paper} style={{ zIndex: 2 }}>
               <Map
-                commCenters={commCenters}
+                commCenters={mapCommCenters}
                 history={history}
                 mapPolylinePoints={mapPolylinePoints}
                 bridge={bridge}
@@ -82,13 +82,13 @@ const mapDispatchToProps = (dispatch) => ({
 
 function mapStateToProps(state) {
   const { message } = state.message;
-  const commCenters = state.commCentersReducer.items;
-  const mapPolylinePoints = state.commCentersReducer.mapPolylinePoints;
-  const bridge = state.commCentersReducer.bridge;
-  const { error, loading } = state.commCentersReducer;
+  const mapCommCenters = state.mapCommCentersReducer.items;
+  const mapPolylinePoints = state.mapCommCentersReducer.mapPolylinePoints;
+  const bridge = state.mapCommCentersReducer.bridge;
+  const { error, loading } = state.mapCommCentersReducer;
   return {
     message,
-    commCenters,
+    mapCommCenters,
     mapPolylinePoints,
     bridge,
     error,

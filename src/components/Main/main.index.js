@@ -11,7 +11,7 @@ import LeftBar from "./LeftBar/leftBar.index";
 import Loader from "../Loader";
 
 import { connect } from "react-redux";
-import { getCommCenters } from "../../actions/commCenters";
+import { getMapCommCenters } from "../../actions/mapCommCenters";
 
 const useStyles = (theme: Theme) =>
   createStyles({
@@ -27,18 +27,18 @@ const useStyles = (theme: Theme) =>
 class Main extends Component {
   componentDidMount() {
     console.log("componentDidMount() Main....");
-    const { commCenters, dispatchGetCommCenters } = this.props;
-    const getCommCenterUrl = "commCenters?controller=include";
+    const { mapCommCenters, dispatchGetMapCommCenters } = this.props;
+    const getMapCommCentersUrl = "mapCommCenters";
 
-    if (commCenters.length === 0) {
-      dispatchGetCommCenters(getCommCenterUrl);
+    if (mapCommCenters.length === 0) {
+      dispatchGetMapCommCenters(getMapCommCentersUrl);
     }
   }
   render() {
     console.log("render");
-    const { classes, commCenters, error, loading } = this.props;
-    console.log({ commCenters });
-    commCenters.sort(function (a, b) {
+    const { classes, mapCommCenters, error, loading } = this.props;
+    console.log({ mapCommCenters });
+    mapCommCenters.sort(function (a, b) {
       return a.index - b.index;
     });
 
@@ -46,12 +46,12 @@ class Main extends Component {
       return <div>Error! {error}</div>;
     }
 
-    if (loading || commCenters.length === 0) {
+    if (loading || mapCommCenters.length === 0) {
       return <Loader />;
     }
     return (
       <div className={classes.root}>
-        <LeftBar commCenters={commCenters} />
+        <LeftBar commCenters={mapCommCenters} />
         <div className={classes.main}>
           <Switch>
             <Route exact path="/main" component={MapCommCenters} />
@@ -80,18 +80,16 @@ class Main extends Component {
   }
 }
 const mapDispatchToProps = (dispatch) => ({
-  dispatchGetCommCenters: (url) => {
-    dispatch(getCommCenters(url));
+  dispatchGetMapCommCenters: (url) => {
+    dispatch(getMapCommCenters(url));
   },
 });
 
 function mapStateToProps(state) {
-  const { message } = state.message;
-  const commCenters = state.commCentersReducer.items;
+  const mapCommCenters = state.mapCommCentersReducer.items;
   const { error, loading } = state.commCentersReducer;
   return {
-    message,
-    commCenters,
+    mapCommCenters,
     error,
     loading,
   };

@@ -131,7 +131,7 @@ export default function FormDialog({
             value={avarii}
             onChange={handleChangeAvarii}
             onClick={() => {
-              // setAvarii_shrink(true);
+              setAvarii_shrink(true);
             }}
             multiline
             label="Содержание (место, вероятная причина аварии)"

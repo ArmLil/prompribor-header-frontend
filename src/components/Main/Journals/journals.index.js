@@ -13,7 +13,7 @@ import NasosiTables from "./Tables/Nasosi/nasosi.table.index";
 import FuelTables from "./Tables/Fuel/fuel.table.index";
 
 import { connect } from "react-redux";
-import { getCommCenters } from "../../../actions/commCenters";
+import { getCurrentCommCenter } from "../../../actions/currentCommCenter";
 
 const theme = createTheme(
   {
@@ -47,21 +47,19 @@ class Journals extends Component {
     super(props);
     this.state = {
       currentJournal: <AvariiTables commCenter={""} />,
-      currentCommCenter: "",
+      currentCommCenter: {},
     };
   }
   componentDidMount() {
     //use native js to control Carousal library, on change slide we need to change tables
+    const { dispatchGetCommCenter } = this.props;
+    const commCenterPath = this.props.match.params.commCenterPath;
+    console.log({ commCenterPath });
+    dispatchGetCommCenter(`commCenters/${commCenterPath}`);
     setTimeout(() => {
       console.log("componentDidMount");
-      const commCenterPath = this.props.match.params.commCenterPath;
-      const { commCenters } = this.props;
-      let currentCommCenter = commCenters.find((commCenter) => {
-        if (commCenter.path === commCenterPath) {
-          return commCenter;
-        }
-        return null;
-      });
+      const { currentCommCenter } = this.props;
+
       this.setState(
         {
           currentCommCenter,
@@ -180,59 +178,150 @@ class Journals extends Component {
           }
         });
       }
-    }, 1000);
+    }, 2000);
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     console.log("componentDidUpdate");
-    const { commCenters } = this.props;
-    const prevCommCenters = prevProps.commCenters;
     const thisPath = this.props.match.params.commCenterPath;
     const prevPath = prevProps.match.params.commCenterPath;
-    if (
-      prevPath !== thisPath ||
-      JSON.stringify(commCenters) !== JSON.stringify(prevCommCenters)
-    ) {
-      let currentCommCenter = commCenters.find((commCenter) => {
-        if (commCenter.path === thisPath) {
-          return commCenter;
+    if (prevPath !== thisPath) {
+      // window.location.reload();
+      const { dispatchGetCommCenter } = this.props;
+      const commCenterPath = this.props.match.params.commCenterPath;
+      console.log({ commCenterPath });
+      dispatchGetCommCenter(`commCenters/${commCenterPath}`);
+      setTimeout(() => {
+        console.log("componentDidMount");
+        const { currentCommCenter } = this.props;
+
+        this.setState(
+          {
+            currentCommCenter,
+          },
+          () => {
+            this.setState({
+              currentJournal: (
+                <AvariiTables commCenter={this.state.currentCommCenter} />
+              ),
+            });
+          }
+        );
+
+        //change arrows styles in library
+        let list_i_left = document.getElementsByClassName("fa fa-arrow-left");
+        let list_i_right = document.getElementsByClassName("fa fa-arrow-right");
+
+        for (let i = 0; i < list_i_left.length; ++i) {
+          list_i_left[i].style.color = "#6c757d7a";
         }
-        return null;
-      });
-      this.setState({
-        currentCommCenter,
-      });
-      let currentJournalName = this.state.currentJournal.type.name;
-      if (currentJournalName === "AvariiTables") {
-        this.setState({
-          currentJournal: <AvariiTables commCenter={currentCommCenter} />,
-        });
-      }
-      if (currentJournalName === "NasosiTables") {
-        this.setState({
-          currentJournal: <NasosiTables commCenter={currentCommCenter} />,
-        });
-      }
-      if (currentJournalName === "DoneseniiTables") {
-        this.setState({
-          currentJournal: <DoneseniiTables commCenter={currentCommCenter} />,
-        });
-      }
-      if (currentJournalName === "FuelTables") {
-        this.setState({
-          currentJournal: <FuelTables commCenter={currentCommCenter} />,
-        });
-      }
+        for (let i = 0; i < list_i_right.length; ++i) {
+          list_i_right[i].style.color = "#6c757d7a";
+        }
+        let slider_left = document.getElementsByClassName("slider-left");
+        for (let i = 0; i < slider_left.length; ++i) {
+          slider_left[i].addEventListener("click", () => {
+            let active_journal = document.getElementsByClassName(
+              "slider-single preactive"
+            );
+            let active_journal_name =
+              active_journal[0].childNodes[2].childNodes[0].attributes.name;
+            if (
+              active_journal_name.nodeValue === "учета донесений и распоряжений"
+            ) {
+              this.setState({
+                currentJournal: (
+                  <DoneseniiTables commCenter={this.state.currentCommCenter} />
+                ),
+              });
+            }
+            if (
+              active_journal_name.nodeValue ===
+              "учета режимов работы насосных станций"
+            ) {
+              this.setState({
+                currentJournal: (
+                  <NasosiTables commCenter={this.state.currentCommCenter} />
+                ),
+              });
+            }
+            if (
+              active_journal_name.nodeValue ===
+              "учета аварий и неисправностей на трубопроводе"
+            ) {
+              this.setState({
+                currentJournal: (
+                  <AvariiTables commCenter={this.state.currentCommCenter} />
+                ),
+              });
+            }
+            if (
+              active_journal_name.nodeValue ===
+              "учёта параметров процесса транспортирования горючего"
+            ) {
+              this.setState({
+                currentJournal: (
+                  <FuelTables commCenter={this.state.currentCommCenter} />
+                ),
+              });
+            }
+          });
+        }
+        let slider_right = document.getElementsByClassName("slider-right");
+        for (let i = 0; i < slider_right.length; ++i) {
+          slider_right[i].addEventListener("click", () => {
+            let active_journal = document.getElementsByClassName(
+              "slider-single proactive"
+            );
+            let active_journal_name =
+              active_journal[0].childNodes[2].childNodes[0].attributes.name;
+            if (
+              active_journal_name.nodeValue ===
+              "учета аварий и неисправностей на трубопроводе"
+            ) {
+              this.setState({
+                currentJournal: (
+                  <AvariiTables commCenter={this.state.currentCommCenter} />
+                ),
+              });
+            } else if (
+              active_journal_name.nodeValue ===
+              "учета режимов работы насосных станций"
+            ) {
+              this.setState({
+                currentJournal: (
+                  <NasosiTables commCenter={this.state.currentCommCenter} />
+                ),
+              });
+            } else if (
+              active_journal_name.nodeValue === "учета донесений и распоряжений"
+            ) {
+              this.setState({
+                currentJournal: (
+                  <DoneseniiTables commCenter={this.state.currentCommCenter} />
+                ),
+              });
+            } else if (
+              active_journal_name.nodeValue ===
+              "учёта параметров процесса транспортирования горючего"
+            ) {
+              this.setState({
+                currentJournal: (
+                  <FuelTables commCenter={this.state.currentCommCenter} />
+                ),
+              });
+            }
+          });
+        }
+      }, 2000);
     }
   }
 
   render() {
     console.log("render");
-    const { classes, commCenters, error, loading } = this.props;
-    commCenters.sort(function (a, b) {
-      return a.index - b.index;
-    });
-
+    const { classes, error, loading } = this.props;
+    const thisPath = this.props.match.params.commCenterPath;
+    console.log({ thisPath });
     if (error) {
       return <div>Error! {error}</div>;
     }
@@ -266,16 +355,16 @@ class Journals extends Component {
   }
 }
 const mapDispatchToProps = (dispatch) => ({
-  dispatchGetCommCenters: (url) => {
-    dispatch(getCommCenters(url));
+  dispatchGetCommCenter: (url) => {
+    dispatch(getCurrentCommCenter(url));
   },
 });
 
 function mapStateToProps(state) {
-  const commCenters = state.commCentersReducer.items;
-  const { error, loading } = state.commCentersReducer;
+  const currentCommCenter = state.currentCommCenterReducer.item;
+  const { error, loading } = state.currentCommCenterReducer;
   return {
-    commCenters,
+    currentCommCenter,
     error,
     loading,
   };
