@@ -5,7 +5,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import GlobalContainer from "./components/global.container";
 import { updateControllerBySocket } from "./actions/controllersForCommCenters";
-import { updateCommCentersBySocket } from "./actions/commCenters";
 import { addJournalData } from "./actions/commCenters";
 import { socket, SocketContext } from "./socket_api";
 
@@ -29,19 +28,6 @@ export default function App() {
       socket.off("registerControllerValue", updateControllerListener);
     };
   }, [controllers, dispatch]);
-
-  useEffect(() => {
-    const updateCommCenterListener = (data) => {
-      console.log("socket on updateMapCommCenters");
-      console.log(data);
-
-      dispatch(updateCommCentersBySocket(commCenters, data));
-    };
-    socket.on("updateMapCommCenters", updateCommCenterListener);
-    return () => {
-      socket.off("updateMapCommCenters", updateCommCenterListener);
-    };
-  }, [commCenters, dispatch]);
 
   useEffect(() => {
     const updateCommCentersFuelData = (data) => {

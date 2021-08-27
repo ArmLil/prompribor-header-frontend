@@ -46,6 +46,7 @@ export const getMapCommCenters = (url) => (dispatch) => {
   );
 };
 
-export const updateMapCommCentersBySocket = (MapCommCenters) => (dispatch) => {
-  dispatch(socketUpdateMapCommCenters(MapCommCenters));
+export const updateMapCommCentersBySocket = (mapCommCenters) => (dispatch) => {
+  console.log({ mapCommCenters });
+  dispatch(socketUpdateMapCommCenters(mapCommCenters));
 };
