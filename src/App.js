@@ -4,30 +4,12 @@ import "../node_modules/font-awesome/css/font-awesome.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import GlobalContainer from "./components/global.container";
-import { updateControllerBySocket } from "./actions/controllersForCommCenters";
 import { addJournalData } from "./actions/commCenters";
 import { socket, SocketContext } from "./socket_api";
 
 export default function App() {
   const dispatch = useDispatch();
-  const controllers = useSelector(
-    (state) => state.controllersForCommCentersReducer.controllers
-  );
   const commCenters = useSelector((state) => state.commCentersReducer.items);
-
-  useEffect(() => {
-    // let isMounted = true;
-    const updateControllerListener = (data) => {
-      console.log("socket on registerControllerValue");
-
-      dispatch(updateControllerBySocket(controllers, data));
-    };
-    socket.on("registerControllerValue", updateControllerListener);
-    return () => {
-      // isMounted = false;
-      socket.off("registerControllerValue", updateControllerListener);
-    };
-  }, [controllers, dispatch]);
 
   useEffect(() => {
     const updateCommCentersFuelData = (data) => {

@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React from "react";
 // import MarkerClusterGroup from "react-leaflet-markercluster";
 import ExtMarker from "react-leaflet-enhanced-marker";
 // import PersonPinCircleOutlinedIcon from "@material-ui/icons/PersonPinCircleOutlined";
-import LocalShippingIcon from "@material-ui/icons/LocalShipping";
 
 import "leaflet/dist/leaflet.css";
 
@@ -26,7 +25,6 @@ import {
   // Marker,
   Tooltip,
 } from "react-leaflet";
-import { SocketContext } from "../../../socket_api";
 
 import { api } from "../../../api";
 export const API_URL = `http://${api.host}:${api.port}`;
@@ -130,7 +128,6 @@ function SkladSign() {
 }
 const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
   console.log({ history }, { commCenters }, { mapPolylinePoints }, { bridge });
-  const socket = useContext(SocketContext);
   const places = [];
   const polyline = [];
 
@@ -168,89 +165,6 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
     markerBounds.isValid() && map.fitBounds(markerBounds);
     return null;
   }
-
-  // function LocationMarker() {
-  //   const [position, setPosition] = useState(null);
-  //   const map = useMapEvents({
-  //     click() {
-  //       map.locate();
-  //     },
-  //     locationfound(e) {
-  //       setPosition(e.latlng);
-  //       map.flyTo(e.latlng, map.getZoom());
-  //     },
-  //   });
-  //   // marker.setIcon(<Icon> icon);
-  //   return position === null ? null : (
-  //     <ExtMarker
-  //       position={position}
-  //       icon={
-  //         <PersonPinCircleOutlinedIcon
-  //           style={{ fontSize: 40, opacity: "0.95", color: "#b51f1fbc" }}
-  //         />
-  //       }
-  //     >
-  //       <Popup>Вы тут!</Popup>
-  //     </ExtMarker>
-  //   );
-  // }
-  // <LocationMarker />
-
-  function CarMarker() {
-    const [carPosition, setCarPosition] = useState([56.301, 42.688]);
-    useEffect(() => {
-      // let isMounted = true;
-      const carPositionListeners = (data) => {
-        console.log("socket on carPostion");
-        console.log(data.latlen);
-        console.log("carPosition=", carPosition);
-        if (carPosition !== data.latlen) {
-          setCarPosition(data.latlen);
-        }
-      };
-      socket.on("carPostion", carPositionListeners);
-      return () => {
-        // isMounted = false;
-        socket.off("carPostion", carPositionListeners);
-      };
-    }, [carPosition]);
-    // icon={<img src={car} style={{ width: "40px" }} />}
-    return (
-      <ExtMarker
-        position={carPosition}
-        icon={
-          <LocalShippingIcon
-            style={{ fontSize: 40, opacity: "0.95", color: "green" }}
-          />
-        }
-      />
-    );
-  }
-
-  // <Marker
-  //   key={place.name}
-  //   position={place.position}
-  //   eventHandlers={{
-  //     click: () => {
-  //       // showPreview(place);
-  //       history.push("/main/journals");
-  //     },
-  //   }}
-  // >
-  //   {/* show place's title on hover the marker */}
-  //               <Tooltip direction="top" offset={[0, -12]} opacity={0.6} permanent>{place.name}</Tooltip>
-  // </Marker>
-  //https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png
-  // icon={
-  //   <PlaceIcon
-  //     style={{ fontSize: 30, opacity: "0.95", color: "#4791db" }}
-  //   />
-  // }
-  // <TileLayer
-  //   attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-  //   url="https:{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-  // />
-  // <CarMarker />
 
   console.log("render");
   return (
@@ -304,22 +218,8 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
               </div>
             );
           };
-          let tooltipDirection = "top";
           let tooltipOffset = [0, -12];
-          let tooltipStyle = {};
-          if (place.tablePosition === "top-left") {
-            tooltipDirection = "top-right";
-          }
-          if (place.tablePosition === "top-right") {
-            tooltipDirection = "top-left";
-          }
-          if (place.tablePosition === "bottom-left") {
-            tooltipDirection = "bottom-right";
-          }
-          if (place.tablePosition === "bottom-right") {
-            tooltipDirection = "bottom-left";
-            tooltipStyle = { position: "relative", bottom: 10 };
-          }
+
           if (place.path === "GNS5") {
             tooltipOffset = [9, -12];
           }

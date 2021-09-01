@@ -69,19 +69,22 @@ export default function FormDialog({
   const handleChangeNote = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNote(event.target.value);
   };
+  const handleOnClose = () => {
+    setDate("");
+    setTime("");
+    setFromWho("");
+    setDonesenii("");
+    setExecutor("");
+    setNote("");
+    setDonesenii_error(false);
+    setDonesenii_shrink(false);
+    handleAddDialogClose();
+  };
   return (
     <div>
       <Dialog
         open={openAddDialog}
-        onClose={() => {
-          setDate("");
-          setTime("");
-          setFromWho("");
-          setDonesenii("");
-          setExecutor("");
-          setNote("");
-          handleAddDialogClose();
-        }}
+        onClose={() => handleOnClose()}
         PaperComponent={PaperComponent}
         aria-labelledby="form-dialog-title"
         className={classes.root}
@@ -131,9 +134,6 @@ export default function FormDialog({
             id="donesenii"
             value={donesenii}
             onChange={handleChangeDonesenii}
-            onClick={() => {
-              // setDonesenii_shrink(true);
-            }}
             multiline
             label="Содержание донесения, распоряжения"
             style={{ padding: 8 }}
@@ -141,6 +141,10 @@ export default function FormDialog({
             required
             helperText={donesenii_helperText}
             error={donesenii_error}
+            InputLabelProps={{
+              shrink: donesenii_shrink,
+            }}
+            onClick={() => setDonesenii_shrink(true)}
           />
           <TextField
             id="executor"
@@ -164,7 +168,13 @@ export default function FormDialog({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleAddDialogClose} color="primary">
+          <Button
+            onClick={() => {
+              handleOnClose();
+              handleAddDialogClose();
+            }}
+            color="primary"
+          >
             Отменить
           </Button>
           <Button
@@ -174,16 +184,9 @@ export default function FormDialog({
                 setDonesenii_error(true);
                 setDonesenii_helperText("поле обязательно для заполнения");
                 return;
-              } else {
-                setDonesenii_error(false);
               }
+              handleOnClose();
               handleCreate(ev, date, time, fromWho, donesenii, executor, note);
-              setDate("");
-              setTime("");
-              setFromWho("");
-              setDonesenii("");
-              setExecutor("");
-              setNote("");
             }}
             color="primary"
           >

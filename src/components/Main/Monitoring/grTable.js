@@ -62,34 +62,32 @@ export default function GroupTable({ group }) {
         </TableHead>
         <TableBody>
           {group.registers.map((row) => {
-            if (row.address !== "0x1310" && row.address !== "0x1311") {
-              return (
-                <StyledTableRow key={row.address}>
-                  <StyledTableCell
-                    component="th"
-                    scope="row"
-                    style={{ width: 100 }}
-                  >
-                    {row.address}
-                  </StyledTableCell>
-                  <StyledTableCell align="center" style={{ width: 100 }}>
-                    {row.sizeRegister}
-                  </StyledTableCell>
-                  <StyledTableCell align="center" style={{ width: 100 }}>
-                    {row.dataType}
-                  </StyledTableCell>
-                  <StyledTableCell align="center" style={{ width: 200 }}>
-                    {row.appointment}
-                  </StyledTableCell>
-                  <StyledTableCell
-                    align="center"
-                    style={{ width: 200, minWidth: 200, maxWidth: 200 }}
-                  >
-                    {row.value}
-                  </StyledTableCell>
-                </StyledTableRow>
-              );
-            } else return null;
+            return (
+              <StyledTableRow key={row.address}>
+                <StyledTableCell
+                  component="th"
+                  scope="row"
+                  style={{ width: 100 }}
+                >
+                  {row.address}
+                </StyledTableCell>
+                <StyledTableCell align="center" style={{ width: 100 }}>
+                  {row.sizeRegister}
+                </StyledTableCell>
+                <StyledTableCell align="center" style={{ width: 100 }}>
+                  {row.dataType}
+                </StyledTableCell>
+                <StyledTableCell align="center" style={{ width: 200 }}>
+                  {row.appointment}
+                </StyledTableCell>
+                <StyledTableCell
+                  align="center"
+                  style={{ width: 200, minWidth: 200, maxWidth: 200 }}
+                >
+                  {row.value}
+                </StyledTableCell>
+              </StyledTableRow>
+            );
           })}
         </TableBody>
       </Table>

@@ -6,10 +6,7 @@ import Loader from "../../Loader";
 import Body from "./body";
 import Title from "./title";
 import { connect } from "react-redux";
-import {
-  getController,
-  // updateControllerBySocket,
-} from "../../../actions/controller";
+
 import {
   getControllersForCommCenter,
   updateControllerBySocket,
@@ -110,9 +107,6 @@ class Monitoring extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchGetController: (url) => {
-    dispatch(getController(url));
-  },
   dispatchGetControllersForCommCenter: (url) => {
     dispatch(getControllersForCommCenter(url));
   },
@@ -124,14 +118,12 @@ const mapDispatchToProps = (dispatch) => ({
 function mapStateToProps(state) {
   // console.log("state.monitoring", state);
   const { message } = state.message;
-  const controller = state.controllerReducer.item;
   const controllersForCommCenter =
     state.controllersForCommCentersReducer.controllers;
   const { error, loading } = state.controllersForCommCentersReducer;
   const mapCommCenters = state.mapCommCentersReducer.items;
   return {
     message,
-    controller,
     error,
     loading,
     controllersForCommCenter,

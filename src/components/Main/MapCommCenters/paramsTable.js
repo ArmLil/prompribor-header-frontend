@@ -160,7 +160,6 @@ export default function ParamsTable(data) {
         total_mass = reg.Registers_Controllers_values.value;
     });
   });
-  console.log({ temperature });
   return (
     <div style={{ width: "105px" }}>
       <div style={lineStyle}></div>

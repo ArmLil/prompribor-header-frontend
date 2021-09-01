@@ -46,8 +46,6 @@ export default function FormDialog({
   const [donesenii, setDonesenii] = React.useState(params.donesenii || "");
   const [executor, setExecutor] = React.useState(params.executor || "");
   const [note, setNote] = React.useState(params.note || "");
-  const [donesenii_shrink, setDonesenii_shrink] = React.useState(false);
-  const [donesenii_error, setDonesenii_error] = React.useState(false);
   const [donesenii_helperText, setDonesenii_helperText] = React.useState("");
 
   React.useEffect(() => {
@@ -143,16 +141,12 @@ export default function FormDialog({
             id="donesenii"
             value={donesenii}
             onChange={handleChangeDonesenii}
-            onClick={() => {
-              // setDonesenii_shrink(true);
-            }}
             multiline
             label="Содержание донесения, распоряжения"
             style={{ padding: 8 }}
             margin="dense"
             required
             helperText={donesenii_helperText}
-            error={donesenii_error}
           />
           <TextField
             id="executor"
@@ -181,14 +175,6 @@ export default function FormDialog({
           </Button>
           <Button
             onClick={(ev) => {
-              if (donesenii === "") {
-                setDonesenii_shrink(true);
-                setDonesenii_error(true);
-                setDonesenii_helperText("поле обязательно для заполнения");
-                return;
-              } else {
-                setDonesenii_error(false);
-              }
               handleEdit(
                 ev,
                 date,

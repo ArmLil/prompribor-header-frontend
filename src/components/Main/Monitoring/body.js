@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Theme, createStyles, makeStyles } from "@material-ui/core/styles";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -7,7 +7,9 @@ import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Box from "@material-ui/core/Box";
 import StopRoundedIcon from "@material-ui/icons/StopRounded";
-
+import { useDispatch, useSelector } from "react-redux";
+import { updateControllerBySocket } from "../../../actions/controllersForCommCenters";
+import { socket } from "../../../socket_api";
 import GroupTable from "./grTable";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -48,6 +50,25 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function ControllerValue({ controller }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const controllers = useSelector(
+    (state) => state.controllersForCommCentersReducer.controllers
+  );
+
+  useEffect(() => {
+    // let isMounted = true;
+    const updateControllerListener = (data) => {
+      console.log("socket on registerControllerValue");
+
+      dispatch(updateControllerBySocket(controllers, data));
+    };
+    socket.on("registerControllerValue", updateControllerListener);
+    return () => {
+      // isMounted = false;
+      socket.off("registerControllerValue", updateControllerListener);
+    };
+  }, [controllers, dispatch]);
+
   const [expanded, setExpanded] = React.useState(true);
   let groups = [];
   if (controller.registersGroups) {

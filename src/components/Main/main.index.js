@@ -37,12 +37,12 @@ class Main extends Component {
   render() {
     console.log("render");
     const { classes, mapCommCenters, error, loading } = this.props;
-    console.log({ mapCommCenters });
     mapCommCenters.sort(function (a, b) {
       return a.index - b.index;
     });
 
     if (error) {
+      console.log({ error });
       return <div>Error! {error}</div>;
     }
 
@@ -87,7 +87,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 function mapStateToProps(state) {
   const mapCommCenters = state.mapCommCentersReducer.items;
-  const { error, loading } = state.commCentersReducer;
+  const { error, loading } = state.mapCommCentersReducer;
   return {
     mapCommCenters,
     error,

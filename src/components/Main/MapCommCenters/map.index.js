@@ -1,20 +1,12 @@
 import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import {
-  withStyles,
-  createStyles,
-  Theme,
-  makeStyles,
-} from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import { useDispatch, useSelector } from "react-redux";
 import { updateMapCommCentersBySocket } from "../../../actions/mapCommCenters";
-import { socket, SocketContext } from "../../../socket_api";
-
+import { socket } from "../../../socket_api";
 import Loader from "../../Loader";
-import { connect } from "react-redux";
-import { getCommCenters } from "../../../actions/commCenters";
 
 import Map from "./map";
 // import CommCentersTable from "./commCentersTable";
@@ -94,8 +86,3 @@ export default function MapCommCenters(props) {
     </div>
   );
 }
-const mapDispatchToProps = (dispatch) => ({
-  dispatchGetCommCenters: (url) => {
-    dispatch(getCommCenters(url));
-  },
-});
