@@ -44,7 +44,6 @@ export default function FormDialog({
   const [temperature, setTemperature] = React.useState("");
   const [density, setDensity] = React.useState("");
   const [current_volume, setCurrent_volume] = React.useState("");
-  const [fuel_shrink, setFuel_shrink] = React.useState(false);
   const [fuel_error, setFuel_error] = React.useState(false);
   const [fuel_helperText, setFuel_helperText] = React.useState("");
   const [current_mass, setCurrent_mass] = React.useState("");
@@ -89,21 +88,26 @@ export default function FormDialog({
   const handleChangeNote = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNote(event.target.value);
   };
+  const handleOnClose = () => {
+    setDate("");
+    setTime("");
+    setTemperature("");
+    setDensity("");
+    setCurrent_volume("");
+    setCurrent_mass("");
+    setTotal_volume("");
+    setTotal_mass("");
+    setNote("");
+    setFuel_error(false);
+    setFuel_helperText(false);
+    handleAddDialogClose();
+  };
   return (
     <div>
       <Dialog
         open={openAddDialog}
         onClose={() => {
-          setDate("");
-          setTime("");
-          setTemperature("");
-          setDensity("");
-          setCurrent_volume("");
-          setCurrent_mass("");
-          setTotal_volume("");
-          setTotal_mass("");
-          setNote("");
-          handleAddDialogClose();
+          handleOnClose();
         }}
         PaperComponent={PaperComponent}
         aria-labelledby="form-dialog-title"
@@ -156,9 +160,6 @@ export default function FormDialog({
             id="density"
             value={density}
             onChange={handleChangeDensity}
-            onClick={() => {
-              // setFuel_shrink(true);
-            }}
             multiline
             label="Плотность"
             style={{ padding: 8 }}
@@ -171,9 +172,6 @@ export default function FormDialog({
             id="current_volume"
             value={current_volume}
             onChange={handleChangeCurrent_volume}
-            onClick={() => {
-              // setFuel_shrink(true);
-            }}
             multiline
             label="Текущий объемный расход"
             style={{ padding: 8 }}
@@ -230,7 +228,12 @@ export default function FormDialog({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleAddDialogClose} color="primary">
+          <Button
+            onClick={() => {
+              handleOnClose();
+            }}
+            color="primary"
+          >
             Отменить
           </Button>
           <Button
@@ -238,14 +241,14 @@ export default function FormDialog({
               if (
                 density === "" ||
                 current_volume === "" ||
-                current_mass === ""
+                current_mass === "" ||
+                temperature === "" ||
+                total_volume === "" ||
+                total_mass === ""
               ) {
-                setFuel_shrink(true);
                 setFuel_error(true);
                 setFuel_helperText("поле обязательно для заполнения");
                 return;
-              } else {
-                setFuel_error(false);
               }
               handleCreate(
                 ev,
@@ -259,15 +262,7 @@ export default function FormDialog({
                 total_mass,
                 note
               );
-              setDate("");
-              setTime("");
-              setTemperature("");
-              setDensity("");
-              setCurrent_volume("");
-              setCurrent_mass("");
-              setTotal_volume("");
-              setTotal_mass("");
-              setNote("");
+              handleOnClose();
             }}
             color="primary"
           >

@@ -46,7 +46,6 @@ export default function FormDialog({
   const [donesenii, setDonesenii] = React.useState(params.donesenii || "");
   const [executor, setExecutor] = React.useState(params.executor || "");
   const [note, setNote] = React.useState(params.note || "");
-  const [donesenii_helperText, setDonesenii_helperText] = React.useState("");
 
   React.useEffect(() => {
     const setParams = () => {
@@ -146,7 +145,6 @@ export default function FormDialog({
             style={{ padding: 8 }}
             margin="dense"
             required
-            helperText={donesenii_helperText}
           />
           <TextField
             id="executor"

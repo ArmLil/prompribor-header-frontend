@@ -44,7 +44,6 @@ export default function FormDialog({
   const [line, setLine] = React.useState("");
   const [P_in, setP_in] = React.useState("");
   const [P_out, setP_out] = React.useState("");
-  const [nasosi_shrink, setNasosi_shrink] = React.useState(false);
   const [nasosi_error, setNasosi_error] = React.useState(false);
   const [nasosi_helperText, setNasosi_helperText] = React.useState("");
   const [revs, setRevs] = React.useState("");
@@ -71,20 +70,23 @@ export default function FormDialog({
   const handleChangeNote = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNote(event.target.value);
   };
+  const handleOnClose = () => {
+    setDate("");
+    setTime("");
+    setLine("");
+    setP_in("");
+    setP_out("");
+    setRevs("");
+    setNote("");
+    setNasosi_error(false);
+    setNasosi_helperText(false);
+    handleAddDialogClose();
+  };
   return (
     <div>
       <Dialog
         open={openAddDialog}
-        onClose={() => {
-          setDate("");
-          setTime("");
-          setLine("");
-          setP_in("");
-          setP_out("");
-          setRevs("");
-          setNote("");
-          handleAddDialogClose();
-        }}
+        onClose={handleOnClose}
         PaperComponent={PaperComponent}
         aria-labelledby="form-dialog-title"
         className={classes.root}
@@ -136,9 +138,6 @@ export default function FormDialog({
             id="P_in"
             value={P_in}
             onChange={handleChangeP_in}
-            onClick={() => {
-              // setNasosi_shrink(true);
-            }}
             multiline
             label="Рвх."
             style={{ padding: 8 }}
@@ -151,9 +150,6 @@ export default function FormDialog({
             id="P_out"
             value={P_out}
             onChange={handleChangeP_out}
-            onClick={() => {
-              // setNasosi_shrink(true);
-            }}
             multiline
             label="Рвых."
             style={{ padding: 8 }}
@@ -186,27 +182,18 @@ export default function FormDialog({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleAddDialogClose} color="primary">
+          <Button onClick={handleOnClose} color="primary">
             Отменить
           </Button>
           <Button
             onClick={(ev) => {
-              if (P_in === "" || P_out === "" || revs === "") {
-                setNasosi_shrink(true);
+              if (line === "" || P_in === "" || P_out === "" || revs === "") {
                 setNasosi_error(true);
                 setNasosi_helperText("поле обязательно для заполнения");
                 return;
-              } else {
-                setNasosi_error(false);
               }
+              handleOnClose();
               handleCreate(ev, date, time, line, P_in, P_out, revs, note);
-              setDate("");
-              setTime("");
-              setLine("");
-              setP_in("");
-              setP_out("");
-              setRevs("");
-              setNote("");
             }}
             color="primary"
           >

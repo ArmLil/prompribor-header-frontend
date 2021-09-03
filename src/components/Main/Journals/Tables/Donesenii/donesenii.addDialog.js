@@ -171,7 +171,6 @@ export default function FormDialog({
           <Button
             onClick={() => {
               handleOnClose();
-              handleAddDialogClose();
             }}
             color="primary"
           >

@@ -47,9 +47,6 @@ export default function FormDialog({
   const [P_out, setP_out] = React.useState(params.P_out || "");
   const [revs, setRevs] = React.useState(params.revs || "");
   const [note, setNote] = React.useState(params.note || "");
-  const [nasosi_shrink, setNasosi_shrink] = React.useState(false);
-  const [nasosi_error, setNasosi_error] = React.useState(false);
-  const [nasosi_helperText, setNasosi_helperText] = React.useState("");
 
   React.useEffect(() => {
     const setParams = () => {
@@ -146,31 +143,21 @@ export default function FormDialog({
             id="P_in"
             value={P_in}
             onChange={handleChangeP_in}
-            onClick={() => {
-              // setNasosi_shrink(true);
-            }}
             multiline
             label="Рвх."
             style={{ padding: 8 }}
             margin="dense"
             required
-            helperText={nasosi_helperText}
-            error={nasosi_error}
           />
           <TextField
             id="P_out"
             value={P_out}
             onChange={handleChangeP_out}
-            onClick={() => {
-              // setNasosi_shrink(true);
-            }}
             multiline
             label="Рвых."
             style={{ padding: 8 }}
             margin="dense"
             required
-            helperText={nasosi_helperText}
-            error={nasosi_error}
           />
           <TextField
             id="revs"
@@ -199,14 +186,6 @@ export default function FormDialog({
           </Button>
           <Button
             onClick={(ev) => {
-              if (P_in === "" || P_out === "" || revs === "") {
-                setNasosi_shrink(true);
-                setNasosi_error(true);
-                setNasosi_helperText("поле обязательно для заполнения");
-                return;
-              } else {
-                setNasosi_error(false);
-              }
               handleEdit(
                 ev,
                 date,

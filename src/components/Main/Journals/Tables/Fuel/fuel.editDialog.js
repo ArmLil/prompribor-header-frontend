@@ -57,9 +57,6 @@ export default function FormDialog({
   );
   const [total_mass, setTotal_mass] = React.useState(params.total_mass || "");
   const [note, setNote] = React.useState(params.note || "");
-  const [fuel_shrink, setFuel_shrink] = React.useState(false);
-  const [fuel_error, setFuel_error] = React.useState(false);
-  const [fuel_helperText, setFuel_helperText] = React.useState("");
 
   React.useEffect(() => {
     const setParams = () => {
@@ -184,31 +181,21 @@ export default function FormDialog({
             id="density"
             value={density}
             onChange={handleChangeDensity}
-            onClick={() => {
-              // setFuel_shrink(true);
-            }}
             multiline
             label="Плотность"
             style={{ padding: 8 }}
             margin="dense"
             required
-            helperText={fuel_helperText}
-            error={fuel_error}
           />
           <TextField
             id="current_volume"
             value={current_volume}
             onChange={handleChangeCurrent_volume}
-            onClick={() => {
-              // setFuel_shrink(true);
-            }}
             multiline
             label="Текущий объемный расход"
             style={{ padding: 8 }}
             margin="dense"
             required
-            helperText={fuel_helperText}
-            error={fuel_error}
           />
           <TextField
             id="current_mass"
@@ -257,18 +244,6 @@ export default function FormDialog({
           </Button>
           <Button
             onClick={(ev) => {
-              if (
-                density === "" ||
-                current_volume === "" ||
-                current_mass === ""
-              ) {
-                setFuel_shrink(true);
-                setFuel_error(true);
-                setFuel_helperText("поле обязательно для заполнения");
-                return;
-              } else {
-                setFuel_error(false);
-              }
               handleEdit(
                 ev,
                 date,
