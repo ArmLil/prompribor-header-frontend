@@ -68,19 +68,22 @@ export default function FormDialog({
   const handleChangeNote = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNote(event.target.value);
   };
+  const handleOnClose = () => {
+    setDate("");
+    setTime("");
+    setFromWho("");
+    setAvarii("");
+    setExecutor("");
+    setNote("");
+    setAvarii_error(false);
+    setAvarii_shrink(false);
+    handleAddDialogClose();
+  };
   return (
     <div>
       <Dialog
         open={openAddDialog}
-        onClose={() => {
-          setDate("");
-          setTime("");
-          setFromWho("");
-          setAvarii("");
-          setExecutor("");
-          setNote("");
-          handleAddDialogClose();
-        }}
+        onClose={() => handleOnClose()}
         PaperComponent={PaperComponent}
         aria-labelledby="form-dialog-title"
         className={classes.root}
@@ -166,7 +169,13 @@ export default function FormDialog({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleAddDialogClose} color="primary">
+          <Button
+            onClick={() => {
+              handleOnClose();
+              handleAddDialogClose();
+            }}
+            color="primary"
+          >
             Отменить
           </Button>
           <Button
@@ -176,16 +185,9 @@ export default function FormDialog({
                 setAvarii_error(true);
                 setAvarii_helperText("поле обязательно для заполнения");
                 return;
-              } else {
-                setAvarii_error(false);
               }
               handleCreate(ev, date, time, fromWho, avarii, executor, note);
-              setDate("");
-              setTime("");
-              setFromWho("");
-              setAvarii("");
-              setExecutor("");
-              setNote("");
+              handleOnClose();
             }}
             color="primary"
           >

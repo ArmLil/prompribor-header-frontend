@@ -46,8 +46,6 @@ export default function FormDialog({
   const [avarii, setAvarii] = React.useState(params.avarii || "");
   const [executor, setExecutor] = React.useState(params.executor || "");
   const [note, setNote] = React.useState(params.note || "");
-  const [avarii_error, setAvarii_error] = React.useState(false);
-  const [avarii_helperText, setAvarii_helperText] = React.useState("");
 
   React.useEffect(() => {
     const setParams = () => {
@@ -148,8 +146,6 @@ export default function FormDialog({
             style={{ padding: 8 }}
             margin="dense"
             required
-            helperText={avarii_helperText}
-            error={avarii_error}
           />
           <TextField
             id="executor"
@@ -178,13 +174,6 @@ export default function FormDialog({
           </Button>
           <Button
             onClick={(ev) => {
-              if (avarii === "") {
-                setAvarii_error(true);
-                setAvarii_helperText("поле обязательно для заполнения");
-                return;
-              } else {
-                setAvarii_error(false);
-              }
               handleEdit(
                 ev,
                 date,
