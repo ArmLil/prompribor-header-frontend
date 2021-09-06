@@ -43,7 +43,6 @@ export default function FormDialog({
   const [time, setTime] = React.useState("");
   const [fromWho, setFromWho] = React.useState("");
   const [donesenii, setDonesenii] = React.useState("");
-  const [donesenii_shrink, setDonesenii_shrink] = React.useState(false);
   const [donesenii_error, setDonesenii_error] = React.useState(false);
   const [donesenii_helperText, setDonesenii_helperText] = React.useState("");
   const [executor, setExecutor] = React.useState("");
@@ -62,6 +61,7 @@ export default function FormDialog({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setDonesenii(event.target.value);
+    setDonesenii_error(false);
   };
   const handleChangeExecutor = (event: React.ChangeEvent<HTMLInputElement>) => {
     setExecutor(event.target.value);
@@ -77,7 +77,6 @@ export default function FormDialog({
     setExecutor("");
     setNote("");
     setDonesenii_error(false);
-    setDonesenii_shrink(false);
     handleAddDialogClose();
   };
   return (
@@ -141,10 +140,6 @@ export default function FormDialog({
             required
             helperText={donesenii_helperText}
             error={donesenii_error}
-            InputLabelProps={{
-              shrink: donesenii_shrink,
-            }}
-            onClick={() => setDonesenii_shrink(true)}
           />
           <TextField
             id="executor"
@@ -179,7 +174,6 @@ export default function FormDialog({
           <Button
             onClick={(ev) => {
               if (donesenii === "") {
-                setDonesenii_shrink(true);
                 setDonesenii_error(true);
                 setDonesenii_helperText("поле обязательно для заполнения");
                 return;

@@ -139,7 +139,7 @@ export default function FormDialog({
         className={classes.root}
       >
         <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-          Режим работы насосных станций
+          Параметры процесса транспортирования горючего
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -176,6 +176,7 @@ export default function FormDialog({
             label="Температура"
             style={{ padding: 8 }}
             margin="dense"
+            required
           />
           <TextField
             id="density"

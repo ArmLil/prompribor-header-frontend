@@ -320,8 +320,6 @@ class Journals extends Component {
   render() {
     console.log("render");
     const { classes, error, loading } = this.props;
-    const thisPath = this.props.match.params.commCenterPath;
-    console.log({ thisPath });
     if (error) {
       return <div>Error! {error}</div>;
     }
@@ -343,7 +341,7 @@ class Journals extends Component {
                 <ListJournals />
               </Paper>
             </Grid>
-            <Grid item xs={11}>
+            <Grid item xs={12}>
               <Paper className={classes.paperJournal}>
                 {this.state.currentJournal}
               </Paper>

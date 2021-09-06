@@ -43,7 +43,6 @@ export default function FormDialog({
   const [time, setTime] = React.useState("");
   const [fromWho, setFromWho] = React.useState("");
   const [avarii, setAvarii] = React.useState("");
-  const [avarii_shrink, setAvarii_shrink] = React.useState(false);
   const [avarii_error, setAvarii_error] = React.useState(false);
   const [avarii_helperText, setAvarii_helperText] = React.useState("");
   const [executor, setExecutor] = React.useState("");
@@ -76,7 +75,6 @@ export default function FormDialog({
     setExecutor("");
     setNote("");
     setAvarii_error(false);
-    setAvarii_shrink(false);
     handleAddDialogClose();
   };
   return (
@@ -89,7 +87,7 @@ export default function FormDialog({
         className={classes.root}
       >
         <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-          Аварии и неисправности
+          Авария и неисправность
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -133,9 +131,6 @@ export default function FormDialog({
             id="avarii"
             value={avarii}
             onChange={handleChangeAvarii}
-            onClick={() => {
-              setAvarii_shrink(true);
-            }}
             multiline
             label="Содержание (место, вероятная причина аварии)"
             style={{ padding: 8 }}
@@ -143,9 +138,6 @@ export default function FormDialog({
             required
             helperText={avarii_helperText}
             error={avarii_error}
-            InputLabelProps={{
-              shrink: avarii_shrink,
-            }}
           />
           <TextField
             id="executor"
@@ -153,7 +145,7 @@ export default function FormDialog({
             onChange={handleChangeExecutor}
             multiline
             label="Исполнитель"
-            helperText="не обязательно"
+            helperText=""
             style={{ padding: 8 }}
             margin="dense"
           />
@@ -163,7 +155,7 @@ export default function FormDialog({
             onChange={handleChangeNote}
             multiline
             label="Отметка об устранении"
-            helperText="не обязательно"
+            helperText=""
             style={{ padding: 8 }}
             margin="dense"
           />
@@ -180,7 +172,6 @@ export default function FormDialog({
           <Button
             onClick={(ev) => {
               if (avarii === "") {
-                setAvarii_shrink(true);
                 setAvarii_error(true);
                 setAvarii_helperText("поле обязательно для заполнения");
                 return;

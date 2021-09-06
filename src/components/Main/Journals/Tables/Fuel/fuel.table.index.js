@@ -29,7 +29,7 @@ const useStyles = makeStyles({
   container: {
     display: "flex",
     flexDirection: "column",
-    maxHeight: 440,
+    // maxHeight: 440,
     // maxWidth: "90vw",
   },
 
@@ -43,6 +43,7 @@ const useStyles = makeStyles({
   },
   headerCell: {
     // padding: 5,
+    maxWidth: 200,
     margin: 0,
     border: "solid black 1px",
     fontWeight: "bold",
@@ -60,7 +61,7 @@ const useStyles = makeStyles({
     // padding: 5,
     margin: 0,
     border: "solid black 1px",
-    maxWidth: 280,
+    // maxWidth: 280,
     whiteSpace: "initial",
   },
   rowEditDeleteCell: {
@@ -276,49 +277,76 @@ export default function FuelTables() {
               </TableCell>
             </TableRow>
             <TableRow key="row2">
-              <TableCell className={classes.headerCell}>
+              <TableCell
+                className={classes.headerCell}
+                style={{ padding: "2px" }}
+              >
                 <p className={classes.p}>Дата</p>
               </TableCell>
-              <TableCell className={classes.headerCell}>
+              <TableCell
+                className={classes.headerCell}
+                style={{ padding: "4px" }}
+              >
                 <p className={classes.p}>Время</p>
                 <p className={classes.p}>(ч. мин.)</p>
               </TableCell>
-              <TableCell className={classes.headerCell}>
+              <TableCell
+                className={classes.headerCell}
+                style={{ padding: "4px" }}
+              >
                 <p className={classes.p}>Температура</p>
                 <p className={classes.p}>(°С)</p>
               </TableCell>
-              <TableCell className={classes.headerCell}>
+              <TableCell
+                className={classes.headerCell}
+                style={{ padding: "4px" }}
+              >
                 <p className={classes.p}>Плотность</p>
                 <p className={classes.p}>(кг/м3)</p>
               </TableCell>
-              <TableCell align="center" className={classes.headerCell}>
+              <TableCell
+                className={classes.headerCell}
+                style={{ padding: "4px" }}
+              >
                 <p className={classes.p}>Текущий объемный</p>
                 <p className={classes.p}>расход (м3/ч)</p>
               </TableCell>
-              <TableCell align="center" className={classes.headerCell}>
+              <TableCell
+                className={classes.headerCell}
+                style={{ padding: "4px" }}
+              >
                 <p className={classes.p}>Текущий массовый</p>
                 <p className={classes.p}>расход(т/ч)</p>
               </TableCell>
-              <TableCell align="center" className={classes.headerCell}>
+              <TableCell
+                className={classes.headerCell}
+                style={{ padding: "4px" }}
+              >
                 <p className={classes.p}>Сумматор объема</p>
                 <p className={classes.p}> (м3)</p>
               </TableCell>
-              <TableCell align="center" className={classes.headerCell}>
+              <TableCell
+                className={classes.headerCell}
+                style={{ padding: "4px" }}
+              >
                 <p className={classes.p}>Сумматор массы</p>
                 <p className={classes.p}> (тонны)</p>
               </TableCell>
-              <TableCell align="center" className={classes.headerCell}>
+              <TableCell className={classes.headerCell}>
                 <p
                   className={classes.p}
-                  style={{ marginLeft: "55px", marginRight: "50px" }}
+                  style={{
+                    marginLeft: "55px",
+                    marginRight: "50px",
+                  }}
                 >
                   Примеч.
                 </p>
               </TableCell>
-              <TableCell align="center" className={classes.headerCellEdit}>
+              <TableCell className={classes.headerCellEdit}>
                 <p className={classes.p}>Редакт.</p>
               </TableCell>
-              <TableCell align="center" className={classes.headerCellEdit}>
+              <TableCell className={classes.headerCellEdit}>
                 <p className={classes.p}>Удалить</p>
               </TableCell>
             </TableRow>

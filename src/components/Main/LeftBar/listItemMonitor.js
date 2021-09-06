@@ -9,8 +9,8 @@ import Collapse from "@material-ui/core/Collapse";
 // import InboxIcon from "@material-ui/icons/MoveToInbox";
 import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
-import DvrOutlinedIcon from "@material-ui/icons/DvrOutlined";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
+import AssessmentOutlinedIcon from "@material-ui/icons/AssessmentOutlined";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -41,7 +41,7 @@ export default function NestedList({ commCenters }) {
   let { path } = useRouteMatch();
 
   const classes = useStyles();
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);
@@ -55,7 +55,7 @@ export default function NestedList({ commCenters }) {
     >
       <ListItem button onClick={handleClick}>
         <ListItemIcon>
-          <DvrOutlinedIcon />
+          <AssessmentOutlinedIcon />
         </ListItemIcon>
         <ListItemText primary="Мониторинг" />
         {open ? <ExpandLess /> : <ExpandMore />}

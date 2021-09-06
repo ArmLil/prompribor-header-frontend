@@ -29,7 +29,7 @@ const useStyles = makeStyles({
   container: {
     display: "flex",
     flexDirection: "column",
-    maxHeight: 440,
+    // maxHeight: 440,
   },
   addButton: {
     width: 20,

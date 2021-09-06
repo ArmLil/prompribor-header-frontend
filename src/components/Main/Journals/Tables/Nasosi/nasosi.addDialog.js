@@ -44,8 +44,14 @@ export default function FormDialog({
   const [line, setLine] = React.useState("");
   const [P_in, setP_in] = React.useState("");
   const [P_out, setP_out] = React.useState("");
-  const [nasosi_error, setNasosi_error] = React.useState(false);
-  const [nasosi_helperText, setNasosi_helperText] = React.useState("");
+  const [line_error, setLine_error] = React.useState(false);
+  const [p_in_error, setP_in_error] = React.useState(false);
+  const [p_out_error, setP_out_error] = React.useState(false);
+  const [revs_error, setRevs_error] = React.useState(false);
+  const [line_helperText, setLine_helperText] = React.useState("");
+  const [p_in_helperText, setP_in_helperText] = React.useState("");
+  const [p_out_helperText, setP_out_helperText] = React.useState("");
+  const [revs_helperText, setRevs_helperText] = React.useState("");
   const [revs, setRevs] = React.useState("");
   const [note, setNote] = React.useState("");
 
@@ -57,15 +63,19 @@ export default function FormDialog({
   };
   const handleChangeLine = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLine(event.target.value);
+    setLine_error(false);
   };
   const handleChangeP_in = (event: React.ChangeEvent<HTMLInputElement>) => {
     setP_in(event.target.value);
+    setP_in_error(false);
   };
   const handleChangeP_out = (event: React.ChangeEvent<HTMLInputElement>) => {
     setP_out(event.target.value);
+    setP_out_error(false);
   };
   const handleChangeRevs = (event: React.ChangeEvent<HTMLInputElement>) => {
     setRevs(event.target.value);
+    setRevs_error(false);
   };
   const handleChangeNote = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNote(event.target.value);
@@ -78,8 +88,14 @@ export default function FormDialog({
     setP_out("");
     setRevs("");
     setNote("");
-    setNasosi_error(false);
-    setNasosi_helperText(false);
+    setLine_error(false);
+    setP_in_error(false);
+    setP_out_error(false);
+    setRevs_error(false);
+    setLine_helperText(false);
+    setP_in_helperText(false);
+    setP_out_helperText(false);
+    setRevs_helperText(false);
     handleAddDialogClose();
   };
   return (
@@ -131,8 +147,8 @@ export default function FormDialog({
             label="Линия ПМТП"
             style={{ padding: 8 }}
             margin="dense"
-            helperText={nasosi_helperText}
-            error={nasosi_error}
+            helperText={line_helperText}
+            error={line_error}
           />
           <TextField
             id="P_in"
@@ -143,8 +159,8 @@ export default function FormDialog({
             style={{ padding: 8 }}
             margin="dense"
             required
-            helperText={nasosi_helperText}
-            error={nasosi_error}
+            helperText={p_in_helperText}
+            error={p_in_error}
           />
           <TextField
             id="P_out"
@@ -155,8 +171,8 @@ export default function FormDialog({
             style={{ padding: 8 }}
             margin="dense"
             required
-            helperText={nasosi_helperText}
-            error={nasosi_error}
+            helperText={p_out_helperText}
+            error={p_out_error}
           />
           <TextField
             id="revs"
@@ -165,8 +181,8 @@ export default function FormDialog({
             multiline
             label="Обороты"
             required
-            helperText={nasosi_helperText}
-            error={nasosi_error}
+            helperText={revs_helperText}
+            error={revs_error}
             style={{ padding: 8 }}
             margin="dense"
           />
@@ -187,13 +203,31 @@ export default function FormDialog({
           </Button>
           <Button
             onClick={(ev) => {
-              if (line === "" || P_in === "" || P_out === "" || revs === "") {
-                setNasosi_error(true);
-                setNasosi_helperText("поле обязательно для заполнения");
-                return;
+              let close = true;
+              if (line === "") {
+                setLine_error(true);
+                setLine_helperText("поле обязательно для заполнения");
+                close = false;
               }
-              handleOnClose();
-              handleCreate(ev, date, time, line, P_in, P_out, revs, note);
+              if (P_in === "") {
+                setP_in_error(true);
+                setP_in_helperText("поле обязательно для заполнения");
+                close = false;
+              }
+              if (P_out === "") {
+                setP_out_error(true);
+                setP_out_helperText("поле обязательно для заполнения");
+                close = false;
+              }
+              if (revs === "") {
+                setRevs_error(true);
+                setRevs_helperText("поле обязательно для заполнения");
+                close = false;
+              }
+              if (close) {
+                handleOnClose();
+                handleCreate(ev, date, time, line, P_in, P_out, revs, note);
+              }
             }}
             color="primary"
           >

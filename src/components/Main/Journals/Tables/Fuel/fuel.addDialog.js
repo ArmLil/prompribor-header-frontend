@@ -44,12 +44,33 @@ export default function FormDialog({
   const [temperature, setTemperature] = React.useState("");
   const [density, setDensity] = React.useState("");
   const [current_volume, setCurrent_volume] = React.useState("");
-  const [fuel_error, setFuel_error] = React.useState(false);
-  const [fuel_helperText, setFuel_helperText] = React.useState("");
   const [current_mass, setCurrent_mass] = React.useState("");
   const [total_volume, setTotal_volume] = React.useState("");
   const [total_mass, setTotal_mass] = React.useState("");
   const [note, setNote] = React.useState("");
+
+  const [temperature_error, setTemperature_error] = React.useState(false);
+  const [density_error, setDensity_error] = React.useState(false);
+  const [current_volume_error, setCurrent_volume_error] = React.useState(false);
+  const [current_mass_error, setCurrent_mass_error] = React.useState(false);
+  const [total_volume_error, setTotal_volume_error] = React.useState(false);
+  const [total_mass_error, setTotal_mass_error] = React.useState(false);
+
+  const [temperature_helperText, setTemperature_helperText] = React.useState(
+    ""
+  );
+  const [density_helperText, setDensity_helperText] = React.useState("");
+  const [
+    current_volume_helperText,
+    setCurrent_volume_helperText,
+  ] = React.useState("");
+  const [current_mass_helperText, setCurrent_mass_helperText] = React.useState(
+    ""
+  );
+  const [total_volume_helperText, setTotal_volume_helperText] = React.useState(
+    ""
+  );
+  const [total_mass_helperText, setTotal_mass_helperText] = React.useState("");
 
   const handleChangeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDate(event.target.value);
@@ -61,29 +82,35 @@ export default function FormDialog({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setTemperature(event.target.value);
+    setTemperature_error(false);
   };
   const handleChangeDensity = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDensity(event.target.value);
+    setDensity_error(false);
   };
   const handleChangeCurrent_volume = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setCurrent_volume(event.target.value);
+    setCurrent_volume_error(false);
   };
   const handleChangeCurrent_mass = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setCurrent_mass(event.target.value);
+    setCurrent_mass_error(false);
   };
   const handleChangeTotal_volume = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setTotal_volume(event.target.value);
+    setTotal_volume_error(false);
   };
   const handleChangeTotal_mass = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setTotal_mass(event.target.value);
+    setTotal_mass_error(false);
   };
   const handleChangeNote = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNote(event.target.value);
@@ -98,8 +125,21 @@ export default function FormDialog({
     setTotal_volume("");
     setTotal_mass("");
     setNote("");
-    setFuel_error(false);
-    setFuel_helperText(false);
+
+    setTemperature_error(false);
+    setDensity_error(false);
+    setCurrent_volume_error(false);
+    setCurrent_mass_error(false);
+    setTotal_volume_error(false);
+    setTotal_mass_error(false);
+
+    setTemperature_helperText(false);
+    setDensity_helperText(false);
+    setCurrent_volume_helperText(false);
+    setCurrent_mass_helperText(false);
+    setTotal_volume_helperText(false);
+    setTotal_mass_helperText(false);
+
     handleAddDialogClose();
   };
   return (
@@ -114,7 +154,7 @@ export default function FormDialog({
         className={classes.root}
       >
         <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-          Режим работы насосных станций
+          Параметры процесса транспортирования горючего
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
@@ -153,8 +193,9 @@ export default function FormDialog({
             label="Температура"
             style={{ padding: 8 }}
             margin="dense"
-            helperText={fuel_helperText}
-            error={fuel_error}
+            helperText={temperature_helperText}
+            error={temperature_error}
+            required
           />
           <TextField
             id="density"
@@ -165,8 +206,8 @@ export default function FormDialog({
             style={{ padding: 8 }}
             margin="dense"
             required
-            helperText={fuel_helperText}
-            error={fuel_error}
+            helperText={density_helperText}
+            error={density_error}
           />
           <TextField
             id="current_volume"
@@ -177,8 +218,8 @@ export default function FormDialog({
             style={{ padding: 8 }}
             margin="dense"
             required
-            helperText={fuel_helperText}
-            error={fuel_error}
+            helperText={current_volume_helperText}
+            error={current_volume_error}
           />
           <TextField
             id="current_mass"
@@ -187,8 +228,8 @@ export default function FormDialog({
             multiline
             label="Текущий массовый расход"
             required
-            helperText={fuel_helperText}
-            error={fuel_error}
+            helperText={current_mass_helperText}
+            error={current_mass_error}
             style={{ padding: 8 }}
             margin="dense"
           />
@@ -199,8 +240,8 @@ export default function FormDialog({
             multiline
             label="Сумматор объема"
             required
-            helperText={fuel_helperText}
-            error={fuel_error}
+            helperText={total_volume_helperText}
+            error={total_volume_error}
             style={{ padding: 8 }}
             margin="dense"
           />
@@ -211,8 +252,8 @@ export default function FormDialog({
             multiline
             label="Сумматор массы"
             required
-            helperText={fuel_helperText}
-            error={fuel_error}
+            helperText={total_mass_helperText}
+            error={total_mass_error}
             style={{ padding: 8 }}
             margin="dense"
           />
@@ -222,7 +263,7 @@ export default function FormDialog({
             onChange={handleChangeNote}
             multiline
             label="Примечание"
-            helperText="не обязательно"
+            helperText=""
             style={{ padding: 8 }}
             margin="dense"
           />
@@ -238,31 +279,52 @@ export default function FormDialog({
           </Button>
           <Button
             onClick={(ev) => {
-              if (
-                density === "" ||
-                current_volume === "" ||
-                current_mass === "" ||
-                temperature === "" ||
-                total_volume === "" ||
-                total_mass === ""
-              ) {
-                setFuel_error(true);
-                setFuel_helperText("поле обязательно для заполнения");
-                return;
+              let close = true;
+              if (density === "") {
+                setDensity_error(true);
+                setDensity_helperText("поле обязательно для заполнения");
+                close = false;
               }
-              handleCreate(
-                ev,
-                date,
-                time,
-                temperature,
-                density,
-                current_volume,
-                current_mass,
-                total_volume,
-                total_mass,
-                note
-              );
-              handleOnClose();
+              if (current_volume === "") {
+                setCurrent_volume_error(true);
+                setCurrent_volume_helperText("поле обязательно для заполнения");
+                close = false;
+              }
+              if (current_mass === "") {
+                setCurrent_mass_error(true);
+                setCurrent_mass_helperText("поле обязательно для заполнения");
+                close = false;
+              }
+              if (temperature === "") {
+                setTemperature_error(true);
+                setTemperature_helperText("поле обязательно для заполнения");
+                close = false;
+              }
+              if (total_volume === "") {
+                setTotal_volume_error(true);
+                setTotal_volume_helperText("поле обязательно для заполнения");
+                close = false;
+              }
+              if (total_mass === "") {
+                setTotal_mass_error(true);
+                setTotal_mass_helperText("поле обязательно для заполнения");
+                close = false;
+              }
+              if (close) {
+                handleCreate(
+                  ev,
+                  date,
+                  time,
+                  temperature,
+                  density,
+                  current_volume,
+                  current_mass,
+                  total_volume,
+                  total_mass,
+                  note
+                );
+                handleOnClose();
+              }
             }}
             color="primary"
           >

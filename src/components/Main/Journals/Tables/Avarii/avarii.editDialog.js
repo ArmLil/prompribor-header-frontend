@@ -96,7 +96,7 @@ export default function FormDialog({
         className={classes.root}
       >
         <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-          Аварии и неисправности
+          Авария и неисправность
         </DialogTitle>
         <DialogContent>
           <DialogContentText>

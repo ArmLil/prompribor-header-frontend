@@ -107,6 +107,7 @@ const styles = {
     fontSize: "70%",
     fontWeight: "bold",
     whiteSpace: "initial",
+    padding: 5,
   },
   footerText1: {
     position: "absolute",
