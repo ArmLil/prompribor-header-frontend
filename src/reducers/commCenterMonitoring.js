@@ -1,43 +1,46 @@
 import {
-  FETCH_CONTROLLER_BEGIN,
-  FETCH_CONTROLLER_SUCCESS,
-  FETCH_CONTROLLER_FAIL,
-  SOCKET_UPDATE_CONTROLLER,
+  FETCH_COMMCENTER_MONITORING_BEGIN,
+  FETCH_COMMCENTER_MONITORING_SUCCESS,
+  FETCH_COMMCENTER_MONITORING_FAIL,
+  SOCKET_UPDATE_COMMCENTER_MONITORING,
 } from "../actions/types";
 
 const initialState = {
   item: {
-    commCenter: { name: "", description: "", status: "", path: "" },
     name: "",
     description: "",
-    modbusId: "",
-    registersGroups: [],
+    status: "",
+    path: "",
+    controllers: [],
   },
   loading: false,
   error: null,
 };
 
-export default function controllerReducer(state = initialState, action) {
+export default function commCenterMonitoringReducer(
+  state = initialState,
+  action
+) {
   switch (action.type) {
-    case FETCH_CONTROLLER_BEGIN:
+    case FETCH_COMMCENTER_MONITORING_BEGIN:
       return Object.assign({}, state, {
         loading: true,
         error: null,
       });
-    case FETCH_CONTROLLER_SUCCESS:
+    case FETCH_COMMCENTER_MONITORING_SUCCESS:
       return Object.assign({}, state, {
         loading: false,
         item: action.payload,
       });
 
-    case FETCH_CONTROLLER_FAIL:
+    case FETCH_COMMCENTER_MONITORING_FAIL:
       return Object.assign({}, state, {
         loading: false,
         error: action.payload,
         item: initialState.item,
       });
 
-    case SOCKET_UPDATE_CONTROLLER:
+    case SOCKET_UPDATE_COMMCENTER_MONITORING:
       return Object.assign({}, state, {
         loading: false,
         error: null,

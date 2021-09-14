@@ -8,7 +8,7 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Box from "@material-ui/core/Box";
 import StopRoundedIcon from "@material-ui/icons/StopRounded";
 import { useDispatch, useSelector } from "react-redux";
-import { updateControllerBySocket } from "../../../actions/controllersForCommCenters";
+import { updateCommCenterMonitoringBySocket } from "../../../actions/commCenterMonitoring";
 import { socket } from "../../../socket_api";
 import GroupTable from "./grTable";
 
@@ -48,11 +48,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function ControllerValue({ controller }) {
+export default function Controllers({ controllers }) {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const controllers = useSelector(
-    (state) => state.controllersForCommCentersReducer.controllers
+  const commCenterMonitoring = useSelector(
+    (state) => state.commCenterMonitoringReducer.item
   );
 
   useEffect(() => {
@@ -60,84 +60,70 @@ function ControllerValue({ controller }) {
     const updateControllerListener = (data) => {
       console.log("socket on registerControllerValue");
 
-      dispatch(updateControllerBySocket(controllers, data));
+      dispatch(updateCommCenterMonitoringBySocket(commCenterMonitoring, data));
     };
     socket.on("registerControllerValue", updateControllerListener);
     return () => {
       // isMounted = false;
       socket.off("registerControllerValue", updateControllerListener);
     };
-  }, [controllers, dispatch]);
+  }, [commCenterMonitoring, dispatch]);
 
   const [expanded, setExpanded] = React.useState(true);
-  let groups = [];
-  if (controller.registersGroups) {
-    controller.registersGroups.forEach((gr, i) => {
-      groups.push(
-        <div className={classes.acordion} key={gr.id}>
-          <div className={classes.titleRoot}>
-            <div className={classes.firstLayerTitle}>
-              <div className={classes.title}>
-                <Box className={classes.subTitle} style={{ fontSize: 14 }}>
-                  Контролер -
-                </Box>
-                <Box fontWeight="fontWeightMedium" style={{ fontSize: 16 }}>
-                  {controller.name} (ID-{controller.modbusId})
-                </Box>
-              </div>
-              <div className={classes.title}>
-                <Box className={classes.subTitle} style={{ fontSize: 12 }}>
-                  Статус -
-                </Box>
 
-                {controller.status === "offline" ? (
-                  <Box style={{ fontSize: 12 }}>офлайн</Box>
-                ) : (
-                  <Box style={{ fontSize: 12 }}>онлайн</Box>
-                )}
-                <Box>
-                  <StopRoundedIcon
-                    style={{
-                      color:
-                        controller.status === "offline" ? "#d50000" : "#64dd17",
-                      margin: 0,
-                    }}
-                  />
-                </Box>
-              </div>
-            </div>
+  let groups = [];
+  controllers.forEach((controller, i) => {
+    groups.push(
+      <div className={classes.acordion} key={controller.modbusId}>
+        <div className={classes.titleRoot}>
+          <div className={classes.firstLayerTitle}>
             <div className={classes.title}>
-              <Box
-                className={classes.subTitle}
-                style={{ fontSize: 12, marginRight: 10 }}
-              >
-                Описание -
+              <Box className={classes.subTitle} style={{ fontSize: 14 }}>
+                Контролер -
               </Box>
-              <Box style={{ fontSize: 14 }}>{controller.description}</Box>
+              <Box fontWeight="fontWeightMedium" style={{ fontSize: 16 }}>
+                {controller.name} (ID-{controller.modbusId})
+              </Box>
             </div>
           </div>
-          <Accordion expanded={expanded} onClick={() => setExpanded(!expanded)}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography className={classes.heading}>{gr.name}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <GroupTable group={gr} />
-            </AccordionDetails>
-          </Accordion>
+          <div className={classes.title}>
+            <Box className={classes.subTitle} style={{ fontSize: 12 }}>
+              Статус -
+            </Box>
+
+            {controller.status === "offline" ? (
+              <Box style={{ fontSize: 12 }}>офлайн</Box>
+            ) : (
+              <Box style={{ fontSize: 12 }}>онлайн</Box>
+            )}
+            <Box>
+              <StopRoundedIcon
+                style={{
+                  color:
+                    controller.status === "offline" ? "#d50000" : "#64dd17",
+                  margin: 0,
+                }}
+              />
+            </Box>
+          </div>
         </div>
-      );
-    });
-  }
+        <Accordion expanded={expanded} onClick={() => setExpanded(!expanded)}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="panel1a-content"
+            id="panel1a-header"
+          >
+            <Typography className={classes.heading}>
+              {controller.description}
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <GroupTable controller={controller} />
+          </AccordionDetails>
+        </Accordion>
+      </div>
+    );
+  });
 
   return <div className={classes.root}>{groups}</div>;
-}
-
-export default function Body({ controllersForCommCenter }) {
-  return controllersForCommCenter.map((controller, index) => {
-    return <ControllerValue key={index} controller={controller} />;
-  });
 }

@@ -3,8 +3,7 @@ import authReducer from "./auth";
 import message from "./message";
 import mapCommCentersReducer from "./mapCommCenters";
 import commCentersReducer from "./commCenters";
-import controllerReducer from "./controller";
-import controllersForCommCentersReducer from "./controllersForCommCenters";
+import commCenterMonitoringReducer from "./commCenterMonitoring";
 import currentCommCenterReducer from "./currentCommCenter";
 
 export default combineReducers({
@@ -12,7 +11,6 @@ export default combineReducers({
   message,
   mapCommCentersReducer,
   commCentersReducer,
-  controllerReducer,
-  controllersForCommCentersReducer,
+  commCenterMonitoringReducer,
   currentCommCenterReducer,
 });

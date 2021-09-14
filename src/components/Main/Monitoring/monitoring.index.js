@@ -8,9 +8,9 @@ import Title from "./title";
 import { connect } from "react-redux";
 
 import {
-  getControllersForCommCenter,
-  updateControllerBySocket,
-} from "../../../actions/controllersForCommCenters";
+  getCommCenterMonitoring,
+  updateCommCenterMonitoringBySocket,
+} from "../../../actions/commCenterMonitoring";
 
 const useStyles = (theme: Theme) =>
   createStyles({
@@ -56,28 +56,22 @@ class Monitoring extends Component {
   componentDidMount() {
     console.log(this.props.match.params);
     const commCenterPath = this.props.match.params.commCenterPath;
-    const { dispatchGetControllersForCommCenter } = this.props;
-    const getControllerUrl = `controllers/getRegGroupsRegistersValues/${commCenterPath}`;
-    dispatchGetControllersForCommCenter(getControllerUrl);
+    const { dispatchGetCommCenterMonitoring } = this.props;
+    const getControllerUrl = `commCenterControllersRegs/${commCenterPath}`;
+    dispatchGetCommCenterMonitoring(getControllerUrl);
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
-    const { dispatchGetControllersForCommCenter } = this.props;
+    const { dispatchGetCommCenterMonitoring } = this.props;
     const thisPath = this.props.match.params.commCenterPath;
     const prevPath = prevProps.match.params.commCenterPath;
     if (prevPath !== thisPath) {
-      const getControllerUrl = `controllers/getRegGroupsRegistersValues/${thisPath}`;
-      dispatchGetControllersForCommCenter(getControllerUrl);
+      const getControllerUrl = `commCenterControllersRegs/${thisPath}`;
+      dispatchGetCommCenterMonitoring(getControllerUrl);
     }
   }
 
   render() {
-    const {
-      classes,
-      controllersForCommCenter,
-      error,
-      loading,
-      mapCommCenters,
-    } = this.props;
+    const { classes, commCenterMonitoring, error, loading } = this.props;
     if (error) {
       return <div>Error! {error}</div>;
     }
@@ -86,20 +80,20 @@ class Monitoring extends Component {
       return <Loader />;
     }
 
-    const commCenter = mapCommCenters.find(
-      (el) => el.path === this.props.match.params.commCenterPath
-    );
+    // const commCenter = mapCommCenters.find(
+    //   (el) => el.path === this.props.match.params.commCenterPath
+    // );
 
     return (
       <Grid container className={classes.root}>
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <Title commCenter={commCenter} />
+            <Title commCenter={commCenterMonitoring} />
           </Paper>
         </Grid>
 
         <Grid item xs={12}>
-          <Body controllersForCommCenter={controllersForCommCenter} />
+          <Body controllers={commCenterMonitoring.controllers} />
         </Grid>
       </Grid>
     );
@@ -107,27 +101,23 @@ class Monitoring extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  dispatchGetControllersForCommCenter: (url) => {
-    dispatch(getControllersForCommCenter(url));
+  dispatchGetCommCenterMonitoring: (url) => {
+    dispatch(getCommCenterMonitoring(url));
   },
-  dispatchUpdateControllerBySocket: (controller, data) => {
-    dispatch(updateControllerBySocket(controller, data));
+  dispatchUpdateCommCenterMonitoringBySocket: (controller, data) => {
+    dispatch(updateCommCenterMonitoringBySocket(controller, data));
   },
 });
 
 function mapStateToProps(state) {
   // console.log("state.monitoring", state);
-  const { message } = state.message;
-  const controllersForCommCenter =
-    state.controllersForCommCentersReducer.controllers;
-  const { error, loading } = state.controllersForCommCentersReducer;
-  const mapCommCenters = state.mapCommCentersReducer.items;
+  const commCenterMonitoring = state.commCenterMonitoringReducer.item;
+  const { error, loading } = state.commCenterMonitoringReducer;
+
   return {
-    message,
     error,
     loading,
-    controllersForCommCenter,
-    mapCommCenters,
+    commCenterMonitoring,
   };
 }
 export default connect(

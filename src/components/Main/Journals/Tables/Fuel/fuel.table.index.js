@@ -330,7 +330,7 @@ export default function FuelTables() {
                 style={{ padding: "4px" }}
               >
                 <p className={classes.p}>Сумматор массы</p>
-                <p className={classes.p}> (тонны)</p>
+                <p className={classes.p}> (т)</p>
               </TableCell>
               <TableCell className={classes.headerCell}>
                 <p

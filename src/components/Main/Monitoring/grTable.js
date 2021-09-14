@@ -46,7 +46,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function GroupTable({ group }) {
+export default function GroupTable({ controller }) {
   const classes = useStyles();
   return (
     <TableContainer component={Paper}>
@@ -61,7 +61,7 @@ export default function GroupTable({ group }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {group.registers.map((row) => {
+          {controller.registers.map((row) => {
             return (
               <StyledTableRow key={row.address}>
                 <StyledTableCell
@@ -84,7 +84,7 @@ export default function GroupTable({ group }) {
                   align="center"
                   style={{ width: 200, minWidth: 200, maxWidth: 200 }}
                 >
-                  {row.value}
+                  {row.Registers_Controllers_values.value}
                 </StyledTableCell>
               </StyledTableRow>
             );
