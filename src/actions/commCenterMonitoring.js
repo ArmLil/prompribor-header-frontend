@@ -56,8 +56,8 @@ export const updateCommCenterMonitoringBySocket = (
   let regValue = "";
   let regContrValue = "";
 
-  newCommCenterMonitoring.controllers.forEach((cotr, i) => {
-    cotr.registers.forEach((reg, i) => {
+  newCommCenterMonitoring.controllers.forEach((contr, i) => {
+    contr.registers.forEach((reg, i) => {
       if (
         reg.address === registerControllerValue.registerAddress &&
         reg.Registers_Controllers_values.value !== registerControllerValue.value
@@ -70,4 +70,38 @@ export const updateCommCenterMonitoringBySocket = (
   });
   if (regValue !== regContrValue)
     dispatch(socketUpdateCommCenterMonitoring(newCommCenterMonitoring));
+};
+
+export const updateSocketProgrammStatus = (
+  commCenterMonitoring,
+  controller
+) => (dispatch) => {
+  console.log({ commCenterMonitoring, controller });
+  let newCommCenterMonitoring = Object.assign({}, commCenterMonitoring);
+  let _controllers = [];
+  newCommCenterMonitoring.controllers.forEach((contr, i) => {
+    if (contr.modbusId === controller.modbusId) {
+      contr.programmStatus = controller.programmStatus;
+    }
+    _controllers.push(contr);
+  });
+  newCommCenterMonitoring.controllers = _controllers;
+  dispatch(socketUpdateCommCenterMonitoring(newCommCenterMonitoring));
+};
+
+export const updateSocketControllerStatus = (
+  commCenterMonitoring,
+  controller
+) => (dispatch) => {
+  console.log({ commCenterMonitoring, controller });
+  let newCommCenterMonitoring = Object.assign({}, commCenterMonitoring);
+  let _controllers = [];
+  newCommCenterMonitoring.controllers.forEach((contr, i) => {
+    if (contr.modbusId === controller.modbusId) {
+      contr.status = controller.status;
+    }
+    _controllers.push(contr);
+  });
+  newCommCenterMonitoring.controllers = _controllers;
+  dispatch(socketUpdateCommCenterMonitoring(newCommCenterMonitoring));
 };

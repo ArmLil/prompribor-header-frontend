@@ -1,6 +1,5 @@
 import React from "react";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
-import StopRoundedIcon from "@material-ui/icons/StopRounded";
 import Box from "@material-ui/core/Box";
 import Divider from "@material-ui/core/Divider";
 
@@ -31,6 +30,27 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+// <div className={classes.title}>
+//   <Box className={classes.subTitle} style={{ fontSize: 14 }}>
+//     Статус -
+//   </Box>
+//
+//   {commCenter.status === "offline" ? (
+//     <Box style={{ fontSize: 14 }}>офлайн</Box>
+//   ) : (
+//     <Box style={{ fontSize: 14 }}>онлайн</Box>
+//   )}
+//   <Box>
+//     <StopRoundedIcon
+//       style={{
+//         color:
+//           commCenter.status === "offline" ? "#d50000" : "#64dd17",
+//         margin: 0,
+//       }}
+//     />
+//   </Box>
+// </div>
+
 export default function Title({ commCenter }) {
   const classes = useStyles();
   return (
@@ -39,30 +59,10 @@ export default function Title({ commCenter }) {
         <div className={classes.firstLayerTitle}>
           <div className={classes.title}>
             <Box className={classes.subTitle} style={{ fontSize: 18 }}>
-              Коммуникационный центр -
+              Насосная станция -
             </Box>
             <Box fontWeight="fontWeightMedium" style={{ fontSize: 22 }}>
               {commCenter.name}
-            </Box>
-          </div>
-          <div className={classes.title}>
-            <Box className={classes.subTitle} style={{ fontSize: 14 }}>
-              Статус -
-            </Box>
-
-            {commCenter.status === "offline" ? (
-              <Box style={{ fontSize: 14 }}>офлайн</Box>
-            ) : (
-              <Box style={{ fontSize: 14 }}>онлайн</Box>
-            )}
-            <Box>
-              <StopRoundedIcon
-                style={{
-                  color:
-                    commCenter.status === "offline" ? "#d50000" : "#64dd17",
-                  margin: 0,
-                }}
-              />
             </Box>
           </div>
         </div>

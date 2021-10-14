@@ -9,6 +9,8 @@ import Box from "@material-ui/core/Box";
 import StopRoundedIcon from "@material-ui/icons/StopRounded";
 import { useDispatch, useSelector } from "react-redux";
 import { updateCommCenterMonitoringBySocket } from "../../../actions/commCenterMonitoring";
+import { updateSocketProgrammStatus } from "../../../actions/commCenterMonitoring";
+import { updateSocketControllerStatus } from "../../../actions/commCenterMonitoring";
 import { socket } from "../../../socket_api";
 import GroupTable from "./grTable";
 
@@ -56,7 +58,7 @@ export default function Controllers({ controllers }) {
   );
 
   useEffect(() => {
-    // let isMounted = true;
+    //registerControllerValue
     const updateControllerListener = (data) => {
       console.log("socket on registerControllerValue");
 
@@ -64,8 +66,31 @@ export default function Controllers({ controllers }) {
     };
     socket.on("registerControllerValue", updateControllerListener);
     return () => {
-      // isMounted = false;
       socket.off("registerControllerValue", updateControllerListener);
+    };
+  }, [commCenterMonitoring, dispatch]);
+
+  useEffect(() => {
+    const updateControllerProgrammStatus = (data) => {
+      console.log("socket on programmStatusChanged");
+
+      dispatch(updateSocketProgrammStatus(commCenterMonitoring, data));
+    };
+    socket.on("programmStatusChanged", updateControllerProgrammStatus);
+    return () => {
+      socket.off("programmStatusChanged", updateControllerProgrammStatus);
+    };
+  }, [commCenterMonitoring, dispatch]);
+
+  useEffect(() => {
+    const updateControllerStatus = (data) => {
+      console.log("socket on updateSocketControllerStatus");
+
+      dispatch(updateSocketControllerStatus(commCenterMonitoring, data));
+    };
+    socket.on("controllerStatusChanged", updateControllerStatus);
+    return () => {
+      socket.off("controllerStatusChanged", updateControllerStatus);
     };
   }, [commCenterMonitoring, dispatch]);
 
@@ -86,15 +111,39 @@ export default function Controllers({ controllers }) {
               </Box>
             </div>
           </div>
+
           <div className={classes.title}>
             <Box className={classes.subTitle} style={{ fontSize: 12 }}>
-              Статус -
+              Программа котнтроллера-
+            </Box>
+
+            {controller.programmStatus === "offline" ? (
+              <Box style={{ fontSize: 12 }}>незапущена</Box>
+            ) : (
+              <Box style={{ fontSize: 12 }}>запущена</Box>
+            )}
+            <Box>
+              <StopRoundedIcon
+                style={{
+                  color:
+                    controller.programmStatus === "offline"
+                      ? "#d50000"
+                      : "#64dd17",
+                  margin: 0,
+                }}
+              />
+            </Box>
+          </div>
+
+          <div className={classes.title}>
+            <Box className={classes.subTitle} style={{ fontSize: 12 }}>
+              Статус котнтроллера-
             </Box>
 
             {controller.status === "offline" ? (
-              <Box style={{ fontSize: 12 }}>офлайн</Box>
+              <Box style={{ fontSize: 12 }}>недоступен</Box>
             ) : (
-              <Box style={{ fontSize: 12 }}>онлайн</Box>
+              <Box style={{ fontSize: 12 }}>доступен</Box>
             )}
             <Box>
               <StopRoundedIcon

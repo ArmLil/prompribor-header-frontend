@@ -29,6 +29,7 @@ import {
 import { api } from "../../../api";
 export const API_URL = `http://${api.host}:${api.port}`;
 // const IMAGES_URL = `${API_URL}/images/{s}.tile.openstreetmap.org.{z}.{x}.{y}.png`;
+const IMAGES_URL = `${API_URL}/Tiles/{z}/{x}/{y}.png`;
 function BureyaSign() {
   return (
     <div>
@@ -183,10 +184,7 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
         touchZoom={true}
         scrollWheelZoom={true}
       >
-        <TileLayer
-          attribution=""
-          url="https:{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        />
+        <TileLayer attribution="" url={IMAGES_URL} />
 
         <ChangeView center={defaultPosition} markers={changeViewMarkers} />
         {places.map((place: Place) => {
