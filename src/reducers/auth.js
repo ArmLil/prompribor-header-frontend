@@ -20,7 +20,7 @@ export default function authReducer(state = initialState, action) {
       return {
         ...state,
         isLoggedIn: false,
-        bodyPhone: "",
+        bodyPhone: "bodyPhone",
       };
     case REGISTER_FAIL:
       return {

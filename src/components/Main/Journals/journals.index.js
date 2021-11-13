@@ -178,7 +178,7 @@ class Journals extends Component {
           }
         });
       }
-    }, 2000);
+    }, 1000);
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -186,7 +186,6 @@ class Journals extends Component {
     const thisPath = this.props.match.params.commCenterPath;
     const prevPath = prevProps.match.params.commCenterPath;
     if (prevPath !== thisPath) {
-      // window.location.reload();
       const { dispatchGetCommCenter } = this.props;
       const commCenterPath = this.props.match.params.commCenterPath;
       console.log({ commCenterPath });

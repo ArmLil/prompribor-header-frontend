@@ -5,11 +5,27 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import GlobalContainer from "./components/global.container";
 import { addJournalData } from "./actions/commCenters";
+import { logout } from "./actions/auth";
 import { socket, SocketContext } from "./socket_api";
 
 export default function App() {
   const dispatch = useDispatch();
   const commCenters = useSelector((state) => state.commCentersReducer.items);
+
+  useEffect(() => {
+    const logoutHandler = () => {
+      const now = new Date();
+      let userFromLocalStorage = JSON.parse(localStorage.getItem("user"));
+      if (userFromLocalStorage) {
+        let time = userFromLocalStorage.ttl;
+        if (userFromLocalStorage && now.getTime() > time) {
+          dispatch(logout());
+        }
+      }
+    };
+    logoutHandler();
+    window.addEventListener("click", logoutHandler, false);
+  });
 
   useEffect(() => {
     const updateCommCentersFuelData = (data) => {

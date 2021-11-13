@@ -96,6 +96,7 @@ export default function DoneseniiTables() {
   const commCenter = useSelector(
     (state) => state.currentCommCenterReducer.item
   );
+  const user = useSelector((state) => state.authReducer.user);
 
   React.useEffect(() => {
     const setParams = () => {};
@@ -219,7 +220,6 @@ export default function DoneseniiTables() {
       })
       .catch((err) => console.log({ err }));
   };
-
   return (
     <div>
       <AddDialog
@@ -241,6 +241,7 @@ export default function DoneseniiTables() {
       <TableContainer className={classes.container}>
         <Tooltip title="Создать новый элемент">
           <Button
+            disabled={!user.isAdmin}
             variant="contained"
             color="primary"
             onClick={handleAddDialogOpen}
@@ -322,6 +323,7 @@ export default function DoneseniiTables() {
                     className={classes.rowEditDeleteCell}
                   >
                     <IconButton
+                      disabled={!user.isAdmin}
                       aria-label="edit"
                       color="primary"
                       className={classes.iconButton}
@@ -337,6 +339,7 @@ export default function DoneseniiTables() {
                     className={classes.rowEditDeleteCell}
                   >
                     <IconButton
+                      disabled={!user.isAdmin}
                       aria-label="delete"
                       color="secondary"
                       className={classes.iconButton}

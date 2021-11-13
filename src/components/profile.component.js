@@ -27,7 +27,7 @@ class Profile extends Component {
               <strong>е-майл:</strong> {currentUser.email}
             </p>
             <strong>
-              {currentUser.roleAdmin ? "права: админ" : "права: админ"}
+              {currentUser.isAdmin ? "права: админ" : "права: гость"}
             </strong>
           </header>
         </div>

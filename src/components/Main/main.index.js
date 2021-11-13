@@ -35,7 +35,6 @@ class Main extends Component {
     }
   }
   render() {
-    console.log("render");
     const { classes, mapCommCenters, error, loading } = this.props;
     mapCommCenters.sort(function (a, b) {
       return a.index - b.index;
