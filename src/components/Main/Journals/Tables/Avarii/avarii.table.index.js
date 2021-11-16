@@ -130,7 +130,7 @@ export default function AvariiTables() {
     setOpenWorning(false);
     if (action === "submit") {
       dataService
-        .deleteData(`avarii_journals_data/${parameters.id}`)
+        .deleteData(`avarii_journals_data/${parameters.id}?token=${user.token}`)
         .then((result) => {
           dispatch(deleteJournalData(commCenter, "avarii", parameters.id));
         })
@@ -160,7 +160,9 @@ export default function AvariiTables() {
     note,
     paramsId
   ) => {
-    let putBody = {};
+    let putBody = {
+      token: user.token,
+    };
     if (date) putBody.date = date;
     if (time) putBody.time = time;
     if (fromWho) putBody.fromWho = fromWho;
@@ -213,8 +215,12 @@ export default function AvariiTables() {
         executor,
         note,
         commCenterPath: commCenter.path,
+        token: user.token,
       })
       .then((result) => {
+        if (result.data.message) {
+          throw new Error(result.data.message);
+        }
         dispatch(addJournalData(commCenter, "avarii", result.data));
         setOpenAddDialog(false);
       })

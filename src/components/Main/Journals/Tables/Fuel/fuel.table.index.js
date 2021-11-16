@@ -125,7 +125,7 @@ export default function FuelTables() {
     setOpenWorning(false);
     if (action === "submit") {
       dataService
-        .deleteData(`fuel_journals_data/${parameters.id}`)
+        .deleteData(`fuel_journals_data/${parameters.id}?token=${user.token}`)
         .then((result) => {
           dispatch(deleteJournalData(commCenter, "fuel", parameters.id));
         })
@@ -158,7 +158,9 @@ export default function FuelTables() {
     note,
     paramsId
   ) => {
-    let putBody = {};
+    let putBody = {
+      token: user.token,
+    };
     if (date) putBody.date = date;
     if (time) putBody.time = time;
     if (temperature) putBody.temperature = temperature;
@@ -228,6 +230,7 @@ export default function FuelTables() {
         total_mass,
         note,
         commCenterPath: commCenter.path,
+        token: user.token,
       })
       .then((result) => {
         dispatch(addJournalData(commCenter, "fuel", result.data));

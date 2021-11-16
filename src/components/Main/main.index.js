@@ -6,6 +6,7 @@ import Monitoring from "./Monitoring/monitoring.index";
 import Journals from "./Journals/journals.index";
 import Controllers from "./Controllers/controllers.index";
 import CommCenters from "./CommCenters/commCenters.index";
+import Users from "./Users/users.index";
 import Registers from "./Registers";
 import LeftBar from "./LeftBar/leftBar.index";
 import Loader from "../Loader";
@@ -69,9 +70,18 @@ class Main extends Component {
               path="/main/journals/:commCenterPath"
               component={Journals}
             />
-            <Route exact path="/main/controllers" component={Controllers} />
-            <Route exact path="/main/comm-centers" component={CommCenters} />
-            <Route exact path="/main/registers" component={Registers} />
+            <Route
+              exact
+              path="/main/admin/controllers"
+              component={Controllers}
+            />
+            <Route
+              exact
+              path="/main/admin/comm-centers"
+              component={CommCenters}
+            />
+            <Route exact path="/main/admin/registers" component={Registers} />
+            <Route exact path="/main/admin/users" component={Users} />
           </Switch>
         </div>
       </div>

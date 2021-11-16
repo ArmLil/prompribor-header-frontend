@@ -130,7 +130,7 @@ export default function NasosiTables() {
     setOpenWorning(false);
     if (action === "submit") {
       dataService
-        .deleteData(`nasosi_journals_data/${parameters.id}`)
+        .deleteData(`nasosi_journals_data/${parameters.id}?token=${user.token}`)
         .then((result) => {
           dispatch(deleteJournalData(commCenter, "nasosi", parameters.id));
         })
@@ -161,7 +161,9 @@ export default function NasosiTables() {
     note,
     paramsId
   ) => {
-    let putBody = {};
+    let putBody = {
+      token: user.token,
+    };
     if (date) putBody.date = date;
     if (time) putBody.time = time;
     if (line) putBody.line = line;
@@ -216,6 +218,7 @@ export default function NasosiTables() {
         revs,
         note,
         commCenterPath: commCenter.path,
+        token: user.token,
       })
       .then((result) => {
         dispatch(addJournalData(commCenter, "nasosi", result.data));

@@ -130,7 +130,9 @@ export default function DoneseniiTables() {
     setOpenWorning(false);
     if (action === "submit") {
       dataService
-        .deleteData(`donesenii_journals_data/${parameters.id}`)
+        .deleteData(
+          `donesenii_journals_data/${parameters.id}?token=${user.token}`
+        )
         .then((result) => {
           dispatch(deleteJournalData(commCenter, "donesenii", parameters.id));
         })
@@ -160,7 +162,9 @@ export default function DoneseniiTables() {
     note,
     paramsId
   ) => {
-    let putBody = {};
+    let putBody = {
+      token: user.token,
+    };
     if (date) putBody.date = date;
     if (time) putBody.time = time;
     if (fromWho) putBody.fromWho = fromWho;
@@ -213,6 +217,7 @@ export default function DoneseniiTables() {
         executor,
         note,
         commCenterPath: commCenter.path,
+        token: user.token,
       })
       .then((result) => {
         dispatch(addJournalData(commCenter, "donesenii", result.data));

@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
 import {
@@ -24,8 +25,9 @@ import LocationOnOutlinedIcon from "@material-ui/icons/LocationOnOutlined"; //ma
 // import DnsOutlinedIcon from "@material-ui/icons/DnsOutlined"; //comm centers
 // import ListAltOutlinedIcon from "@material-ui/icons/ListAltOutlined"; //registers
 import ListItemMonitor from "./listItemMonitor";
+import ListItemAdmin from "./listItemAdmin";
 import ListItemJournals from "./listItemJournals";
-const drawerWidth = 240;
+const drawerWidth = 290;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -93,6 +95,8 @@ export default function LeftBar({ commCenters }) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const user = useSelector((state) => state.authReducer.user);
 
   // <List>
   //   <Link to={"/main/controllers"} className={classes.link}>
@@ -171,8 +175,8 @@ export default function LeftBar({ commCenters }) {
           <ListItemMonitor commCenters={commCenters} />
           <ListItemJournals commCenters={commCenters} />
         </List>
-
         <Divider />
+        {user.isAdmin && <ListItemAdmin commCenters={commCenters} />}
       </Drawer>
     </div>
   );
