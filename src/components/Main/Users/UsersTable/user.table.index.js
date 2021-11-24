@@ -14,7 +14,6 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableFooter from "@material-ui/core/TableFooter";
 import dataService from "../../../../services/data.service";
-import { addJournalData } from "../../../../actions/currentCommCenter";
 import { editJournalData } from "../../../../actions/currentCommCenter";
 import { deleteJournalData } from "../../../../actions/currentCommCenter";
 
@@ -93,16 +92,30 @@ export default function UserTable() {
   const [openWorning, setOpenWorning] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [users, setUsers] = React.useState([]);
   const dispatch = useDispatch();
   const commCenter = useSelector(
     (state) => state.currentCommCenterReducer.item
   );
   const user = useSelector((state) => state.authReducer.user);
+  console.log({ user });
 
   React.useEffect(() => {
-    const setParams = () => {};
-    setParams();
-  }, [commCenter]);
+    const getUsers = () => {
+      dataService
+        .getData(`users?token=${user.token}`)
+        .then((result) => {
+          setUsers(result.data.users.rows);
+        })
+        .catch((err) => {
+          if (err.response && err.response.data && err.response.data.message) {
+            alert(err.response.data.message);
+          }
+          console.log({ err });
+        });
+    };
+    getUsers();
+  }, [user.token]);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -186,71 +199,19 @@ export default function UserTable() {
       .catch((err) => console.log({ err }));
   };
 
-  const handleCreate = (
-    ev,
-    date,
-    time,
-    temperature,
-    density,
-    current_volume,
-    current_mass,
-    total_volume,
-    total_mass,
-    note
-  ) => {
-    if (date === "") {
-      let today = new Date();
-      let dd = String(today.getDate()).padStart(2, "0");
-      let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-      let yyyy = today.getFullYear();
-
-      today = dd + "-" + mm + "-" + yyyy;
-      date = today;
-    } else {
-      let formateDate = new Date(date);
-      let dd = String(formateDate.getDate()).padStart(2, "0");
-      let mm = String(formateDate.getMonth() + 1).padStart(2, "0"); //January is 0!
-      let yyyy = formateDate.getFullYear();
-      formateDate = dd + "-" + mm + "-" + yyyy;
-      date = formateDate;
-    }
-    if (time === "") {
-      let today = new Date();
-      let hh = String(today.getHours());
-      let min = String(today.getMinutes());
-
-      if (hh.length === 1) hh = "0" + hh;
-      if (min.length === 1) min = "0" + min;
-      let currentTime = hh + ":" + min;
-      time = currentTime;
-    }
-    dataService
-      .postData("fuel_journals_data", {
-        date,
-        time,
-        temperature,
-        density,
-        current_volume,
-        current_mass,
-        total_volume,
-        total_mass,
-        note,
-        commCenterPath: commCenter.path,
-        token: user.token,
-      })
-      .then((result) => {
-        dispatch(addJournalData(commCenter, "fuel", result.data));
-        setOpenAddDialog(false);
-      })
-      .catch((err) => console.log({ err }));
+  const handleCreate = (newUser) => {
+    const _users = [...users, newUser];
+    setUsers(_users);
   };
 
+  console.log({ users });
   return (
     <div>
       <AddDialog
         handleAddDialogClose={handleAddDialogClose}
         handleCreate={handleCreate}
         openAddDialog={openAddDialog}
+        user={user}
       />
       <EditDialog
         handleEditDialogClose={handleEditDialogClose}
@@ -341,9 +302,9 @@ export default function UserTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {commCenter.fuel_journal_data
+            {users
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => (
+              .map((_user, index) => (
                 <TableRow
                   key={index}
                   hover
@@ -352,31 +313,28 @@ export default function UserTable() {
                   overflow="hidden"
                 >
                   <TableCell align="center" className={classes.rowCell}>
-                    {row.date}
+                    {_user.name}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    {row.time}
+                    {_user.secondName}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    {row.temperature}
+                    {_user.fatherName}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    {row.density}
+                    {_user.username}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    {row.current_volume}
+                    {_user.position}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    {row.current_mass}
+                    {_user.isAdmin ? "да" : "нет"}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    {row.total_volume}
+                    {_user.email}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    {row.total_mass}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {row.note}
+                    {_user.phone}
                   </TableCell>
                   <TableCell
                     align="center"
@@ -388,7 +346,7 @@ export default function UserTable() {
                       color="primary"
                       className={classes.iconButton}
                       onClick={() => {
-                        handleEditDialogOpen(row);
+                        handleEditDialogOpen(user);
                       }}
                     >
                       <EditOutlinedIcon />
@@ -403,7 +361,7 @@ export default function UserTable() {
                       aria-label="delete"
                       color="secondary"
                       className={classes.iconButton}
-                      onClick={() => handleDeleteWorningOpen(row)}
+                      onClick={() => handleDeleteWorningOpen(user)}
                     >
                       <DeleteForeverOutlinedIcon />
                     </IconButton>
@@ -416,7 +374,7 @@ export default function UserTable() {
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={3}
-                count={commCenter.fuel_journal_data.length}
+                count={users.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{

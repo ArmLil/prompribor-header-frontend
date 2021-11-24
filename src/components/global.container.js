@@ -92,19 +92,8 @@ class GlobalContainer extends Component {
                   marginLeft: 20,
                 }}
               >
-                СМТ
-              </h5>{" "}
-              <p
-                style={{
-                  fontStyle: "italic",
-                  fontSize: 15,
-                  marginLeft: 5,
-                  marginBottom: 0,
-                  marginTop: 0,
-                }}
-              >
-                тпр-1
-              </p>
+                СМТ <em style={{ fontSize: 15 }}>тпр-1</em>
+              </h5>
             </Link>
             <div className="navbar-nav mr-auto">
               {user && (
