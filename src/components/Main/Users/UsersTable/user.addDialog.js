@@ -26,6 +26,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+function validateEmail(_email) {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(_email).toLowerCase());
+}
+
 function PaperComponent(props: PaperProps) {
   return (
     <Draggable
@@ -86,10 +91,7 @@ export default function FormDialog({
     setPosition(event.target.value);
     setPosition_error(false);
   };
-  function validateEmail(_email) {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(_email).toLowerCase());
-  }
+
   const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };

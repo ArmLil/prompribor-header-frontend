@@ -31,7 +31,7 @@ const useStyles = makeStyles({
     backgroundColor: "#fdf9f7",
 
     // maxHeight: 440,
-    // maxWidth: "90vw",
+    // maxWidth: "87vw",
   },
   table: {
     marginTop: 50,
@@ -88,7 +88,7 @@ export default function UserTable() {
   const classes = useStyles();
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
-  const [parameters, setParameters] = React.useState({});
+  const [userParams, setUserParams] = React.useState({});
   const [openWorning, setOpenWorning] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -135,9 +135,9 @@ export default function UserTable() {
     setOpenAddDialog(true);
   };
 
-  const handleDeleteWorningOpen = (parameters) => {
+  const handleDeleteWorningOpen = (row) => {
     setOpenWorning(true);
-    setParameters(Object.assign({}, parameters));
+    setUserParams(Object.assign({}, row, { token: user.token }));
   };
 
   const handleDeleteWorningClose = (action, parameters) => {
@@ -152,8 +152,8 @@ export default function UserTable() {
     }
   };
 
-  const handleEditDialogOpen = (parameters) => {
-    setParameters(Object.assign({}, parameters));
+  const handleEditDialogOpen = (row) => {
+    setUserParams(Object.assign({}, row, { token: user.token }));
     setOpenEditDialog(true);
   };
 
@@ -164,39 +164,12 @@ export default function UserTable() {
     setOpenEditDialog(false);
   };
 
-  const handleEdit = (
-    ev,
-    date,
-    time,
-    temperature,
-    density,
-    current_volume,
-    current_mass,
-    total_volume,
-    total_mass,
-    note,
-    paramsId
-  ) => {
-    let putBody = {
-      token: user.token,
-    };
-    if (date) putBody.date = date;
-    if (time) putBody.time = time;
-    if (temperature) putBody.temperature = temperature;
-    if (density) putBody.density = density;
-    if (current_volume) putBody.current_volume = current_volume;
-    if (current_mass) putBody.current_mass = current_mass;
-    if (total_volume) putBody.total_volume = total_volume;
-    if (total_mass) putBody.total_mass = total_mass;
-    if (note) putBody.note = note;
-    putBody.commCenterPath = commCenter.path;
-    dataService
-      .putData(`fuel_journals_data/${paramsId}`, putBody)
-      .then((result) => {
-        dispatch(editJournalData(commCenter, "fuel", result.data));
-        setOpenEditDialog(false);
-      })
-      .catch((err) => console.log({ err }));
+  const handleEdit = (editedUser) => {
+    const _users = users.map((_user) => {
+      if (editedUser.id === _user.id) return editedUser;
+      return _user;
+    });
+    setUsers(_users);
   };
 
   const handleCreate = (newUser) => {
@@ -217,11 +190,11 @@ export default function UserTable() {
         handleEditDialogClose={handleEditDialogClose}
         handleEdit={handleEdit}
         openEditDialog={openEditDialog}
-        params={parameters}
+        userParams={userParams}
       />
       <WorningDialog
         openWorning={openWorning}
-        parameters={parameters}
+        parameters={userParams}
         handleClose={handleDeleteWorningClose}
       />
       <TableContainer className={classes.container}>
@@ -346,7 +319,7 @@ export default function UserTable() {
                       color="primary"
                       className={classes.iconButton}
                       onClick={() => {
-                        handleEditDialogOpen(user);
+                        handleEditDialogOpen(_user);
                       }}
                     >
                       <EditOutlinedIcon />

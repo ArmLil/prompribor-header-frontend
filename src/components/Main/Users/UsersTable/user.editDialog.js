@@ -7,8 +7,13 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Paper, { PaperProps } from "@material-ui/core/Paper";
+import FormControl from "@mui/material/FormControl";
+import NativeSelect from "@mui/material/NativeSelect";
+import FormHelperText from "@mui/material/FormHelperText";
 import Draggable from "react-draggable";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+
+import dataService from "../../../../services/data.service";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,102 +38,203 @@ function PaperComponent(props: PaperProps) {
   );
 }
 
+function validateEmail(_email) {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(_email).toLowerCase());
+}
+
 export default function FormDialog({
   handleEditDialogClose,
   handleEdit,
   openEditDialog,
-  params,
+  userParams,
 }) {
   const classes = useStyles();
-  const [date, setDate] = React.useState(params.date || "");
-  const [time, setTime] = React.useState(params.time || "");
-  const [temperature, setTemperature] = React.useState(
-    params.temperature || ""
+
+  const [name, setName] = React.useState(userParams.name || "");
+  const [secondName, setSecondName] = React.useState(
+    userParams.secondName || ""
   );
-  const [density, setDensity] = React.useState(params.density || "");
-  const [current_volume, setCurrent_volume] = React.useState(
-    params.current_volume || ""
+  const [fatherName, setFatherName] = React.useState(
+    userParams.fatherName || ""
   );
-  const [current_mass, setCurrent_mass] = React.useState(
-    params.current_mass || ""
+  const [username, setUsername] = React.useState(userParams.username || "");
+  const [position, setPosition] = React.useState(userParams.position || "");
+  const [email, setEmail] = React.useState(userParams.email || "");
+  const [phone, setPhone] = React.useState(userParams.phine || "");
+  const [isAdmin, setIsAdmin] = React.useState(userParams.isAdmin || false);
+  const [password, setPassword] = React.useState("");
+
+  const [name_error, setName_error] = React.useState(false);
+  const [secondName_error, setSecondName_error] = React.useState(false);
+  const [username_error, setUsername_error] = React.useState(false);
+  const [position_error, setPosition_error] = React.useState(false);
+  const [password_error, setPassword_error] = React.useState(false);
+  const [email_error, setEmail_error] = React.useState(false);
+
+  const [name_helperText, setName_helperText] = React.useState("");
+  const [secondName_helperText, setSecondName_helperText] = React.useState("");
+  const [username_helperText, setUsername_helperText] = React.useState("");
+  const [position_helperText, setPosition_helperText] = React.useState("");
+  const [password_helperText, setPassword_helperText] = React.useState(
+    "заполните поле если хотите изменить пароль"
   );
-  const [total_volume, setTotal_volume] = React.useState(
-    params.total_volume || ""
-  );
-  const [total_mass, setTotal_mass] = React.useState(params.total_mass || "");
-  const [note, setNote] = React.useState(params.note || "");
+  const [email_helperText, setEmail_helperText] = React.useState("");
 
   React.useEffect(() => {
     const setParams = () => {
-      if (params.date) {
-        if (date === "") {
-          var newdate = params.date.split("-").reverse().join("-");
-          setDate(newdate);
-        }
-        if (params.time) setTime(params.time);
-        else setTime("");
-
-        if (params.temperature) setTemperature(params.temperature);
-        else setTemperature("");
-
-        if (params.density) setDensity(params.density);
-        else setDensity("");
-
-        if (params.current_volume) setCurrent_volume(params.current_volume);
-        else setCurrent_volume("");
-
-        if (params.current_mass) setCurrent_mass(params.current_mass);
-        else setCurrent_mass("");
-
-        if (params.total_volume) setTotal_volume(params.total_volume);
-        else setTotal_volume("");
-
-        if (params.total_mass) setTotal_mass(params.total_mass);
-        else setTotal_mass("");
-
-        if (params.note) setNote(params.note);
-        else setNote("");
-      }
+      console.log({ userParams });
+      if (userParams.name) setName(userParams.name);
+      if (userParams.username) setUsername(userParams.username);
+      if (userParams.secondName) setSecondName(userParams.secondName);
+      if (userParams.fatherName) setFatherName(userParams.fatherName);
+      if (userParams.position) setPosition(userParams.position);
+      if (userParams.email) setEmail(userParams.email);
+      if (userParams.phone) setPhone(userParams.phone);
     };
     setParams();
-  }, [date, params]);
-  const handleChangeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDate(event.target.value);
+  }, [userParams]);
+
+  const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setName(event.target.value);
+    setName_error(false);
   };
-  const handleChangeTime = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTime(event.target.value);
-  };
-  const handleChangeTemperature = (
+  const handleChangeSecondName = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setTemperature(event.target.value);
+    setSecondName(event.target.value);
+    setSecondName_error(false);
   };
-  const handleChangeDensity = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDensity(event.target.value);
+  const handleChangeUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUsername(event.target.value);
+    setUsername_error(false);
   };
-  const handleChangeCurrent_volume = (
+  const handleChangePosition = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPosition(event.target.value);
+    setPosition_error(false);
+  };
+
+  const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  };
+  const handleChangePhone = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPhone(event.target.value);
+  };
+  const handleChangeFatherName = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setCurrent_volume(event.target.value);
+    setFatherName(event.target.value);
   };
-  const handleChangeCurrent_mass = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setCurrent_mass(event.target.value);
+  const handleChangeIsAdmin = (event) => {
+    console.log(event.target.value);
+    setIsAdmin(event.target.value);
   };
-  const handleChangeTotal_volume = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setTotal_volume(event.target.value);
+  const handleChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+    if (event.target.value === "") {
+      setPassword_helperText("заполните поле если хотите изменить пароль");
+    }
+    setPassword_error(false);
   };
-  const handleChangeTotal_mass = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setTotal_mass(event.target.value);
+
+  const handleOnClose = () => {
+    setName_error(false);
+    setSecondName_error(false);
+    setUsername_error(false);
+    setPosition_error(false);
+    setPassword_error(false);
+    setEmail_error(false);
+
+    setName_helperText("");
+    setSecondName_helperText("");
+    setUsername_helperText("");
+    setPosition_helperText("");
+    setPassword_helperText("заполните поле если хотите изменить пароль");
+    setEmail_helperText("");
+
+    handleEditDialogClose();
   };
-  const handleChangeNote = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNote(event.target.value);
+
+  const handleSubmit = (id) => {
+    console.log("handleSubmit");
+    let close = true;
+    if (email !== "") {
+      if (!validateEmail(email)) {
+        setEmail_error(true);
+        setEmail_helperText("е-майл не валидный");
+        close = false;
+      } else {
+        setEmail_error(false);
+        setEmail_helperText("");
+      }
+    }
+    if (secondName === "") {
+      setSecondName_error(true);
+      setSecondName_helperText("поле не может быть пустым");
+      close = false;
+    }
+    if (username === "") {
+      setUsername_error(true);
+      setUsername_helperText("поле не может быть пустым");
+      close = false;
+    }
+    if (position === "") {
+      setPosition_error(true);
+      setPosition_helperText("поле не может быть пустым");
+      close = false;
+    }
+    if (name === "") {
+      setName_error(true);
+      setName_helperText("поле не может быть пустым");
+      close = false;
+    }
+    if (password !== "" && password.length < 8) {
+      setPassword_error(true);
+      setPassword_helperText("пароль должен содержать не менее 8 символов ");
+      close = false;
+    }
+    if (close) {
+      dataService
+        .putData(`users/${id}`, {
+          name,
+          secondName,
+          fatherName,
+          username,
+          position,
+          isAdmin,
+          email,
+          phone,
+          password,
+          token: userParams.token,
+        })
+        .then((result) => {
+          console.log({ result });
+          if (result.data.user) {
+            const editedUser = result.data.user;
+            handleEdit(editedUser);
+            if (close) {
+              handleOnClose();
+            }
+          }
+        })
+        .catch((err) => {
+          console.log({ err });
+          if (err.response && err.response.data) {
+            if (err.response.data.message === "username already in use") {
+              setUsername_error(true);
+              setUsername_helperText("имя пользователя уже используется");
+            } else {
+              alert(err.response.data.message);
+            }
+          }
+          close = false;
+          if (close) {
+            handleOnClose();
+          }
+        });
+    }
   };
+
   return (
     <div>
       <Dialog
@@ -139,104 +245,116 @@ export default function FormDialog({
         className={classes.root}
       >
         <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-          Параметры процесса транспортирования горючего
+          Пользователь
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
             Пожалуйста, редактируйте необходимые поля.
           </DialogContentText>
           <TextField
-            margin="dense"
-            id="date"
-            value={date}
-            onChange={handleChangeDate}
-            label="Дата"
-            type="date"
+            id="name"
+            value={name}
+            onChange={handleChangeName}
+            label="Имя"
             style={{ padding: 8 }}
-            InputLabelProps={{
-              shrink: true,
+            margin="dense"
+            required
+            helperText={name_helperText}
+            error={name_error}
+          />
+          <TextField
+            id="secondName"
+            value={secondName}
+            onChange={handleChangeSecondName}
+            label="Ф амилия"
+            style={{ padding: 8 }}
+            margin="dense"
+            required
+            helperText={secondName_helperText}
+            error={secondName_error}
+          />
+          <TextField
+            id="fatherName"
+            value={fatherName}
+            onChange={handleChangeFatherName}
+            label="Отчество"
+            helperText=""
+            style={{ padding: 8 }}
+            margin="dense"
+          />
+          <TextField
+            id="username"
+            value={username}
+            onChange={handleChangeUsername}
+            multiline
+            label="Никнейм"
+            style={{ padding: 8 }}
+            margin="dense"
+            required
+            helperText={username_helperText}
+            error={username_error}
+          />
+          <TextField
+            id="position"
+            value={position}
+            onChange={handleChangePosition}
+            multiline
+            label="Должность"
+            required
+            helperText={position_helperText}
+            error={position_error}
+            style={{ padding: 8 }}
+            margin="dense"
+          />
+          <FormControl
+            variant="standard"
+            sx={{
+              m: 1,
+              minWidth: "55ch",
+              backgroundColor: "#fdf9f7",
+              marginLeft: 0,
             }}
-          />
+          >
+            <NativeSelect
+              value={isAdmin}
+              inputProps={{
+                name: "isAdmin",
+                id: "uncontrolled-native",
+              }}
+              onChange={handleChangeIsAdmin}
+              style={{ width: "53.5ch", marginLeft: 8 }}
+            >
+              <option value={true}>Да</option>
+              <option value={false}>Нет</option>
+            </NativeSelect>
+            <FormHelperText>Имеет права админа</FormHelperText>
+          </FormControl>
           <TextField
-            margin="dense"
-            id="time"
-            value={time}
-            onChange={handleChangeTime}
-            label="Время"
-            type="time"
+            id="email"
+            value={email}
+            onChange={handleChangeEmail}
+            helperText={email_helperText}
+            error={email_error}
+            label="Почта"
             style={{ padding: 8 }}
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-          <TextField
-            id="temperature"
-            value={temperature}
-            onChange={handleChangeTemperature}
-            label="Температура"
-            style={{ padding: 8 }}
             margin="dense"
-            required
           />
           <TextField
-            id="density"
-            value={density}
-            onChange={handleChangeDensity}
+            id="phone"
+            value={phone}
+            onChange={handleChangePhone}
             multiline
-            label="Плотность"
-            style={{ padding: 8 }}
-            margin="dense"
-            required
-          />
-          <TextField
-            id="current_volume"
-            Fuel
-            value={current_volume}
-            onChange={handleChangeCurrent_volume}
-            multiline
-            label="Текущий объемный расход"
-            style={{ padding: 8 }}
-            margin="dense"
-            required
-          />
-          <TextField
-            id="current_mass"
-            value={current_mass}
-            onChange={handleChangeCurrent_mass}
-            multiline
-            label="Текущий массовый расход"
-            helperText="не обязательно"
+            label="Телефон"
             style={{ padding: 8 }}
             margin="dense"
           />
           <TextField
-            id="total_volume"
-            value={total_volume}
-            onChange={handleChangeTotal_volume}
-            multiline
-            label="Сумматор объема"
-            helperText="не обязательно"
-            style={{ padding: 8 }}
-            margin="dense"
-            Fuel
-          />
-          <TextField
-            id="total_mass"
-            value={total_mass}
-            onChange={handleChangeTotal_mass}
-            multiline
-            label="Сумматор объема"
-            helperText="не обязательно"
-            style={{ padding: 8 }}
-            margin="dense"
-          />
-          <TextField
-            id="note"
-            value={note}
-            onChange={handleChangeNote}
-            multiline
-            label="Примечание"
-            helperText="не обязательно"
+            id="password"
+            value={password}
+            onChange={handleChangePassword}
+            label="Пароль"
+            helperText={password_helperText}
+            error={password_error}
             style={{ padding: 8 }}
             margin="dense"
           />
@@ -245,24 +363,7 @@ export default function FormDialog({
           <Button onClick={handleEditDialogClose} color="primary">
             Отменить
           </Button>
-          <Button
-            onClick={(ev) => {
-              handleEdit(
-                ev,
-                date,
-                time,
-                temperature,
-                density,
-                current_volume,
-                current_mass,
-                total_volume,
-                total_mass,
-                note,
-                params.id
-              );
-            }}
-            color="primary"
-          >
+          <Button onClick={() => handleSubmit(userParams.id)} color="primary">
             Подтвердить
           </Button>
         </DialogActions>
