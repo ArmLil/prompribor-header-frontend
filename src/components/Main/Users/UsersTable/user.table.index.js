@@ -98,7 +98,6 @@ export default function UserTable() {
     (state) => state.currentCommCenterReducer.item
   );
   const user = useSelector((state) => state.authReducer.user);
-  console.log({ user });
 
   React.useEffect(() => {
     const getUsers = () => {
@@ -144,8 +143,12 @@ export default function UserTable() {
     setOpenWorning(false);
     if (action === "submit") {
       dataService
-        .deleteData(`fuel_journals_data/${parameters.id}?token=${user.token}`)
+        .deleteData(`users/${parameters.id}?token=${user.token}`)
         .then((result) => {
+          const _users = users.filter((_user) => {
+            if (parameters.id !== _user.id) return true;
+          });
+          setUsers(_users);
           dispatch(deleteJournalData(commCenter, "fuel", parameters.id));
         })
         .catch((err) => console.log({ err }));
@@ -177,7 +180,6 @@ export default function UserTable() {
     setUsers(_users);
   };
 
-  console.log({ users });
   return (
     <div>
       <AddDialog
@@ -334,7 +336,7 @@ export default function UserTable() {
                       aria-label="delete"
                       color="secondary"
                       className={classes.iconButton}
-                      onClick={() => handleDeleteWorningOpen(user)}
+                      onClick={() => handleDeleteWorningOpen(_user)}
                     >
                       <DeleteForeverOutlinedIcon />
                     </IconButton>

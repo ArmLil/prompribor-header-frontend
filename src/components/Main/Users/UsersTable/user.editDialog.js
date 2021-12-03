@@ -83,7 +83,6 @@ export default function FormDialog({
 
   React.useEffect(() => {
     const setParams = () => {
-      console.log({ userParams });
       if (userParams.name) setName(userParams.name);
       if (userParams.username) setUsername(userParams.username);
       if (userParams.secondName) setSecondName(userParams.secondName);
@@ -126,7 +125,6 @@ export default function FormDialog({
     setFatherName(event.target.value);
   };
   const handleChangeIsAdmin = (event) => {
-    console.log(event.target.value);
     setIsAdmin(event.target.value);
   };
   const handleChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -156,7 +154,6 @@ export default function FormDialog({
   };
 
   const handleSubmit = (id) => {
-    console.log("handleSubmit");
     let close = true;
     if (email !== "") {
       if (!validateEmail(email)) {
@@ -208,7 +205,6 @@ export default function FormDialog({
           token: userParams.token,
         })
         .then((result) => {
-          console.log({ result });
           if (result.data.user) {
             const editedUser = result.data.user;
             handleEdit(editedUser);

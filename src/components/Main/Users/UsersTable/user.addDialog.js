@@ -104,7 +104,6 @@ export default function FormDialog({
     setFatherName(event.target.value);
   };
   const handleChangeIsAdmin = (event) => {
-    console.log(event.target.value);
     setIsAdmin(event.target.value);
   };
   const handleChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
