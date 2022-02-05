@@ -51,7 +51,6 @@ export const updateCommCenterMonitoringBySocket = (
   commCenterMonitoring,
   registerControllerValue
 ) => (dispatch) => {
-  console.log({ commCenterMonitoring, registerControllerValue });
   let newCommCenterMonitoring = Object.assign({}, commCenterMonitoring);
   let regValue = "";
   let regContrValue = "";

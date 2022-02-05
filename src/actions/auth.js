@@ -28,8 +28,6 @@ const loginFail = () => ({
 export const register = (username, email, password) => (dispatch) => {
   return AuthService.register(username, email, password).then(
     (response) => {
-      console.log({ response });
-
       dispatch(registerSuccess());
       dispatch(setMessage(response.data.message));
       return Promise.resolve();
@@ -73,6 +71,7 @@ export const login = (username, password) => (dispatch) => {
 };
 
 export const logout = () => (dispatch) => {
+  console.log("action/logout");
   AuthService.logout();
   dispatch({
     type: LOGOUT,

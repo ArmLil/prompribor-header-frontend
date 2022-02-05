@@ -25,57 +25,6 @@ export const updateCommCenters = (payload) => ({
   payload,
 });
 
-export const updateCommCentersBySocket = (commCenters, data) => (dispatch) => {
-  console.log(commCenters, data);
-  let newCommCenters = [...commCenters];
-  // console.log({ newCommCenters });
-  newCommCenters.forEach((commCenter, i) => {
-    commCenter.controllers.forEach((contr, i) => {
-      contr.registers.forEach((reg, i) => {
-        if (
-          reg.Registers_Controllers_values.registerAddr ===
-            data.registerAddress &&
-          reg.Registers_Controllers_values.controllerMo ===
-            data.controllerModbusId
-        ) {
-          console.log(
-            "reg.Registers_Controllers_values=",
-            reg.Registers_Controllers_values
-          );
-          reg.Registers_Controllers_values.value = data.value;
-          dispatch(updateCommCenters(newCommCenters));
-        }
-      });
-    });
-  });
-};
-
-export const getCommCenters = (url) => (dispatch) => {
-  dispatch(fetchCommCentersBegin());
-  return dataService.getData(url).then(
-    (response) => {
-      if (response.message) {
-        throw Error(response.massage);
-      }
-      console.log("response.data====", response.data);
-      dispatch(fetchCommCentersSuccess(response.data));
-      return Promise.resolve();
-    },
-    (error) => {
-      console.log(error);
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-
-      dispatch(fetchCommCentersFail(message));
-      // return Promise.reject();
-    }
-  );
-};
-
 export const addJournalData = (
   commCenters,
   commCenterPath,

@@ -7,6 +7,8 @@ import Register from "./register.component";
 import Home from "./home.component";
 import Main from "./Main/main.index";
 import Profile from "./profile.component";
+import DataService from "../services/data.service";
+
 // import BoardUser from "./components/board-user.component";
 // import BoardModerator from "./components/board-moderator.component";
 // import BoardAdmin from "./components/board-admin.component";
@@ -123,12 +125,6 @@ class GlobalContainer extends Component {
                 <li className="nav-item">
                   <Link to={"/login"} className="nav-link">
                     Войти
-                  </Link>
-                </li>
-
-                <li className="nav-item">
-                  <Link to={"/register"} className="nav-link">
-                    Регистрация
                   </Link>
                 </li>
               </div>

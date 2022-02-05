@@ -137,22 +137,22 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
   //   setDraggable((d) => !d);
   // }, []);
   mapPolylinePoints.forEach((point, i) => {
-    polyline.push([point.lat, point.len]);
+    polyline.push([point.lat, point.lon]);
   });
 
   commCenters.forEach((item, i) => {
-    places.push(Object.assign({}, item, { position: [item.lat, item.len] }));
-    // polyline.push([item.lat, item.len]);
+    places.push(Object.assign({}, item, { position: [item.lat, item.lon] }));
+    // polyline.push([item.lat, item.lon]);
   });
   const defaultPosition: LatLngExpression = [55.755826, 37.6173]; // Moscow position
   // const showPreview = (place) => {
   //   return place.toString();
   // };
   let changeViewMarkers = [
-    { lat: Number(places[0].lat) - 0.006, len: Number(places[0].len) - 0.04 },
+    { lat: Number(places[0].lat) - 0.006, lon: Number(places[0].lon) - 0.04 },
     {
       lat: Number(places[places.length - 1].lat) - 0.001,
-      len: Number(places[places.length - 1].len) + 0.02,
+      lon: Number(places[places.length - 1].lon) + 0.02,
     },
   ];
   changeViewMarkers = changeViewMarkers.concat(places);
@@ -161,7 +161,7 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
     const map = useMap();
     let markerBounds = latLngBounds([]);
     markers.forEach((marker) => {
-      markerBounds.extend([marker.lat, marker.len]);
+      markerBounds.extend([marker.lat, marker.lon]);
     });
     markerBounds.isValid() && map.fitBounds(markerBounds);
     return null;
@@ -188,7 +188,6 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
 
         <ChangeView center={defaultPosition} markers={changeViewMarkers} />
         {places.map((place: Place) => {
-          let nameArr = place.name.split("-");
           let NameDiv = () => {
             return (
               <div style={{ display: "flex", opasity: 1, fontWeight: "bold" }}>
@@ -199,19 +198,7 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
                     fontSize: 13,
                   }}
                 >
-                  {nameArr[0]}
-                </p>
-
-                <p
-                  style={{
-                    fontSize: 11,
-                    margin: 0,
-                    padding: 0,
-                    position: "relative",
-                    top: 2,
-                  }}
-                >
-                  -{nameArr[1]}
+                  {place.name}
                 </p>
               </div>
             );
@@ -250,7 +237,7 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
         })}
         {places.map((place: Place) => (
           <ExtMarker
-            key={place.len}
+            key={place.path}
             position={place.position}
             icon={
               <img
@@ -278,7 +265,7 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
           });
           let coords = [];
           typeArray.forEach((item, i) => {
-            coords.push([item.lat, item.len]);
+            coords.push([item.lat, item.lon]);
           });
           let color = "black";
           if (typeArray[0].type.charAt(0) === "2") {

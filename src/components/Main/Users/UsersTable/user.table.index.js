@@ -13,9 +13,9 @@ import DeleteForeverOutlinedIcon from "@material-ui/icons/DeleteForeverOutlined"
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableFooter from "@material-ui/core/TableFooter";
+import { useHistory } from "react-router-dom";
 import dataService from "../../../../services/data.service";
-import { editJournalData } from "../../../../actions/currentCommCenter";
-import { deleteJournalData } from "../../../../actions/currentCommCenter";
+import { logout } from "../../../../actions/auth";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -93,11 +93,10 @@ export default function UserTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [users, setUsers] = React.useState([]);
-  const dispatch = useDispatch();
-  const commCenter = useSelector(
-    (state) => state.currentCommCenterReducer.item
-  );
+
   const user = useSelector((state) => state.authReducer.user);
+  const history = useHistory();
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     const getUsers = () => {
@@ -110,7 +109,8 @@ export default function UserTable() {
           if (err.response && err.response.data && err.response.data.message) {
             alert(err.response.data.message);
           }
-          console.log({ err });
+          dispatch(logout());
+          history.push("/login");
         });
     };
     getUsers();
@@ -147,9 +147,9 @@ export default function UserTable() {
         .then((result) => {
           const _users = users.filter((_user) => {
             if (parameters.id !== _user.id) return true;
+            else return false;
           });
           setUsers(_users);
-          dispatch(deleteJournalData(commCenter, "fuel", parameters.id));
         })
         .catch((err) => console.log({ err }));
     }
