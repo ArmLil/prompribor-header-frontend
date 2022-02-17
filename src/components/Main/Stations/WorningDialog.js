@@ -20,7 +20,8 @@ export default function WorningDialog({
       <DialogTitle id="form-dialog-title"></DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Вы действительно хотите удалить строку ?
+          Вы действительно хотите удалить данную Насосную станцию, при удалении
+          так же удалятся журналы и контролеры привязанные к нему ?
         </DialogContentText>
       </DialogContent>
       <DialogActions>

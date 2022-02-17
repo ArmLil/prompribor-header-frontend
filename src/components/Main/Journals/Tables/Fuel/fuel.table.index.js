@@ -170,7 +170,7 @@ export default function FuelTables() {
     if (total_volume) putBody.total_volume = total_volume;
     if (total_mass) putBody.total_mass = total_mass;
     if (note) putBody.note = note;
-    putBody.commCenterPath = commCenter.path;
+    putBody.commCenterId = commCenter.id;
     dataService
       .putData(`fuel_journals_data/${paramsId}`, putBody)
       .then((result) => {
@@ -229,7 +229,7 @@ export default function FuelTables() {
         total_volume,
         total_mass,
         note,
-        commCenterPath: commCenter.path,
+        commCenterId: commCenter.id,
         token: user.token,
       })
       .then((result) => {

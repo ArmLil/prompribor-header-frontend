@@ -169,7 +169,7 @@ export default function AvariiTables() {
     if (avarii) putBody.avarii = avarii;
     if (executor) putBody.executor = executor;
     if (note) putBody.note = note;
-    putBody.commCenterPath = commCenter.path;
+    putBody.commCenterId = commCenter.id;
     dataService
       .putData(`avarii_journals_data/${paramsId}`, putBody)
       .then((result) => {
@@ -214,7 +214,7 @@ export default function AvariiTables() {
         avarii,
         executor,
         note,
-        commCenterPath: commCenter.path,
+        commCenterId: commCenter.id,
         token: user.token,
       })
       .then((result) => {
@@ -321,13 +321,13 @@ export default function AvariiTables() {
                     {row.fromWho}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    <p className={classes.rowP}>{row.avarii}</p>
+                    {row.avarii}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    <p className={classes.rowP}>{row.executor}</p>
+                    {row.executor}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    <p className={classes.rowP}>{row.note}</p>
+                    {row.note}
                   </TableCell>
                   <TableCell
                     align="center"

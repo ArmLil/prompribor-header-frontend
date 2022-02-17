@@ -55,7 +55,7 @@ class Journals extends Component {
     const { dispatchGetCommCenter } = this.props;
     const commCenterPath = this.props.match.params.commCenterPath;
     console.log({ commCenterPath });
-    dispatchGetCommCenter(`commCenters/${commCenterPath}`);
+    dispatchGetCommCenter(`commCenters/commCenterByPath/${commCenterPath}`);
     setTimeout(() => {
       console.log("componentDidMount");
       const { currentCommCenter } = this.props;

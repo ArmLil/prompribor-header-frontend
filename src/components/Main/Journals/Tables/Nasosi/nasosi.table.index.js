@@ -171,7 +171,7 @@ export default function NasosiTables() {
     if (P_out) putBody.P_out = P_out;
     if (revs) putBody.revs = revs;
     if (note) putBody.note = note;
-    putBody.commCenterPath = commCenter.path;
+    putBody.commCenterId = commCenter.id;
     dataService
       .putData(`nasosi_journals_data/${paramsId}`, putBody)
       .then((result) => {
@@ -217,7 +217,7 @@ export default function NasosiTables() {
         P_out,
         revs,
         note,
-        commCenterPath: commCenter.path,
+        commCenterId: commCenter.id,
         token: user.token,
       })
       .then((result) => {

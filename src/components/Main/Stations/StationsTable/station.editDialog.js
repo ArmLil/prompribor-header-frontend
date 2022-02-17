@@ -11,7 +11,11 @@ import FormControl from "@mui/material/FormControl";
 import NativeSelect from "@mui/material/NativeSelect";
 import FormHelperText from "@mui/material/FormHelperText";
 import Draggable from "react-draggable";
+import { useDispatch, useSelector } from "react-redux";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import { getMapCommCenters } from "../../../../actions/mapCommCenters";
+import { validateLatLon } from "../../../../helpers/validateLatLon";
+import { validatePath } from "../../../../helpers/validatePath";
 
 import dataService from "../../../../services/data.service";
 
@@ -38,194 +42,222 @@ function PaperComponent(props: PaperProps) {
   );
 }
 
-function validateEmail(_email) {
-  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(String(_email).toLowerCase());
-}
-
 export default function FormDialog({
   handleEditDialogClose,
-  handleEdit,
   openEditDialog,
-  userParams,
+  stationParams,
 }) {
   const classes = useStyles();
+  const [path, setPath] = React.useState("");
+  const [name, setName] = React.useState("");
+  const [lat, setLat] = React.useState("");
+  const [lon, setLon] = React.useState("");
+  const [description, setDescription] = React.useState("");
+  const [index, setIndex] = React.useState("");
+  const [tablePosition, setTablePosition] = React.useState("top");
+  const [initialStationParams, setInitialStationParams] = React.useState({});
 
-  const [name, setName] = React.useState(userParams.name || "");
-  const [secondName, setSecondName] = React.useState(
-    userParams.secondName || ""
-  );
-  const [fatherName, setFatherName] = React.useState(
-    userParams.fatherName || ""
-  );
-  const [username, setUsername] = React.useState(userParams.username || "");
-  const [position, setPosition] = React.useState(userParams.position || "");
-  const [email, setEmail] = React.useState(userParams.email || "");
-  const [phone, setPhone] = React.useState(userParams.phine || "");
-  const [isAdmin, setIsAdmin] = React.useState(userParams.isAdmin || false);
-  const [password, setPassword] = React.useState("");
-
+  const [path_error, setPath_error] = React.useState(false);
   const [name_error, setName_error] = React.useState(false);
-  const [secondName_error, setSecondName_error] = React.useState(false);
-  const [username_error, setUsername_error] = React.useState(false);
-  const [position_error, setPosition_error] = React.useState(false);
-  const [password_error, setPassword_error] = React.useState(false);
-  const [email_error, setEmail_error] = React.useState(false);
+  const [lat_error, setLat_error] = React.useState(false);
+  const [lon_error, setLon_error] = React.useState(false);
+  const [tablePosition_error, setTablePosition_error] = React.useState(false);
+  const [index_error, setIndex_error] = React.useState(false);
 
+  const [path_helperText, setPath_helperText] = React.useState("");
   const [name_helperText, setName_helperText] = React.useState("");
-  const [secondName_helperText, setSecondName_helperText] = React.useState("");
-  const [username_helperText, setUsername_helperText] = React.useState("");
-  const [position_helperText, setPosition_helperText] = React.useState("");
-  const [password_helperText, setPassword_helperText] = React.useState(
-    "заполните поле если хотите изменить пароль"
-  );
-  const [email_helperText, setEmail_helperText] = React.useState("");
+  const [lat_helperText, setLat_helperText] = React.useState("");
+  const [lon_helperText, setLon_helperText] = React.useState("");
+  const [
+    tablePosition_helperText,
+    setTablePosition_helperText,
+  ] = React.useState("заполните поле если хотите изменить пароль");
+  const [index_helperText, setIndex_helperText] = React.useState("");
+
+  const dispatch = useDispatch();
+  const isMounted = React.useRef(true);
 
   React.useEffect(() => {
+    console.log({ stationParams }, Object.keys(stationParams).length);
     const setParams = () => {
-      if (userParams.name) setName(userParams.name);
-      if (userParams.username) setUsername(userParams.username);
-      if (userParams.secondName) setSecondName(userParams.secondName);
-      if (userParams.fatherName) setFatherName(userParams.fatherName);
-      if (userParams.position) setPosition(userParams.position);
-      if (userParams.email) setEmail(userParams.email);
-      if (userParams.phone) setPhone(userParams.phone);
+      if (stationParams.path) setPath(stationParams.path);
+      if (stationParams.lon) setLon(stationParams.lon);
+      if (stationParams.name) setName(stationParams.name);
+      if (stationParams.lat) setLat(stationParams.lat);
+      if (stationParams.tablePosition)
+        setTablePosition(stationParams.tablePosition);
+      if (stationParams.index) setIndex(stationParams.index);
+      if (stationParams.description) setDescription(stationParams.description);
+      setInitialStationParams(stationParams);
     };
-    setParams();
-  }, [userParams]);
+    if (Object.keys(stationParams).length > 0) {
+      setParams();
+    }
+    console.log({
+      path,
+      name,
+      index,
+      lat,
+      lon,
+      tablePosition,
+      description,
+    });
+  }, [stationParams]);
 
+  const handleChangePath = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPath(event.target.value);
+    setPath_error(false);
+  };
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
     setName_error(false);
   };
-  const handleChangeSecondName = (
+  const handleChangeLon = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLon(event.target.value);
+    setLon_error(false);
+  };
+  const handleChangeLat = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLat(event.target.value);
+    setLat_error(false);
+  };
+  const handleChangeIndex = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIndex(event.target.value);
+  };
+  const handleChangeDescription = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setSecondName(event.target.value);
-    setSecondName_error(false);
+    setDescription(event.target.value);
   };
-  const handleChangeUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUsername(event.target.value);
-    setUsername_error(false);
-  };
-  const handleChangePosition = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPosition(event.target.value);
-    setPosition_error(false);
-  };
-
-  const handleChangeEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  };
-  const handleChangePhone = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPhone(event.target.value);
-  };
-  const handleChangeFatherName = (
+  const handleChangeTablePosition = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setFatherName(event.target.value);
-  };
-  const handleChangeIsAdmin = (event) => {
-    setIsAdmin(event.target.value);
-  };
-  const handleChangePassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(event.target.value);
-    if (event.target.value === "") {
-      setPassword_helperText("заполните поле если хотите изменить пароль");
-    }
-    setPassword_error(false);
+    setTablePosition(event.target.value);
+    setTablePosition_error(false);
   };
 
   const handleOnClose = () => {
+    setPath_error(false);
     setName_error(false);
-    setSecondName_error(false);
-    setUsername_error(false);
-    setPosition_error(false);
-    setPassword_error(false);
-    setEmail_error(false);
+    setLon_error(false);
+    setLat_error(false);
+    setTablePosition_error(false);
+    setIndex_error(false);
 
+    setPath_helperText("");
     setName_helperText("");
-    setSecondName_helperText("");
-    setUsername_helperText("");
-    setPosition_helperText("");
-    setPassword_helperText("заполните поле если хотите изменить пароль");
-    setEmail_helperText("");
+    setLon_helperText("");
+    setLat_helperText("");
+    setTablePosition_helperText("");
+    setIndex_helperText("");
 
     handleEditDialogClose();
   };
 
   const handleSubmit = (id) => {
+    console.log("handleSubmit...");
+    console.log({ path, name, index, lat, lon, tablePosition, description });
     let close = true;
-    if (email !== "") {
-      if (!validateEmail(email)) {
-        setEmail_error(true);
-        setEmail_helperText("е-майл не валидный");
-        close = false;
-      } else {
-        setEmail_error(false);
-        setEmail_helperText("");
-      }
-    }
-    if (secondName === "") {
-      setSecondName_error(true);
-      setSecondName_helperText("поле не может быть пустым");
+    if (path === "") {
+      setPath_error(true);
+      setPath_helperText("поле обязательно для заполнения");
       close = false;
     }
-    if (username === "") {
-      setUsername_error(true);
-      setUsername_helperText("поле не может быть пустым");
-      close = false;
-    }
-    if (position === "") {
-      setPosition_error(true);
-      setPosition_helperText("поле не может быть пустым");
+    if (!validatePath(path)) {
+      setPath_error(true);
+      setPath_helperText(
+        "может включать не менее трёх символов, латиницы, цифры и дефис,(пример NS-10)"
+      );
       close = false;
     }
     if (name === "") {
       setName_error(true);
-      setName_helperText("поле не может быть пустым");
+      setName_helperText("поле обязательно для заполнения");
+      close = false;
+    } else if (name.length < 3) {
+      setName_error(true);
+      setName_helperText("должно содержать не менее трёх символов");
       close = false;
     }
-    if (password !== "" && password.length < 8) {
-      setPassword_error(true);
-      setPassword_helperText("пароль должен содержать не менее 8 символов ");
+    if (lat === "") {
+      setLat_error(true);
+      setLat_helperText("поле обязательно для заполнения");
       close = false;
     }
+    console.log(!validateLatLon(lat));
+    if (!validateLatLon(lat)) {
+      setLat_error(true);
+      setLat_helperText("неправильный формат широты (пример 42.88517)");
+      close = false;
+    }
+    if (lon === "") {
+      setLon_error(true);
+      setLon_helperText("поле обязательно для заполнения");
+      close = false;
+    }
+    if (!validateLatLon(lon)) {
+      setLon_error(true);
+      setLon_helperText("неправильный формат долготы (пример 56.18937)");
+      close = false;
+    }
+
+    if (index === "") {
+      setIndex_error(true);
+      setIndex_helperText("поле обязательно для заполнения");
+      close = false;
+    } else if (!Number(index) || String(index).slice(-2) !== "00") {
+      setIndex_error(true);
+      setIndex_helperText(
+        "Поле должно содержать только числа, которые заканчивается на 00"
+      );
+      close = false;
+    }
+    console.log({ index, lat, lon }, initialStationParams);
+    if (
+      index !== initialStationParams.index &&
+      (lat !== initialStationParams.lat || lon !== initialStationParams.lon)
+    ) {
+      setIndex(initialStationParams.index);
+      alert(
+        "Возвращено начальное значение индекса, нельзя одновременно менять индекс и координаты."
+      );
+      close = false;
+    }
+    console.log({ close });
     if (close) {
       dataService
-        .putData(`users/${id}`, {
+        .putData(`commCenters/${stationParams.id}`, {
+          path,
           name,
-          secondName,
-          fatherName,
-          username,
-          position,
-          isAdmin,
-          email,
-          phone,
-          password,
-          token: userParams.token,
+          lat,
+          lon,
+          index,
+          description,
+          tablePosition,
+          token: stationParams.token,
         })
-        .then((result) => {
-          if (result.data.user) {
-            const editedUser = result.data.user;
-            handleEdit(editedUser);
-            if (close) {
-              handleOnClose();
-            }
-          }
+        .then(() => {
+          handleOnClose();
+          dispatch(getMapCommCenters("mapCommCenters")).catch((err) =>
+            console.log({ err })
+          );
         })
         .catch((err) => {
-          console.log({ err });
-          if (err.response && err.response.data) {
-            if (err.response.data.message === "username already in use") {
-              setUsername_error(true);
-              setUsername_helperText("имя пользователя уже используется");
-            } else {
-              alert(err.response.data.message);
-            }
-          }
-          close = false;
-          if (close) {
-            handleOnClose();
+          let error = err;
+          console.log(err.response);
+          if (err.response && err.response.data.message) {
+            error = err.response.data.message;
+            alert(error);
+          } else if (err.response && err.response.data.pathError) {
+            setPath_error(true);
+            setPath_helperText(err.response.data.pathError);
+          } else if (err.response && err.response.data.nameError) {
+            setName_error(true);
+            setName_helperText(err.response.data.nameError);
+          } else if (err.response && err.response.data.indexError) {
+            setIndex_error(true);
+            setIndex_helperText(err.response.data.indexError);
+          } else {
+            alert(error);
           }
         });
     }
@@ -235,23 +267,34 @@ export default function FormDialog({
     <div>
       <Dialog
         open={openEditDialog}
-        onClose={handleEditDialogClose}
+        onClose={handleOnClose}
         PaperComponent={PaperComponent}
         aria-labelledby="form-dialog-title"
         className={classes.root}
       >
         <DialogTitle style={{ cursor: "move" }} id="draggable-dialog-title">
-          Пользователь
+          Насосная станция
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
             Пожалуйста, редактируйте необходимые поля.
           </DialogContentText>
           <TextField
+            id="path"
+            value={path}
+            onChange={handleChangePath}
+            label="Идентификатор"
+            style={{ padding: 8 }}
+            margin="dense"
+            required
+            helperText={path_helperText}
+            error={path_error}
+          />
+          <TextField
             id="name"
             value={name}
             onChange={handleChangeName}
-            label="Имя"
+            label="Наименование"
             style={{ padding: 8 }}
             margin="dense"
             required
@@ -259,48 +302,37 @@ export default function FormDialog({
             error={name_error}
           />
           <TextField
-            id="secondName"
-            value={secondName}
-            onChange={handleChangeSecondName}
-            label="Ф амилия"
+            id="index"
+            value={index}
+            onChange={handleChangeIndex}
+            helperText={index_helperText}
+            error={index_error}
+            label="Индекс / очередь на карте"
             style={{ padding: 8 }}
             margin="dense"
-            required
-            helperText={secondName_helperText}
-            error={secondName_error}
           />
           <TextField
-            id="fatherName"
-            value={fatherName}
-            onChange={handleChangeFatherName}
-            label="Отчество"
+            id="lat"
+            value={lat}
+            onChange={handleChangeLat}
+            label="Широта"
             helperText=""
             style={{ padding: 8 }}
             margin="dense"
+            required
+            helperText={lat_helperText}
+            error={lat_error}
           />
           <TextField
-            id="username"
-            value={username}
-            onChange={handleChangeUsername}
-            multiline
-            label="Никнейм"
+            id="lon"
+            value={lon}
+            onChange={handleChangeLon}
+            label="Долгота"
             style={{ padding: 8 }}
             margin="dense"
             required
-            helperText={username_helperText}
-            error={username_error}
-          />
-          <TextField
-            id="position"
-            value={position}
-            onChange={handleChangePosition}
-            multiline
-            label="Должность"
-            required
-            helperText={position_helperText}
-            error={position_error}
-            style={{ padding: 8 }}
-            margin="dense"
+            helperText={lon_helperText}
+            error={lon_error}
           />
           <FormControl
             variant="standard"
@@ -312,54 +344,43 @@ export default function FormDialog({
             }}
           >
             <NativeSelect
-              value={isAdmin}
+              value={tablePosition}
               inputProps={{
-                name: "isAdmin",
+                name: "tablePosition",
                 id: "uncontrolled-native",
               }}
-              onChange={handleChangeIsAdmin}
+              onChange={handleChangeTablePosition}
               style={{ width: "53.5ch", marginLeft: 8 }}
             >
-              <option value={true}>Да</option>
-              <option value={false}>Нет</option>
+              <option value="top">верх</option>
+              <option value="bottom">вниз</option>
+              <option value="right">право</option>
+              <option value="left">лево</option>
+              <option value="top-right">верх-право</option>
+              <option value="top-left">верх-лево</option>
+              <option value="bottom-right">вниз-право</option>
+              <option value="bottom-left">вниз-лево</option>
             </NativeSelect>
-            <FormHelperText>Имеет права админа</FormHelperText>
+            <FormHelperText>Позиция таблицы на карте</FormHelperText>
           </FormControl>
           <TextField
-            id="email"
-            value={email}
-            onChange={handleChangeEmail}
-            helperText={email_helperText}
-            error={email_error}
-            label="Почта"
-            style={{ padding: 8 }}
-            margin="dense"
-          />
-          <TextField
-            id="phone"
-            value={phone}
-            onChange={handleChangePhone}
+            id="description"
+            value={description}
+            onChange={handleChangeDescription}
             multiline
-            label="Телефон"
-            style={{ padding: 8 }}
-            margin="dense"
-          />
-          <TextField
-            id="password"
-            value={password}
-            onChange={handleChangePassword}
-            label="Пароль"
-            helperText={password_helperText}
-            error={password_error}
+            label="Описание"
             style={{ padding: 8 }}
             margin="dense"
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleEditDialogClose} color="primary">
+          <Button onClick={handleOnClose} color="primary">
             Отменить
           </Button>
-          <Button onClick={() => handleSubmit(userParams.id)} color="primary">
+          <Button
+            onClick={() => handleSubmit(stationParams.id)}
+            color="primary"
+          >
             Подтвердить
           </Button>
         </DialogActions>

@@ -171,7 +171,8 @@ export default function DoneseniiTables() {
     if (donesenii) putBody.donesenii = donesenii;
     if (executor) putBody.executor = executor;
     if (note) putBody.note = note;
-    putBody.commCenterPath = commCenter.path;
+    putBody.commCenterId = commCenter.id;
+
     dataService
       .putData(`donesenii_journals_data/${paramsId}`, putBody)
       .then((result) => {
@@ -216,7 +217,7 @@ export default function DoneseniiTables() {
         donesenii,
         executor,
         note,
-        commCenterPath: commCenter.path,
+        commCenterId: commCenter.id,
         token: user.token,
       })
       .then((result) => {
@@ -315,13 +316,13 @@ export default function DoneseniiTables() {
                     {row.fromWho}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    <p className={classes.rowP}>{row.donesenii}</p>
+                    {row.donesenii}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    <p className={classes.rowP}>{row.executor}</p>
+                    {row.executor}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    <p className={classes.rowP}>{row.note}</p>
+                    {row.note}
                   </TableCell>
                   <TableCell
                     align="center"

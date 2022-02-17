@@ -41,7 +41,6 @@ function PaperComponent(props: PaperProps) {
 }
 
 export default function FormDialog({
-  handleCreate,
   openAddDialog,
   user,
   handleAddDialogClose,
@@ -130,7 +129,6 @@ export default function FormDialog({
 
   const handleSubmit = () => {
     let close = true;
-    console.log({ path, name, index, lat, lon, tablePosition, description });
     if (path === "") {
       setPath_error(true);
       setPath_helperText("поле обязательно для заполнения");
@@ -181,18 +179,12 @@ export default function FormDialog({
     } else if (!Number(index) || index.slice(-2) !== "00") {
       setIndex_error(true);
       setIndex_helperText(
-        "Поле должно содержать только число, которые заканчивается на 00"
+        "Поле должно содержать только число, которое заканчивается на 00"
       );
-      close = false;
-    }
-    if (tablePosition === "") {
-      setTablePosition_error(true);
-      setTablePosition_helperText("поле обязательно для заполнения");
       close = false;
     }
 
     if (close) {
-      console.log("if close");
       dataService
         .postData(`commCenters?token=${user.token}`, {
           path,
@@ -202,11 +194,13 @@ export default function FormDialog({
           lon,
           tablePosition,
           description,
+          token: user.token,
         })
         .then(() => {
-          dispatch(getMapCommCenters("mapCommCenters"))
-            .then(() => handleOnClose())
-            .catch((err) => console.log(err));
+          handleOnClose();
+          dispatch(getMapCommCenters("mapCommCenters")).catch((err) =>
+            console.log(err)
+          );
         })
         .catch((err) => {
           let error = err;
@@ -227,15 +221,6 @@ export default function FormDialog({
             alert(error);
           }
         });
-      // handleCreate({ path, name, index, lat, lon, tablePosition, description })
-      // .then(() => handleOnClose())
-      // .catch((err) => {
-      //   let error = err;
-      //   if (err.response && err.response.data.message)
-      //     error = err.response.data.message;
-      //   console.log({ err });
-      //   alert(error);
-      // });
     }
   };
   return (

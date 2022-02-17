@@ -118,7 +118,7 @@ export default function UserTable() {
   const classes = useStyles();
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
-  const [userParams, setUserParams] = React.useState({});
+  const [stationParams, setStationParams] = React.useState({});
   const [openWorning, setOpenWorning] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -156,26 +156,30 @@ export default function UserTable() {
 
   const handleDeleteWorningOpen = (row) => {
     setOpenWorning(true);
-    setUserParams(Object.assign({}, row, { token: user.token }));
+    setStationParams(Object.assign({}, row, { token: user.token }));
   };
 
   const handleDeleteWorningClose = (action, parameters) => {
+    console.log({ parameters });
     setOpenWorning(false);
     if (action === "submit") {
+      console.log("delete submit");
       dataService
-        .deleteData(`users/${parameters.id}?token=${user.token}`)
+        .deleteData(`commCenters/${parameters.id}?token=${user.token}`)
         .then((result) => {
-          const _users = users.filter((_user) => {
-            if (parameters.id !== _user.id) return true;
+          dispatch(getMapCommCenters("mapCommCenters")).catch((err) => {
+            console.log({ err });
           });
-          setUsers(_users);
         })
-        .catch((err) => console.log({ err }));
+        .catch((err) => {
+          alert(error);
+          console.log({ err });
+        });
     }
   };
 
   const handleEditDialogOpen = (row) => {
-    setUserParams(Object.assign({}, row, { token: user.token }));
+    setStationParams(Object.assign({}, row, { token: user.token }));
     setOpenEditDialog(true);
   };
 
@@ -186,40 +190,21 @@ export default function UserTable() {
     setOpenEditDialog(false);
   };
 
-  const handleEdit = (editedUser) => {
-    const _users = users.map((_user) => {
-      if (editedUser.id === _user.id) return editedUser;
-      return _user;
-    });
-    setUsers(_users);
-  };
-
-  const handleCreate = (body) => {
-    console.log("handleCreate", body);
-    return dataService
-      .postData(`commCenters?token=${user.token}`, body)
-      .then(() => {
-        // dispatch(getMapCommCenters("mapCommCenters"));
-      });
-  };
-
   return (
     <div>
       <AddDialog
-        handleCreate={handleCreate}
         openAddDialog={openAddDialog}
         handleAddDialogClose={handleAddDialogClose}
         user={user}
       />
       <EditDialog
         handleEditDialogClose={handleEditDialogClose}
-        handleEdit={handleEdit}
         openEditDialog={openEditDialog}
-        userParams={userParams}
+        stationParams={stationParams}
       />
       <WorningDialog
         openWorning={openWorning}
-        parameters={userParams}
+        parameters={stationParams}
         handleClose={handleDeleteWorningClose}
       />
       <TableContainer className={classes.container}>
