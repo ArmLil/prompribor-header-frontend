@@ -7,6 +7,7 @@ import Journals from "./Journals/journals.index";
 import Controllers from "./Controllers/controllers.index";
 import Users from "./Users/users.index";
 import Stations from "./Stations/stations.index";
+import Pipeline from "./Pipeline/pipeline.index";
 import Registers from "./Registers";
 import LeftBar from "./LeftBar/leftBar.index";
 import Loader from "../Loader";
@@ -78,6 +79,7 @@ class Main extends Component {
             <Route exact path="/main/admin/registers" component={Registers} />
             <Route exact path="/main/admin/users" component={Users} />
             <Route exact path="/main/admin/stations" component={Stations} />
+            <Route exact path="/main/admin/pipeline" component={Pipeline} />
           </Switch>
         </div>
       </div>

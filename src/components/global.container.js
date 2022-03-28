@@ -7,7 +7,6 @@ import Register from "./register.component";
 import Home from "./home.component";
 import Main from "./Main/main.index";
 import Profile from "./profile.component";
-import DataService from "../services/data.service";
 
 // import BoardUser from "./components/board-user.component";
 // import BoardModerator from "./components/board-moderator.component";

@@ -82,6 +82,18 @@ export default function NestedList({ commCenters }) {
               <ListItemText primary="Насосные Станции"> </ListItemText>
             </ListItem>
           </Link>
+          <Link
+            key="pipeline"
+            to={`${path}/admin/pipeline`}
+            className={classes.link}
+          >
+            <ListItem button className={classes.nested}>
+              <ListItemIcon>
+                <FiberManualRecordIcon style={{ width: "8px" }} />
+              </ListItemIcon>
+              <ListItemText primary="Трубопровод"> </ListItemText>
+            </ListItem>
+          </Link>
         </List>
       </Collapse>
     </List>

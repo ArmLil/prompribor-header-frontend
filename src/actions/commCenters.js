@@ -4,7 +4,6 @@ import {
   FETCH_COMMCENTERS_FAIL,
   UPDATE_COMMCENTERS,
 } from "./types";
-import dataService from "../services/data.service";
 
 export const fetchCommCentersBegin = () => ({
   type: FETCH_COMMCENTERS_BEGIN,

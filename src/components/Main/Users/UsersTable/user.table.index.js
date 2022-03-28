@@ -114,7 +114,7 @@ export default function UserTable() {
         });
     };
     getUsers();
-  }, [user.token]);
+  }, [user.token, dispatch, history]);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -151,7 +151,12 @@ export default function UserTable() {
           });
           setUsers(_users);
         })
-        .catch((err) => console.log({ err }));
+        .catch((err) => {
+          if (err.response && err.response.data && err.response.data.message) {
+            alert(err.response.data.message);
+          }
+          console.log({ err });
+        });
     }
   };
 
