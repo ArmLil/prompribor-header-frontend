@@ -10,10 +10,10 @@ import Paper, { PaperProps } from "@material-ui/core/Paper";
 import Draggable from "react-draggable";
 import { useDispatch } from "react-redux";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { getMapCommCenters } from "../../../../actions/mapCommCenters";
-import { validateLatLon } from "../../../../helpers/validateLatLon";
+import { getMapCommCenters } from "../../../../../actions/mapCommCenters";
+import { validateLatLon } from "../../../../../helpers/validateLatLon";
 
-import dataService from "../../../../services/data.service";
+import dataService from "../../../../../services/data.service";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

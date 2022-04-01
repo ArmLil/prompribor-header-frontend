@@ -13,13 +13,14 @@ import DeleteForeverOutlinedIcon from "@material-ui/icons/DeleteForeverOutlined"
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableFooter from "@material-ui/core/TableFooter";
-import dataService from "../../../../services/data.service";
-import { getMapCommCenters } from "../../../../actions/mapCommCenters";
+import { useHistory } from "react-router-dom";
+import dataService from "../../../../../services/data.service";
+import { logout } from "../../../../../actions/auth";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import AddDialog from "./pipeline.addDialog";
-import EditDialog from "./pipeline.editDialog";
+import AddDialog from "./user.addDialog";
+import EditDialog from "./user.editDialog";
 import TablePaginationActions from "../tablePaginationActions";
 import WorningDialog from "../WorningDialog";
 
@@ -87,18 +88,33 @@ export default function UserTable() {
   const classes = useStyles();
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
-  const [pipelineParams, setPipelineParams] = React.useState({});
+  const [userParams, setUserParams] = React.useState({});
   const [openWorning, setOpenWorning] = React.useState(false);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-
-  const dispatch = useDispatch();
-
-  const mapPolylinePoints = useSelector(
-    (state) => state.mapCommCentersReducer.mapPolylinePoints
-  );
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [users, setUsers] = React.useState([]);
 
   const user = useSelector((state) => state.authReducer.user);
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    const getUsers = () => {
+      dataService
+        .getData(`users?token=${user.token}`)
+        .then((result) => {
+          setUsers(result.data.users.rows);
+        })
+        .catch((err) => {
+          if (err.response && err.response.data && err.response.data.message) {
+            alert(err.response.data.message);
+          }
+          dispatch(logout());
+          history.push("/login");
+        });
+    };
+    getUsers();
+  }, [user.token, dispatch, history]);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -119,49 +135,33 @@ export default function UserTable() {
   };
 
   const handleDeleteWorningOpen = (row) => {
-    if (row.type === "commCenter") {
-      alert(
-        "Для удаления Насосных Станций переходите в раздел Администрирование --> Насосные станции"
-      );
-      return;
-    }
     setOpenWorning(true);
-    setPipelineParams(Object.assign({}, row, { token: user.token }));
+    setUserParams(Object.assign({}, row, { token: user.token }));
   };
 
   const handleDeleteWorningClose = (action, parameters) => {
-    console.log({ parameters });
     setOpenWorning(false);
     if (action === "submit") {
-      console.log("delete submit");
       dataService
-        .deleteData(`mapPolylinePoints/${parameters.id}?token=${user.token}`)
+        .deleteData(`users/${parameters.id}?token=${user.token}`)
         .then((result) => {
-          dispatch(getMapCommCenters("mapCommCenters")).catch((err) => {
-            console.log({ err });
+          const _users = users.filter((_user) => {
+            if (parameters.id !== _user.id) return true;
+            else return false;
           });
+          setUsers(_users);
         })
         .catch((err) => {
-          let error = err;
-          console.log(err.response);
-          if (err.response && err.response.data) {
-            error = err.response.data.message;
+          if (err.response && err.response.data && err.response.data.message) {
+            alert(err.response.data.message);
           }
-          alert(error);
           console.log({ err });
         });
     }
   };
 
   const handleEditDialogOpen = (row) => {
-    if (row.type === "commCenter") {
-      console.log("if edit click");
-      alert(
-        "Для редактирования Насосных Станций переходите в раздел Администрирование --> Насосные станции"
-      );
-      return;
-    }
-    setPipelineParams(Object.assign({}, row, { token: user.token }));
+    setUserParams(Object.assign({}, row, { token: user.token }));
     setOpenEditDialog(true);
   };
 
@@ -172,21 +172,36 @@ export default function UserTable() {
     setOpenEditDialog(false);
   };
 
+  const handleEdit = (editedUser) => {
+    const _users = users.map((_user) => {
+      if (editedUser.id === _user.id) return editedUser;
+      return _user;
+    });
+    setUsers(_users);
+  };
+
+  const handleCreate = (newUser) => {
+    const _users = [...users, newUser];
+    setUsers(_users);
+  };
+
   return (
     <div>
       <AddDialog
-        openAddDialog={openAddDialog}
         handleAddDialogClose={handleAddDialogClose}
+        handleCreate={handleCreate}
+        openAddDialog={openAddDialog}
         user={user}
       />
       <EditDialog
         handleEditDialogClose={handleEditDialogClose}
+        handleEdit={handleEdit}
         openEditDialog={openEditDialog}
-        pipelineParams={pipelineParams}
+        userParams={userParams}
       />
       <WorningDialog
         openWorning={openWorning}
-        parameters={pipelineParams}
+        parameters={userParams}
         handleClose={handleDeleteWorningClose}
       />
       <TableContainer className={classes.container}>
@@ -213,31 +228,49 @@ export default function UserTable() {
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Индекс</p>
+                <p className={classes.p}>Имя</p>
+              </TableCell>
+              <TableCell
+                className={classes.headerCell}
+                style={{ padding: "2px" }}
+              >
+                <p className={classes.p}>Фамилия</p>
               </TableCell>
               <TableCell
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Широта</p>
+                <p className={classes.p}>Отчество</p>
               </TableCell>
               <TableCell
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Долгота</p>
+                <p className={classes.p}>Никнейм</p>
               </TableCell>
               <TableCell
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Тип</p>
+                <p className={classes.p}>Должность</p>
               </TableCell>
               <TableCell
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Описание</p>
+                <p className={classes.p}>Права админа</p>
+              </TableCell>
+              <TableCell
+                className={classes.headerCell}
+                style={{ padding: "4px" }}
+              >
+                <p className={classes.p}>почта</p>
+              </TableCell>
+              <TableCell
+                className={classes.headerCell}
+                style={{ padding: "4px" }}
+              >
+                <p className={classes.p}>Телефон</p>
               </TableCell>
 
               <TableCell className={classes.headerCellEdit}>
@@ -249,79 +282,79 @@ export default function UserTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {mapPolylinePoints
+            {users
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((point, index) => {
-                let backgroundColor = "white";
-                if (point.type === "commCenter") backgroundColor = "#f8e1e2";
-
-                return (
-                  <TableRow
-                    key={index}
-                    hover
-                    role="checkbox"
-                    tabIndex={-1}
-                    overflow="hidden"
-                    style={{ backgroundColor }}
+              .map((_user, index) => (
+                <TableRow
+                  key={index}
+                  hover
+                  role="checkbox"
+                  tabIndex={-1}
+                  overflow="hidden"
+                >
+                  <TableCell align="center" className={classes.rowCell}>
+                    {_user.name}
+                  </TableCell>
+                  <TableCell align="center" className={classes.rowCell}>
+                    {_user.secondName}
+                  </TableCell>
+                  <TableCell align="center" className={classes.rowCell}>
+                    {_user.fatherName}
+                  </TableCell>
+                  <TableCell align="center" className={classes.rowCell}>
+                    {_user.username}
+                  </TableCell>
+                  <TableCell align="center" className={classes.rowCell}>
+                    {_user.position}
+                  </TableCell>
+                  <TableCell align="center" className={classes.rowCell}>
+                    {_user.isAdmin ? "да" : "нет"}
+                  </TableCell>
+                  <TableCell align="center" className={classes.rowCell}>
+                    {_user.email}
+                  </TableCell>
+                  <TableCell align="center" className={classes.rowCell}>
+                    {_user.phone}
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    className={classes.rowEditDeleteCell}
                   >
-                    <TableCell align="center" className={classes.rowCell}>
-                      {point.index}
-                    </TableCell>
-                    <TableCell align="center" className={classes.rowCell}>
-                      {point.lat}
-                    </TableCell>
-                    <TableCell align="center" className={classes.rowCell}>
-                      {point.lon}
-                    </TableCell>
-                    <TableCell align="center" className={classes.rowCell}>
-                      {point.type === "commCenter"
-                        ? "Насосная Станция"
-                        : "Промежуточная точка"}
-                    </TableCell>
-                    <TableCell align="center" className={classes.rowCell}>
-                      {point.description}
-                    </TableCell>
-
-                    <TableCell
-                      align="center"
-                      className={classes.rowEditDeleteCell}
+                    <IconButton
+                      disabled={!user.isAdmin}
+                      aria-label="edit"
+                      color="primary"
+                      className={classes.iconButton}
+                      onClick={() => {
+                        handleEditDialogOpen(_user);
+                      }}
                     >
-                      <IconButton
-                        disabled={!user.isAdmin}
-                        aria-label="edit"
-                        color="primary"
-                        className={classes.iconButton}
-                        onClick={() => {
-                          handleEditDialogOpen(point);
-                        }}
-                      >
-                        <EditOutlinedIcon />
-                      </IconButton>
-                    </TableCell>
-                    <TableCell
-                      align="center"
-                      className={classes.rowEditDeleteCell}
+                      <EditOutlinedIcon />
+                    </IconButton>
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    className={classes.rowEditDeleteCell}
+                  >
+                    <IconButton
+                      disabled={!user.isAdmin}
+                      aria-label="delete"
+                      color="secondary"
+                      className={classes.iconButton}
+                      onClick={() => handleDeleteWorningOpen(_user)}
                     >
-                      <IconButton
-                        disabled={!user.isAdmin}
-                        aria-label="delete"
-                        color="secondary"
-                        className={classes.iconButton}
-                        onClick={() => handleDeleteWorningOpen(point)}
-                      >
-                        <DeleteForeverOutlinedIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
+                      <DeleteForeverOutlinedIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
           <TableFooter>
             <TableRow>
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={3}
-                count={mapPolylinePoints.length}
+                count={users.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{

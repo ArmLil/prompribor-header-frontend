@@ -13,14 +13,13 @@ import DeleteForeverOutlinedIcon from "@material-ui/icons/DeleteForeverOutlined"
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableFooter from "@material-ui/core/TableFooter";
-import { useHistory } from "react-router-dom";
-import dataService from "../../../../services/data.service";
-import { logout } from "../../../../actions/auth";
+import dataService from "../../../../../services/data.service";
+import { getMapCommCenters } from "../../../../../actions/mapCommCenters";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import AddDialog from "./user.addDialog";
-import EditDialog from "./user.editDialog";
+import AddDialog from "./station.addDialog";
+import EditDialog from "./station.editDialog";
 import TablePaginationActions from "../tablePaginationActions";
 import WorningDialog from "../WorningDialog";
 
@@ -84,37 +83,55 @@ const useStyles = makeStyles({
   },
 });
 
+const renamePosition = (position) => {
+  let result = "";
+  switch (position) {
+    case "top":
+      result = "верх";
+      break;
+    case "top-left":
+      result = "верх-лево";
+      break;
+    case "top-right":
+      result = "верх-право";
+      break;
+    case "bottom":
+      result = "вниз";
+      break;
+    case "bottom-left":
+      result = "вниз-лево";
+      break;
+    case "bottom-right":
+      result = "вниз-право";
+      break;
+    case "left":
+      result = "лево";
+      break;
+    case "right":
+      result = "право";
+      break;
+    default:
+      result = "вниз";
+  }
+  return result;
+};
+
 export default function UserTable() {
   const classes = useStyles();
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
-  const [userParams, setUserParams] = React.useState({});
+  const [stationParams, setStationParams] = React.useState({});
   const [openWorning, setOpenWorning] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [users, setUsers] = React.useState([]);
 
-  const user = useSelector((state) => state.authReducer.user);
-  const history = useHistory();
   const dispatch = useDispatch();
 
-  React.useEffect(() => {
-    const getUsers = () => {
-      dataService
-        .getData(`users?token=${user.token}`)
-        .then((result) => {
-          setUsers(result.data.users.rows);
-        })
-        .catch((err) => {
-          if (err.response && err.response.data && err.response.data.message) {
-            alert(err.response.data.message);
-          }
-          dispatch(logout());
-          history.push("/login");
-        });
-    };
-    getUsers();
-  }, [user.token, dispatch, history]);
+  const mapCommCenters = useSelector(
+    (state) => state.mapCommCentersReducer.items
+  );
+
+  const user = useSelector((state) => state.authReducer.user);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -136,32 +153,35 @@ export default function UserTable() {
 
   const handleDeleteWorningOpen = (row) => {
     setOpenWorning(true);
-    setUserParams(Object.assign({}, row, { token: user.token }));
+    setStationParams(Object.assign({}, row, { token: user.token }));
   };
 
   const handleDeleteWorningClose = (action, parameters) => {
+    console.log({ parameters });
     setOpenWorning(false);
     if (action === "submit") {
+      console.log("delete submit");
       dataService
-        .deleteData(`users/${parameters.id}?token=${user.token}`)
+        .deleteData(`commCenters/${parameters.id}?token=${user.token}`)
         .then((result) => {
-          const _users = users.filter((_user) => {
-            if (parameters.id !== _user.id) return true;
-            else return false;
+          dispatch(getMapCommCenters("mapCommCenters")).catch((err) => {
+            console.log({ err });
           });
-          setUsers(_users);
         })
         .catch((err) => {
-          if (err.response && err.response.data && err.response.data.message) {
-            alert(err.response.data.message);
+          let error = err;
+          console.log(err.response);
+          if (err.response && err.response.data) {
+            error = err.response.data;
           }
+          alert(error);
           console.log({ err });
         });
     }
   };
 
   const handleEditDialogOpen = (row) => {
-    setUserParams(Object.assign({}, row, { token: user.token }));
+    setStationParams(Object.assign({}, row, { token: user.token }));
     setOpenEditDialog(true);
   };
 
@@ -172,36 +192,21 @@ export default function UserTable() {
     setOpenEditDialog(false);
   };
 
-  const handleEdit = (editedUser) => {
-    const _users = users.map((_user) => {
-      if (editedUser.id === _user.id) return editedUser;
-      return _user;
-    });
-    setUsers(_users);
-  };
-
-  const handleCreate = (newUser) => {
-    const _users = [...users, newUser];
-    setUsers(_users);
-  };
-
   return (
     <div>
       <AddDialog
-        handleAddDialogClose={handleAddDialogClose}
-        handleCreate={handleCreate}
         openAddDialog={openAddDialog}
+        handleAddDialogClose={handleAddDialogClose}
         user={user}
       />
       <EditDialog
         handleEditDialogClose={handleEditDialogClose}
-        handleEdit={handleEdit}
         openEditDialog={openEditDialog}
-        userParams={userParams}
+        stationParams={stationParams}
       />
       <WorningDialog
         openWorning={openWorning}
-        parameters={userParams}
+        parameters={stationParams}
         handleClose={handleDeleteWorningClose}
       />
       <TableContainer className={classes.container}>
@@ -228,49 +233,43 @@ export default function UserTable() {
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Имя</p>
+                <p className={classes.p}>Идентификатор</p>
               </TableCell>
               <TableCell
                 className={classes.headerCell}
                 style={{ padding: "2px" }}
               >
-                <p className={classes.p}>Фамилия</p>
+                <p className={classes.p}>Наименование</p>
               </TableCell>
               <TableCell
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Отчество</p>
+                <p className={classes.p}>Индекс</p>
               </TableCell>
               <TableCell
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Никнейм</p>
+                <p className={classes.p}>Широта</p>
               </TableCell>
               <TableCell
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Должность</p>
+                <p className={classes.p}>Долгота</p>
               </TableCell>
               <TableCell
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Права админа</p>
+                <p className={classes.p}>Позиция таблицы на карте</p>
               </TableCell>
               <TableCell
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>почта</p>
-              </TableCell>
-              <TableCell
-                className={classes.headerCell}
-                style={{ padding: "4px" }}
-              >
-                <p className={classes.p}>Телефон</p>
+                <p className={classes.p}>Описание</p>
               </TableCell>
 
               <TableCell className={classes.headerCellEdit}>
@@ -282,9 +281,9 @@ export default function UserTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {users
+            {mapCommCenters
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((_user, index) => (
+              .map((commCenter, index) => (
                 <TableRow
                   key={index}
                   hover
@@ -293,29 +292,27 @@ export default function UserTable() {
                   overflow="hidden"
                 >
                   <TableCell align="center" className={classes.rowCell}>
-                    {_user.name}
+                    {commCenter.path}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    {_user.secondName}
+                    {commCenter.name}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    {_user.fatherName}
+                    {commCenter.index}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    {_user.username}
+                    {commCenter.lat}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    {_user.position}
+                    {commCenter.lon}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    {_user.isAdmin ? "да" : "нет"}
+                    {renamePosition(commCenter.tablePosition)}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
-                    {_user.email}
+                    {commCenter.description}
                   </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {_user.phone}
-                  </TableCell>
+
                   <TableCell
                     align="center"
                     className={classes.rowEditDeleteCell}
@@ -326,7 +323,7 @@ export default function UserTable() {
                       color="primary"
                       className={classes.iconButton}
                       onClick={() => {
-                        handleEditDialogOpen(_user);
+                        handleEditDialogOpen(commCenter);
                       }}
                     >
                       <EditOutlinedIcon />
@@ -341,7 +338,7 @@ export default function UserTable() {
                       aria-label="delete"
                       color="secondary"
                       className={classes.iconButton}
-                      onClick={() => handleDeleteWorningOpen(_user)}
+                      onClick={() => handleDeleteWorningOpen(commCenter)}
                     >
                       <DeleteForeverOutlinedIcon />
                     </IconButton>
@@ -354,7 +351,7 @@ export default function UserTable() {
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={3}
-                count={users.length}
+                count={mapCommCenters.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{

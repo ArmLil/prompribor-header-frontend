@@ -13,11 +13,11 @@ import FormHelperText from "@mui/material/FormHelperText";
 import Draggable from "react-draggable";
 import { useDispatch } from "react-redux";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { getMapCommCenters } from "../../../../actions/mapCommCenters";
-import { validateLatLon } from "../../../../helpers/validateLatLon";
-import { validatePath } from "../../../../helpers/validatePath";
+import { getMapCommCenters } from "../../../../../actions/mapCommCenters";
+import { validateLatLon } from "../../../../../helpers/validateLatLon";
+import { validatePath } from "../../../../../helpers/validatePath";
 
-import dataService from "../../../../services/data.service";
+import dataService from "../../../../../services/data.service";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

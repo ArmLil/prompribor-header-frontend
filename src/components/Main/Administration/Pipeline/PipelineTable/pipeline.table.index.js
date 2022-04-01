@@ -13,13 +13,13 @@ import DeleteForeverOutlinedIcon from "@material-ui/icons/DeleteForeverOutlined"
 import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableFooter from "@material-ui/core/TableFooter";
-import dataService from "../../../../services/data.service";
-import { getMapCommCenters } from "../../../../actions/mapCommCenters";
+import dataService from "../../../../../services/data.service";
+import { getMapCommCenters } from "../../../../../actions/mapCommCenters";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import AddDialog from "./station.addDialog";
-import EditDialog from "./station.editDialog";
+import AddDialog from "./pipeline.addDialog";
+import EditDialog from "./pipeline.editDialog";
 import TablePaginationActions from "../tablePaginationActions";
 import WorningDialog from "../WorningDialog";
 
@@ -83,52 +83,19 @@ const useStyles = makeStyles({
   },
 });
 
-const renamePosition = (position) => {
-  let result = "";
-  switch (position) {
-    case "top":
-      result = "верх";
-      break;
-    case "top-left":
-      result = "верх-лево";
-      break;
-    case "top-right":
-      result = "верх-право";
-      break;
-    case "bottom":
-      result = "вниз";
-      break;
-    case "bottom-left":
-      result = "вниз-лево";
-      break;
-    case "bottom-right":
-      result = "вниз-право";
-      break;
-    case "left":
-      result = "лево";
-      break;
-    case "right":
-      result = "право";
-      break;
-    default:
-      result = "вниз";
-  }
-  return result;
-};
-
 export default function UserTable() {
   const classes = useStyles();
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
-  const [stationParams, setStationParams] = React.useState({});
+  const [pipelineParams, setPipelineParams] = React.useState({});
   const [openWorning, setOpenWorning] = React.useState(false);
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const dispatch = useDispatch();
 
-  const mapCommCenters = useSelector(
-    (state) => state.mapCommCentersReducer.items
+  const mapPolylinePoints = useSelector(
+    (state) => state.mapCommCentersReducer.mapPolylinePoints
   );
 
   const user = useSelector((state) => state.authReducer.user);
@@ -152,8 +119,14 @@ export default function UserTable() {
   };
 
   const handleDeleteWorningOpen = (row) => {
+    if (row.type === "commCenter") {
+      alert(
+        "Для удаления Насосных Станций переходите в раздел Администрирование --> Насосные станции"
+      );
+      return;
+    }
     setOpenWorning(true);
-    setStationParams(Object.assign({}, row, { token: user.token }));
+    setPipelineParams(Object.assign({}, row, { token: user.token }));
   };
 
   const handleDeleteWorningClose = (action, parameters) => {
@@ -162,7 +135,7 @@ export default function UserTable() {
     if (action === "submit") {
       console.log("delete submit");
       dataService
-        .deleteData(`commCenters/${parameters.id}?token=${user.token}`)
+        .deleteData(`mapPolylinePoints/${parameters.id}?token=${user.token}`)
         .then((result) => {
           dispatch(getMapCommCenters("mapCommCenters")).catch((err) => {
             console.log({ err });
@@ -172,7 +145,7 @@ export default function UserTable() {
           let error = err;
           console.log(err.response);
           if (err.response && err.response.data) {
-            error = err.response.data;
+            error = err.response.data.message;
           }
           alert(error);
           console.log({ err });
@@ -181,7 +154,14 @@ export default function UserTable() {
   };
 
   const handleEditDialogOpen = (row) => {
-    setStationParams(Object.assign({}, row, { token: user.token }));
+    if (row.type === "commCenter") {
+      console.log("if edit click");
+      alert(
+        "Для редактирования Насосных Станций переходите в раздел Администрирование --> Насосные станции"
+      );
+      return;
+    }
+    setPipelineParams(Object.assign({}, row, { token: user.token }));
     setOpenEditDialog(true);
   };
 
@@ -202,11 +182,11 @@ export default function UserTable() {
       <EditDialog
         handleEditDialogClose={handleEditDialogClose}
         openEditDialog={openEditDialog}
-        stationParams={stationParams}
+        pipelineParams={pipelineParams}
       />
       <WorningDialog
         openWorning={openWorning}
-        parameters={stationParams}
+        parameters={pipelineParams}
         handleClose={handleDeleteWorningClose}
       />
       <TableContainer className={classes.container}>
@@ -233,18 +213,6 @@ export default function UserTable() {
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Идентификатор</p>
-              </TableCell>
-              <TableCell
-                className={classes.headerCell}
-                style={{ padding: "2px" }}
-              >
-                <p className={classes.p}>Наименование</p>
-              </TableCell>
-              <TableCell
-                className={classes.headerCell}
-                style={{ padding: "4px" }}
-              >
                 <p className={classes.p}>Индекс</p>
               </TableCell>
               <TableCell
@@ -263,7 +231,7 @@ export default function UserTable() {
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Позиция таблицы на карте</p>
+                <p className={classes.p}>Тип</p>
               </TableCell>
               <TableCell
                 className={classes.headerCell}
@@ -281,77 +249,79 @@ export default function UserTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {mapCommCenters
+            {mapPolylinePoints
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((commCenter, index) => (
-                <TableRow
-                  key={index}
-                  hover
-                  role="checkbox"
-                  tabIndex={-1}
-                  overflow="hidden"
-                >
-                  <TableCell align="center" className={classes.rowCell}>
-                    {commCenter.path}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {commCenter.name}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {commCenter.index}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {commCenter.lat}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {commCenter.lon}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {renamePosition(commCenter.tablePosition)}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {commCenter.description}
-                  </TableCell>
+              .map((point, index) => {
+                let backgroundColor = "white";
+                if (point.type === "commCenter") backgroundColor = "#f8e1e2";
 
-                  <TableCell
-                    align="center"
-                    className={classes.rowEditDeleteCell}
+                return (
+                  <TableRow
+                    key={index}
+                    hover
+                    role="checkbox"
+                    tabIndex={-1}
+                    overflow="hidden"
+                    style={{ backgroundColor }}
                   >
-                    <IconButton
-                      disabled={!user.isAdmin}
-                      aria-label="edit"
-                      color="primary"
-                      className={classes.iconButton}
-                      onClick={() => {
-                        handleEditDialogOpen(commCenter);
-                      }}
+                    <TableCell align="center" className={classes.rowCell}>
+                      {point.index}
+                    </TableCell>
+                    <TableCell align="center" className={classes.rowCell}>
+                      {point.lat}
+                    </TableCell>
+                    <TableCell align="center" className={classes.rowCell}>
+                      {point.lon}
+                    </TableCell>
+                    <TableCell align="center" className={classes.rowCell}>
+                      {point.type === "commCenter"
+                        ? "Насосная Станция"
+                        : "Промежуточная точка"}
+                    </TableCell>
+                    <TableCell align="center" className={classes.rowCell}>
+                      {point.description}
+                    </TableCell>
+
+                    <TableCell
+                      align="center"
+                      className={classes.rowEditDeleteCell}
                     >
-                      <EditOutlinedIcon />
-                    </IconButton>
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.rowEditDeleteCell}
-                  >
-                    <IconButton
-                      disabled={!user.isAdmin}
-                      aria-label="delete"
-                      color="secondary"
-                      className={classes.iconButton}
-                      onClick={() => handleDeleteWorningOpen(commCenter)}
+                      <IconButton
+                        disabled={!user.isAdmin}
+                        aria-label="edit"
+                        color="primary"
+                        className={classes.iconButton}
+                        onClick={() => {
+                          handleEditDialogOpen(point);
+                        }}
+                      >
+                        <EditOutlinedIcon />
+                      </IconButton>
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      className={classes.rowEditDeleteCell}
                     >
-                      <DeleteForeverOutlinedIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+                      <IconButton
+                        disabled={!user.isAdmin}
+                        aria-label="delete"
+                        color="secondary"
+                        className={classes.iconButton}
+                        onClick={() => handleDeleteWorningOpen(point)}
+                      >
+                        <DeleteForeverOutlinedIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
           <TableFooter>
             <TableRow>
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={3}
-                count={mapCommCenters.length}
+                count={mapPolylinePoints.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{

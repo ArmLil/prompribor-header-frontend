@@ -4,11 +4,11 @@ import { withStyles, createStyles, Theme } from "@material-ui/core/styles";
 import MapCommCenters from "./MapCommCenters/map.index";
 import Monitoring from "./Monitoring/monitoring.index";
 import Journals from "./Journals/journals.index";
-import Controllers from "./Controllers/controllers.index";
-import Users from "./Users/users.index";
-import Stations from "./Stations/stations.index";
-import Pipeline from "./Pipeline/pipeline.index";
-import Registers from "./Registers";
+import Controllers from "./Administration/Controllers/controllers.index";
+import Users from "./Administration/Users/users.index";
+import Stations from "./Administration/Stations/stations.index";
+import Pipeline from "./Administration/Pipeline/pipeline.index";
+import Registers from "./Administration/Registers";
 import LeftBar from "./LeftBar/leftBar.index";
 import Loader from "../Loader";
 
