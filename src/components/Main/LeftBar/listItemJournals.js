@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch, useParams } from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -39,6 +39,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function NestedList({ commCenters }) {
   let { path } = useRouteMatch();
+   const { journalName } = useParams();
+  console.log(useRouteMatch());
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -66,7 +68,7 @@ export default function NestedList({ commCenters }) {
             ? commCenters.map((comm) => (
                 <Link
                   key={comm.path}
-                  to={`${path}/journals/${comm.path}`}
+                  to={`${path}/journals/${comm.path}/${journalName || "avarii"}`}
                   className={classes.link}
                 >
                   <ListItem button className={classes.nested}>

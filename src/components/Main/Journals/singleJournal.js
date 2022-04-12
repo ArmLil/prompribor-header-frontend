@@ -130,11 +130,11 @@ const styles = {
   },
 };
 
-export default function SingleJournal({ alt, name }) {
+export default function SingleJournal({ alt, name, id }) {
   // <div style={styles.child}></div>
 
   return (
-    <div alt={alt} name={name} style={styles.root} id={alt}>
+    <div alt={alt} name={name} style={styles.root} id={id}>
       <div style={styles.bordersTopBottom}>
         <div style={styles.child}>
           <h6 style={styles.topTitle}>ЗАПАДНЫЙ ВОЕННЫЙ ОКРУГ</h6>

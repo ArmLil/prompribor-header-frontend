@@ -5,7 +5,7 @@ import { Router, Switch, Route, Link, Redirect } from "react-router-dom";
 import Login from "./login.component";
 import Register from "./register.component";
 import Home from "./home.component";
-import Main from "./Main/main.index";
+import Main from "./Main/main.router.index";
 import Profile from "./profile.component";
 
 // import BoardUser from "./components/board-user.component";

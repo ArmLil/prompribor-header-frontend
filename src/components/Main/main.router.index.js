@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import { withStyles, createStyles, Theme } from "@material-ui/core/styles";
 import MapCommCenters from "./MapCommCenters/map.index";
 import Monitoring from "./Monitoring/monitoring.index";
@@ -66,9 +66,14 @@ class Main extends Component {
               path="/main/monitoring/:commCenterPath"
               component={Monitoring}
             />
+            <Redirect
+              exact
+              from="/main/journals/:commCenterPath"
+              to="/main/journals/:commCenterPath/avarii"
+            />
             <Route
               exact
-              path="/main/journals/:commCenterPath"
+              path="/main/journals/:commCenterPath/:journalName"
               component={Journals}
             />
             <Route
