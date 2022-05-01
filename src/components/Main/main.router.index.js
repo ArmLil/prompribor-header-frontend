@@ -29,6 +29,7 @@ const useStyles = (theme: Theme) =>
 
 class Main extends Component {
   componentDidMount() {
+    console.log(this);
     console.log("componentDidMount() Main....");
     const { mapCommCenters, dispatchGetMapCommCenters } = this.props;
 

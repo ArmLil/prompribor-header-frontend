@@ -14,11 +14,11 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableFooter from "@material-ui/core/TableFooter";
 import dataService from "../../../../../services/data.service";
-import { addJournalData } from "../../../../../actions/currentCommCenter";
-import { editJournalData } from "../../../../../actions/currentCommCenter";
-import { deleteJournalData } from "../../../../../actions/currentCommCenter";
 
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useLocation, useParams } from "react-router-dom";
+
+import { getCurrentCommCenter } from "../../../../../actions/currentCommCenter";
 
 import AddDialog from "./fuel.addDialog";
 import EditDialog from "./fuel.editDialog";
@@ -29,8 +29,6 @@ const useStyles = makeStyles({
   container: {
     display: "flex",
     flexDirection: "column",
-    // maxHeight: 440,
-    // maxWidth: "90vw",
   },
 
   addButton: {
@@ -42,7 +40,6 @@ const useStyles = makeStyles({
     alignSelf: "flex-end",
   },
   headerCell: {
-    // padding: 5,
     maxWidth: 200,
     margin: 0,
     border: "solid black 1px",
@@ -58,10 +55,8 @@ const useStyles = makeStyles({
     width: 20,
   },
   rowCell: {
-    // padding: 5,
     margin: 0,
     border: "solid black 1px",
-    // maxWidth: 280,
     whiteSpace: "initial",
   },
   rowEditDeleteCell: {
@@ -80,7 +75,16 @@ const useStyles = makeStyles({
 });
 
 export default function FuelTables() {
+  const commCenter = useSelector(
+    (state) => state.currentCommCenterReducer.item
+  );
   const classes = useStyles();
+  const history = useHistory();
+  const params = useParams();
+  const location = useLocation();
+
+  const rowsPerPageOptions = [5, 10, 25, { label: "Все", value: -1 }];
+
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
   const [parameters, setParameters] = React.useState({});
@@ -88,28 +92,40 @@ export default function FuelTables() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const dispatch = useDispatch();
-  const commCenter = useSelector(
-    (state) => state.currentCommCenterReducer.item
-  );
+
   const user = useSelector((state) => state.authReducer.user);
 
   React.useEffect(() => {
-    const setParams = () => {};
-    setParams();
-  }, [commCenter]);
+    const setPageLimit = () => {
+      let _rowsPerPage = +commCenter.fuel.limit;
+      if (+commCenter.fuel.limit === +commCenter.fuel.count) {
+        _rowsPerPage = -1;
+      }
+      setRowsPerPage(_rowsPerPage);
+      const offset = +commCenter.fuel.offset;
+      setPage(Math.floor(offset / +commCenter.fuel.limit));
+    };
+    setPageLimit();
+  }, [commCenter.fuel.limit, commCenter.fuel.offset, commCenter.fuel.count]);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
-    setPage(newPage);
+    const newLocationSearch = `?page=${newPage}&limit=${rowsPerPage}`;
+    history.push(`${location.pathname}${newLocationSearch}`);
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    let newLimit = parseInt(event.target.value, 10);
+    if (newLimit < 0) {
+      setRowsPerPage(parseInt(event.target.value, 10));
+      newLimit = commCenter.fuel.count;
+    }
+    const newLocationSearch = `?page=0&limit=${newLimit}`;
+    history.push(`${location.pathname}${newLocationSearch}`);
   };
 
   const handleAddDialogOpen = () => {
@@ -125,9 +141,13 @@ export default function FuelTables() {
     setOpenWorning(false);
     if (action === "submit") {
       dataService
-        .deleteData(`fuel_journals_data/${parameters.id}?token=${user.token}`)
+        .deleteData(`fuel/${parameters.id}?token=${user.token}`)
         .then((result) => {
-          dispatch(deleteJournalData(commCenter, "fuel", parameters.id));
+          const fetchCommCenterUrl = `commCenters/commCenterByPath/${
+            params.commCenterPath
+          }?offset=${+commCenter.fuel.offset}&limit=${+commCenter.fuel
+            .limit}&fuel=true`;
+          dispatch(getCurrentCommCenter(fetchCommCenterUrl, commCenter));
         })
         .catch((err) => console.log({ err }));
     }
@@ -172,9 +192,13 @@ export default function FuelTables() {
     if (note) putBody.note = note;
     putBody.commCenterId = commCenter.id;
     dataService
-      .putData(`fuel_journals_data/${paramsId}`, putBody)
+      .putData(`fuel/${paramsId}`, putBody)
       .then((result) => {
-        dispatch(editJournalData(commCenter, "fuel", result.data));
+        const fetchCommCenterUrl = `commCenters/commCenterByPath/${
+          params.commCenterPath
+        }?offset=${+commCenter.fuel.offset}&limit=${+commCenter.fuel
+          .limit}&fuel=true`;
+        dispatch(getCurrentCommCenter(fetchCommCenterUrl, commCenter));
         setOpenEditDialog(false);
       })
       .catch((err) => console.log({ err }));
@@ -219,7 +243,7 @@ export default function FuelTables() {
       time = currentTime;
     }
     dataService
-      .postData("fuel_journals_data", {
+      .postData("fuel", {
         date,
         time,
         temperature,
@@ -233,7 +257,11 @@ export default function FuelTables() {
         token: user.token,
       })
       .then((result) => {
-        dispatch(addJournalData(commCenter, "fuel", result.data));
+        const fetchCommCenterUrl = `commCenters/commCenterByPath/${
+          params.commCenterPath
+        }?offset=${+commCenter.fuel.offset}&limit=${+commCenter.fuel
+          .limit}&fuel=true`;
+        dispatch(getCurrentCommCenter(fetchCommCenterUrl, commCenter));
         setOpenAddDialog(false);
       })
       .catch((err) => console.log({ err }));
@@ -357,82 +385,74 @@ export default function FuelTables() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {commCenter.fuel_journal_data
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => (
-                <TableRow
-                  key={index}
-                  hover
-                  role="checkbox"
-                  tabIndex={-1}
-                  overflow="hidden"
-                >
-                  <TableCell align="center" className={classes.rowCell}>
-                    {row.date}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {row.time}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {row.temperature}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {row.density}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {row.current_volume}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {row.current_mass}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {row.total_volume}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {row.total_mass}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {row.note}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.rowEditDeleteCell}
+            {commCenter.fuel.rows.map((row, index) => (
+              <TableRow
+                key={row.id}
+                hover
+                role="checkbox"
+                tabIndex={-1}
+                overflow="hidden"
+              >
+                <TableCell align="center" className={classes.rowCell}>
+                  {row.date}
+                </TableCell>
+                <TableCell align="center" className={classes.rowCell}>
+                  {row.time}
+                </TableCell>
+                <TableCell align="center" className={classes.rowCell}>
+                  {row.temperature}
+                </TableCell>
+                <TableCell align="center" className={classes.rowCell}>
+                  {row.density}
+                </TableCell>
+                <TableCell align="center" className={classes.rowCell}>
+                  {row.current_volume}
+                </TableCell>
+                <TableCell align="center" className={classes.rowCell}>
+                  {row.current_mass}
+                </TableCell>
+                <TableCell align="center" className={classes.rowCell}>
+                  {row.total_volume}
+                </TableCell>
+                <TableCell align="center" className={classes.rowCell}>
+                  {row.total_mass}
+                </TableCell>
+                <TableCell align="center" className={classes.rowCell}>
+                  {row.note}
+                </TableCell>
+                <TableCell align="center" className={classes.rowEditDeleteCell}>
+                  <IconButton
+                    disabled={!user.isAdmin}
+                    aria-label="edit"
+                    color="primary"
+                    className={classes.iconButton}
+                    onClick={() => {
+                      handleEditDialogOpen(row);
+                    }}
                   >
-                    <IconButton
-                      disabled={!user.isAdmin}
-                      aria-label="edit"
-                      color="primary"
-                      className={classes.iconButton}
-                      onClick={() => {
-                        handleEditDialogOpen(row);
-                      }}
-                    >
-                      <EditOutlinedIcon />
-                    </IconButton>
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.rowEditDeleteCell}
+                    <EditOutlinedIcon />
+                  </IconButton>
+                </TableCell>
+                <TableCell align="center" className={classes.rowEditDeleteCell}>
+                  <IconButton
+                    disabled={!user.isAdmin}
+                    aria-label="delete"
+                    color="secondary"
+                    className={classes.iconButton}
+                    onClick={() => handleDeleteWorningOpen(row)}
                   >
-                    <IconButton
-                      disabled={!user.isAdmin}
-                      aria-label="delete"
-                      color="secondary"
-                      className={classes.iconButton}
-                      onClick={() => handleDeleteWorningOpen(row)}
-                    >
-                      <DeleteForeverOutlinedIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    <DeleteForeverOutlinedIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
           <TableFooter>
             <TableRow>
               <TablePagination
-                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                rowsPerPageOptions={rowsPerPageOptions}
                 colSpan={3}
-                count={commCenter.fuel_journal_data.length}
+                count={+commCenter.fuel.count}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{

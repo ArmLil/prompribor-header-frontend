@@ -4,13 +4,13 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import { ruRU } from "@material-ui/core/locale";
-import Loader from "../../Loader";
 import ListJournals from "./list.journals";
 // import JournalsGeneralTable from "./journals.GeneralTable";
 import AvariiTables from "./Tables/Avarii/avarii.table.index";
 import DoneseniiTables from "./Tables/Donesenii/donesenii.table.index";
 import NasosiTables from "./Tables/Nasosi/nasosi.table.index";
 import FuelTables from "./Tables/Fuel/fuel.table.index";
+import isNaturalNumber from "../../../helpers/isNaturalNumber";
 
 import { connect } from "react-redux";
 import { getCurrentCommCenter } from "../../../actions/currentCommCenter";
@@ -41,17 +41,28 @@ const useStyles = (theme: Theme) =>
       marginBottom: theme.spacing(1),
     },
   });
+const validatePage = (number) => {
+  let result = false;
+  if ((isNaturalNumber(number) && number < 10000) || number === 0)
+    result = true;
+  return result;
+};
+const validateLimit = (number) => {
+  let result = false;
+  if (isNaturalNumber(number) && number < 10000) result = true;
+  return result;
+};
 
 function CurrentTable(tableName, _commCenter) {
   if (tableName === "avarii") {
-    return <AvariiTables commCenter={_commCenter} />;
+    return <AvariiTables />;
   } else if (tableName === "donesenii") {
-    return <DoneseniiTables commCenter={_commCenter} />;
+    return <DoneseniiTables />;
   } else if (tableName === "fuel") {
-    return <FuelTables commCenter={_commCenter} />;
+    return <FuelTables />;
   } else if (tableName === "nasosi") {
-    return <NasosiTables commCenter={_commCenter} />;
-  } else return <AvariiTables commCenter={""} />;
+    return <NasosiTables />;
+  } else return <AvariiTables />;
 }
 
 class Journals extends Component {
@@ -59,17 +70,41 @@ class Journals extends Component {
     super(props);
     this.state = {
       currentJournal: this.props.match.params.journalName,
-      currentCommCenter: {},
     };
   }
   componentDidMount() {
+    console.log("componentDidMount");
+
+    const { dispatchGetCommCenter, currentCommCenter } = this.props;
+    const { location } = this.props.history;
+    const urlCommCenterPath = this.props.match.params.commCenterPath;
+    const { currentJournal } = this.state;
+    const searchParams = new URLSearchParams(this.props.location.search);
+    let queryPage = +searchParams.get("page");
+    let queryLimit = +searchParams.get("limit");
+    let queryOffset = 0;
+    if (!validatePage(queryPage) || !validateLimit(queryLimit)) {
+      queryLimit = currentCommCenter[currentJournal].limit;
+      queryOffset = currentCommCenter[currentJournal].offset;
+      queryPage = Math.floor(queryOffset / queryLimit);
+      const newLocationSearch = `?page=${queryPage}&limit=${queryLimit}`;
+      this.props.history.replace(`${location.pathname}${newLocationSearch}`);
+    } else {
+      queryOffset = queryLimit * queryPage;
+    }
+
+    const fetchCommCenterUrl = `commCenters/commCenterByPath/${urlCommCenterPath}?offset=${queryOffset}&limit=${queryLimit}&${currentJournal}=true`;
+    dispatchGetCommCenter(fetchCommCenterUrl, currentCommCenter);
+
     //use native js to control Carousel library, on slide change we need to change tables
-    const { dispatchGetCommCenter } = this.props;
-    const commCenterPath = this.props.match.params.commCenterPath;
-    dispatchGetCommCenter(`commCenters/commCenterByPath/${commCenterPath}`);
     setTimeout(() => {
-      const { currentCommCenter } = this.props;
-      this.setState({ currentJournal: this.props.match.params.journalName });
+      const { error } = this.props;
+      if (error) return;
+      let _currentJournal = document.getElementsByClassName(
+        "slider-single active"
+      )[0].lastChild.firstChild.id;
+      this.setState({ currentJournal: _currentJournal });
+
       //change arrows styles in library
       let list_i_left = document.getElementsByClassName("fa fa-arrow-left");
       let list_i_right = document.getElementsByClassName("fa fa-arrow-right");
@@ -99,7 +134,6 @@ class Journals extends Component {
             "slider-single proactive"
           );
           let active_journal_id = active_journal[0].lastChild.firstChild.id;
-          let currentTable = CurrentTable(active_journal_id, currentCommCenter);
           this.setState({ currentJournal: active_journal_id });
         });
       }
@@ -108,29 +142,94 @@ class Journals extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     console.log("componentDidUpdate");
+    const { location } = this.props;
+    const { dispatchGetCommCenter } = this.props;
+    const currentCommCenter = this.props.currentCommCenter;
+    const { currentJournal } = this.state;
 
-    const urlCommCenterPath = this.props.match.params.commCenterPath;
-    if (this.props.currentCommCenter.path !== urlCommCenterPath) {
-      const { dispatchGetCommCenter } = this.props;
-      dispatchGetCommCenter(
-        `commCenters/commCenterByPath/${urlCommCenterPath}`
-      );
+    const { journalName, commCenterPath } = this.props.match.params;
+
+    const searchParams = new URLSearchParams(this.props.location.search);
+    let queryPage = +searchParams.get("page");
+    let queryLimit = +searchParams.get("limit");
+    let queryOffset = 0;
+
+    if (!validatePage(queryPage) || !validateLimit(queryLimit)) {
+      queryLimit = currentCommCenter[currentJournal].limit;
+      queryOffset = currentCommCenter[currentJournal].offset;
+      queryPage = Math.floor(queryOffset / queryLimit);
+      const newLocationSearch = `?page=${queryPage}&limit=${queryLimit}`;
+      this.props.history.replace(`${location.pathname}${newLocationSearch}`);
+    } else {
+      queryOffset = queryLimit * queryPage;
     }
-    if (this.props.match.params.journalName !== this.state.currentJournal) {
-      this.props.history.replace({
-        pathname: `${this.props.match.url.replace(
-          this.props.match.params.journalName,
-          this.state.currentJournal
-        )}`,
-      });
+    console.log(
+      {
+        journalName,
+        commCenterPath,
+        currentJournal,
+        queryPage,
+        queryLimit,
+        queryOffset,
+      },
+      currentCommCenter[currentJournal].count
+    );
+
+    let fetchCommCenterUrl = `commCenters/commCenterByPath/${commCenterPath}?offset=${queryOffset}&limit=${queryLimit}&${currentJournal}=true`;
+    if (
+      location.pathname !== prevProps.location.pathname &&
+      !this.props.loading
+    ) {
+      console.log("================> if update path");
+      queryLimit = currentCommCenter[currentJournal].limit;
+      queryOffset = currentCommCenter[currentJournal].offset;
+      fetchCommCenterUrl = `commCenters/commCenterByPath/${commCenterPath}?offset=${queryOffset}&limit=${queryLimit}&${currentJournal}=true`;
+      dispatchGetCommCenter(fetchCommCenterUrl, currentCommCenter);
+    } else if (journalName !== currentJournal && !this.props.loading) {
+      console.log("================> if update journalName");
+      queryLimit = currentCommCenter[currentJournal].limit;
+      queryOffset = currentCommCenter[currentJournal].offset;
+      queryPage = Math.floor(queryOffset / queryLimit);
+      const newLocationSearch = `?page=${queryPage}&limit=${queryLimit}`;
+      const newLocationPath = `/main/journals/${commCenterPath}/${currentJournal}`;
+      this.props.history.replace(`${newLocationPath}${newLocationSearch}`);
+    }
+    if (location.search !== prevProps.location.search && !this.props.loading) {
+      console.log("================> if update search");
+      dispatchGetCommCenter(fetchCommCenterUrl, currentCommCenter);
+    }
+    if (
+      +queryPage !== 0 &&
+      +currentCommCenter[currentJournal].count < +queryPage * +queryLimit &&
+      !this.props.loading
+    ) {
+      console.log("================> if update page to 0");
+      this.props.history.replace(
+        `${location.pathname}?page=0&limit=${queryLimit}`
+      );
     }
   }
 
   render() {
     console.log("render");
-    const { classes, error, loading, currentCommCenter } = this.props;
+    const { classes, error, currentCommCenter } = this.props;
     if (error) {
-      return <div>Error! {error}</div>;
+      return (
+        <ThemeProvider theme={theme}>
+          <div style={{ margin: 20 }}>
+            <Grid container spacing={2} style={{ width: "90vw" }}>
+              <Grid item xs={10}>
+                <Paper className={classes.paper}>
+                  <ListJournals />
+                </Paper>
+              </Grid>
+              <Grid item xs={12}>
+                <div>Error! {error}</div>;
+              </Grid>
+            </Grid>
+          </div>
+        </ThemeProvider>
+      );
     }
 
     let currentTable = CurrentTable(
@@ -157,8 +256,8 @@ class Journals extends Component {
   }
 }
 const mapDispatchToProps = (dispatch) => ({
-  dispatchGetCommCenter: (url) => {
-    dispatch(getCurrentCommCenter(url));
+  dispatchGetCommCenter: (url, reduserCommcenter) => {
+    dispatch(getCurrentCommCenter(url, reduserCommcenter));
   },
 });
 

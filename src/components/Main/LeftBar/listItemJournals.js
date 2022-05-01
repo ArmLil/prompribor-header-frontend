@@ -39,8 +39,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function NestedList({ commCenters }) {
   let { path } = useRouteMatch();
-   const { journalName } = useParams();
-  console.log(useRouteMatch());
+  const { journalName } = useParams();
 
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -68,7 +67,9 @@ export default function NestedList({ commCenters }) {
             ? commCenters.map((comm) => (
                 <Link
                   key={comm.path}
-                  to={`${path}/journals/${comm.path}/${journalName || "avarii"}`}
+                  to={`${path}/journals/${comm.path}/${
+                    journalName || "avarii"
+                  }`}
                   className={classes.link}
                 >
                   <ListItem button className={classes.nested}>

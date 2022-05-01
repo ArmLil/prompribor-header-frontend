@@ -14,11 +14,11 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableFooter from "@material-ui/core/TableFooter";
 import dataService from "../../../../../services/data.service";
-import { addJournalData } from "../../../../../actions/currentCommCenter";
-import { editJournalData } from "../../../../../actions/currentCommCenter";
-import { deleteJournalData } from "../../../../../actions/currentCommCenter";
 
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useLocation, useParams } from "react-router-dom";
+
+import { getCurrentCommCenter } from "../../../../../actions/currentCommCenter";
 
 import AddDialog from "./donesenii.addDialog";
 import EditDialog from "./donesenii.editDialog";
@@ -29,7 +29,6 @@ const useStyles = makeStyles({
   container: {
     display: "flex",
     flexDirection: "column",
-    // maxHeight: 440,
   },
   addButton: {
     width: 20,
@@ -40,7 +39,6 @@ const useStyles = makeStyles({
     alignSelf: "flex-end",
   },
   headerCell: {
-    // padding: 5,
     margin: 0,
     border: "solid black 1px",
     fontWeight: "bold",
@@ -55,7 +53,6 @@ const useStyles = makeStyles({
     width: 20,
   },
   rowCell: {
-    // padding: 5,
     margin: 0,
     border: "solid black 1px",
     maxWidth: 280,
@@ -85,7 +82,16 @@ const useStyles = makeStyles({
 });
 
 export default function DoneseniiTables() {
+  const commCenter = useSelector(
+    (state) => state.currentCommCenterReducer.item
+  );
   const classes = useStyles();
+  const history = useHistory();
+  const params = useParams();
+  const location = useLocation();
+
+  const rowsPerPageOptions = [5, 10, 25, { label: "All", value: -1 }];
+
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
   const [parameters, setParameters] = React.useState({});
@@ -93,28 +99,44 @@ export default function DoneseniiTables() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const dispatch = useDispatch();
-  const commCenter = useSelector(
-    (state) => state.currentCommCenterReducer.item
-  );
+
   const user = useSelector((state) => state.authReducer.user);
 
   React.useEffect(() => {
-    const setParams = () => {};
-    setParams();
-  }, [commCenter]);
+    const setPageLimit = () => {
+      let _rowsPerPage = +commCenter.donesenii.limit;
+      if (+commCenter.donesenii.limit === +commCenter.donesenii.count) {
+        _rowsPerPage = -1;
+      }
+      setRowsPerPage(_rowsPerPage);
+      const offset = +commCenter.donesenii.offset;
+      setPage(Math.floor(offset / +commCenter.donesenii.limit));
+    };
+    setPageLimit();
+  }, [
+    commCenter.donesenii.limit,
+    commCenter.donesenii.offset,
+    commCenter.donesenii.count,
+  ]);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
-    setPage(newPage);
+    const newLocationSearch = `?page=${newPage}&limit=${rowsPerPage}&donesenii=true`;
+    history.push(`${location.pathname}${newLocationSearch}`);
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    let newLimit = parseInt(event.target.value, 10);
+    if (newLimit < 0) {
+      setRowsPerPage(parseInt(event.target.value, 10));
+      newLimit = commCenter.avarii.count;
+    }
+    const newLocationSearch = `?page=0&limit=${newLimit}&donesenii=true`;
+    history.push(`${location.pathname}${newLocationSearch}`);
   };
 
   const handleAddDialogOpen = () => {
@@ -130,11 +152,13 @@ export default function DoneseniiTables() {
     setOpenWorning(false);
     if (action === "submit") {
       dataService
-        .deleteData(
-          `donesenii_journals_data/${parameters.id}?token=${user.token}`
-        )
+        .deleteData(`donesenii/${parameters.id}?token=${user.token}`)
         .then((result) => {
-          dispatch(deleteJournalData(commCenter, "donesenii", parameters.id));
+          const fetchCommCenterUrl = `commCenters/commCenterByPath/${
+            params.commCenterPath
+          }?offset=${+commCenter.donesenii.offset}&limit=${+commCenter.donesenii
+            .limit}&donesenii=true`;
+          dispatch(getCurrentCommCenter(fetchCommCenterUrl, commCenter));
         })
         .catch((err) => console.log({ err }));
     }
@@ -174,9 +198,13 @@ export default function DoneseniiTables() {
     putBody.commCenterId = commCenter.id;
 
     dataService
-      .putData(`donesenii_journals_data/${paramsId}`, putBody)
+      .putData(`donesenii/${paramsId}`, putBody)
       .then((result) => {
-        dispatch(editJournalData(commCenter, "donesenii", result.data));
+        const fetchCommCenterUrl = `commCenters/commCenterByPath/${
+          params.commCenterPath
+        }?offset=${+commCenter.donesenii.offset}&limit=${+commCenter.donesenii
+          .limit}&donesenii=true`;
+        dispatch(getCurrentCommCenter(fetchCommCenterUrl, commCenter));
         setOpenEditDialog(false);
       })
       .catch((err) => console.log({ err }));
@@ -210,7 +238,7 @@ export default function DoneseniiTables() {
       time = currentTime;
     }
     dataService
-      .postData("donesenii_journals_data", {
+      .postData("donesenii", {
         date,
         time,
         fromWho,
@@ -221,7 +249,11 @@ export default function DoneseniiTables() {
         token: user.token,
       })
       .then((result) => {
-        dispatch(addJournalData(commCenter, "donesenii", result.data));
+        const fetchCommCenterUrl = `commCenters/commCenterByPath/${
+          params.commCenterPath
+        }?offset=${+commCenter.donesenii.offset}&limit=${+commCenter.donesenii
+          .limit}&donesenii=true`;
+        dispatch(getCurrentCommCenter(fetchCommCenterUrl, commCenter));
         setOpenAddDialog(false);
       })
       .catch((err) => console.log({ err }));
@@ -296,73 +328,65 @@ export default function DoneseniiTables() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {commCenter.donesenii_journal_data
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => (
-                <TableRow
-                  key={index}
-                  hover
-                  role="checkbox"
-                  tabIndex={-1}
-                  overflow="hidden"
-                >
-                  <TableCell align="center" className={classes.rowCell}>
-                    {row.date}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {row.time}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {row.fromWho}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {row.donesenii}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {row.executor}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {row.note}
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.rowEditDeleteCell}
+            {commCenter.donesenii.rows.map((row, index) => (
+              <TableRow
+                key={row.id}
+                hover
+                role="checkbox"
+                tabIndex={-1}
+                overflow="hidden"
+              >
+                <TableCell align="center" className={classes.rowCell}>
+                  {row.date}
+                </TableCell>
+                <TableCell align="center" className={classes.rowCell}>
+                  {row.time}
+                </TableCell>
+                <TableCell align="center" className={classes.rowCell}>
+                  {row.fromWho}
+                </TableCell>
+                <TableCell align="center" className={classes.rowCell}>
+                  {row.donesenii}
+                </TableCell>
+                <TableCell align="center" className={classes.rowCell}>
+                  {row.executor}
+                </TableCell>
+                <TableCell align="center" className={classes.rowCell}>
+                  {row.note}
+                </TableCell>
+                <TableCell align="center" className={classes.rowEditDeleteCell}>
+                  <IconButton
+                    disabled={!user.isAdmin}
+                    aria-label="edit"
+                    color="primary"
+                    className={classes.iconButton}
+                    onClick={() => {
+                      handleEditDialogOpen(row);
+                    }}
                   >
-                    <IconButton
-                      disabled={!user.isAdmin}
-                      aria-label="edit"
-                      color="primary"
-                      className={classes.iconButton}
-                      onClick={() => {
-                        handleEditDialogOpen(row);
-                      }}
-                    >
-                      <EditOutlinedIcon />
-                    </IconButton>
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    className={classes.rowEditDeleteCell}
+                    <EditOutlinedIcon />
+                  </IconButton>
+                </TableCell>
+                <TableCell align="center" className={classes.rowEditDeleteCell}>
+                  <IconButton
+                    disabled={!user.isAdmin}
+                    aria-label="delete"
+                    color="secondary"
+                    className={classes.iconButton}
+                    onClick={() => handleDeleteWorningOpen(row)}
                   >
-                    <IconButton
-                      disabled={!user.isAdmin}
-                      aria-label="delete"
-                      color="secondary"
-                      className={classes.iconButton}
-                      onClick={() => handleDeleteWorningOpen(row)}
-                    >
-                      <DeleteForeverOutlinedIcon />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
+                    <DeleteForeverOutlinedIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
           <TableFooter>
             <TableRow>
               <TablePagination
-                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                rowsPerPageOptions={rowsPerPageOptions}
                 colSpan={3}
-                count={commCenter.donesenii_journal_data.length}
+                count={+commCenter.donesenii.count}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{

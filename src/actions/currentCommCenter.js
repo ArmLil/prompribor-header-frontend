@@ -25,19 +25,19 @@ export const updateCurrentCommCenter = (payload) => ({
   payload,
 });
 
-export const getCurrentCommCenter = (url) => (dispatch) => {
+export const getCurrentCommCenter = (url, reduserCommcenter) => (dispatch) => {
   dispatch(fetchCurrentCommCenterBegin());
-  return dataService.getData(url).then(
-    (response) => {
+  return dataService
+    .getData(url)
+    .then((response) => {
       if (response.message) {
         throw Error(response.massage);
       }
-      console.log("response.data====", response.data);
-      dispatch(fetchCurrentCommCenterSuccess(response.data));
-      return Promise.resolve();
-    },
-    (error) => {
-      console.log(error);
+      let newCommCenter = Object.assign({}, reduserCommcenter, response.data);
+      dispatch(fetchCurrentCommCenterSuccess(newCommCenter));
+    })
+    .catch((error) => {
+      console.log({ error });
       const message =
         (error.response &&
           error.response.data &&
@@ -45,105 +45,6 @@ export const getCurrentCommCenter = (url) => (dispatch) => {
         error.message ||
         error.toString();
 
-      dispatch(fetchCurrentCommCenterFail(message));
-      // return Promise.reject();
-    }
-  );
-};
-
-export const addJournalData = (commCenter, journalName, journalData) => (
-  dispatch
-) => {
-  let newCommCenter = Object.assign({}, commCenter);
-  if (journalName === "avarii") {
-    newCommCenter.avarii_journal_data.push(journalData);
-  }
-  if (journalName === "donesenii") {
-    newCommCenter.donesenii_journal_data.push(journalData);
-  }
-  if (journalName === "nasosi") {
-    newCommCenter.nasosi_journal_data.push(journalData);
-  }
-  if (journalName === "fuel") {
-    newCommCenter.fuel_journal_data.push(journalData);
-  }
-
-  dispatch(updateCurrentCommCenter(newCommCenter));
-};
-
-export const editJournalData = (commCenter, journalName, journalData) => (
-  dispatch
-) => {
-  let newCommCenter = Object.assign({}, commCenter);
-  if (journalName === "avarii") {
-    let newAvarii_journal_data = newCommCenter.avarii_journal_data.map(
-      (row, i) => {
-        if (row.id === journalData.id) {
-          return journalData;
-        } else return row;
-      }
-    );
-    newCommCenter.avarii_journal_data = newAvarii_journal_data;
-  }
-  if (journalName === "donesenii") {
-    let newDonesenii_journal_data = newCommCenter.donesenii_journal_data.map(
-      (row, i) => {
-        if (row.id === journalData.id) {
-          return journalData;
-        } else return row;
-      }
-    );
-    newCommCenter.donesenii_journal_data = newDonesenii_journal_data;
-  }
-  if (journalName === "nasosi") {
-    let newNasosi_journal_data = newCommCenter.nasosi_journal_data.map(
-      (row, i) => {
-        if (row.id === journalData.id) {
-          return journalData;
-        } else return row;
-      }
-    );
-    newCommCenter.nasosi_journal_data = newNasosi_journal_data;
-  }
-  if (journalName === "fuel") {
-    let newFuel_journal_data = newCommCenter.fuel_journal_data.map((row, i) => {
-      if (row.id === journalData.id) {
-        return journalData;
-      } else return row;
+      dispatch(fetchCurrentCommCenterFail(message.toString()));
     });
-    newCommCenter.fuel_journal_data = newFuel_journal_data;
-  }
-  dispatch(updateCurrentCommCenter(newCommCenter));
-};
-
-export const deleteJournalData = (commCenter, journalName, dataId) => (
-  dispatch
-) => {
-  let newCommCenter = Object.assign({}, commCenter);
-  if (journalName === "avarii") {
-    let newAvarii_journal_data = newCommCenter.avarii_journal_data.filter(
-      (row, i) => row.id !== dataId
-    );
-    newCommCenter.avarii_journal_data = newAvarii_journal_data;
-  }
-  if (journalName === "donesenii") {
-    let newDonesenii_journal_data = newCommCenter.donesenii_journal_data.filter(
-      (row, i) => row.id !== dataId
-    );
-    newCommCenter.donesenii_journal_data = newDonesenii_journal_data;
-  }
-  if (journalName === "nasosi") {
-    let newNasosi_journal_data = newCommCenter.nasosi_journal_data.filter(
-      (row, i) => row.id !== dataId
-    );
-    newCommCenter.nasosi_journal_data = newNasosi_journal_data;
-  }
-  if (journalName === "fuel") {
-    let newFuel_journal_data = newCommCenter.fuel_journal_data.filter(
-      (row, i) => row.id !== dataId
-    );
-    newCommCenter.fuel_journal_data = newFuel_journal_data;
-  }
-
-  dispatch(updateCurrentCommCenter(newCommCenter));
 };

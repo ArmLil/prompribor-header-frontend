@@ -14,11 +14,11 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableFooter from "@material-ui/core/TableFooter";
 import dataService from "../../../../../services/data.service";
-import { addJournalData } from "../../../../../actions/currentCommCenter";
-import { editJournalData } from "../../../../../actions/currentCommCenter";
-import { deleteJournalData } from "../../../../../actions/currentCommCenter";
 
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useLocation, useParams } from "react-router-dom";
+
+import { getCurrentCommCenter } from "../../../../../actions/currentCommCenter";
 
 import AddDialog from "./nasosi.addDialog";
 import EditDialog from "./nasosi.editDialog";
@@ -29,7 +29,6 @@ const useStyles = makeStyles({
   container: {
     display: "flex",
     flexDirection: "column",
-    // maxHeight: 440,
   },
   addButton: {
     width: 20,
@@ -58,16 +57,7 @@ const useStyles = makeStyles({
     padding: 5,
     margin: 0,
     border: "solid black 1px",
-    // maxWidth: 280,
     whiteSpace: "initial",
-  },
-  rowP: {
-    overflow: "scroll",
-    margin: 0,
-    padding: 0,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
   },
   rowEditDeleteCell: {
     padding: 5,
@@ -85,7 +75,16 @@ const useStyles = makeStyles({
 });
 
 export default function NasosiTables() {
+  const commCenter = useSelector(
+    (state) => state.currentCommCenterReducer.item
+  );
   const classes = useStyles();
+  const history = useHistory();
+  const params = useParams();
+  const location = useLocation();
+
+  const rowsPerPageOptions = [5, 10, 25, { label: "Все", value: -1 }];
+
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
   const [parameters, setParameters] = React.useState({});
@@ -93,28 +92,44 @@ export default function NasosiTables() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const dispatch = useDispatch();
-  const commCenter = useSelector(
-    (state) => state.currentCommCenterReducer.item
-  );
+
   const user = useSelector((state) => state.authReducer.user);
 
   React.useEffect(() => {
-    const setParams = () => {};
-    setParams();
-  }, [commCenter]);
+    const setPageLimit = () => {
+      let _rowsPerPage = +commCenter.nasosi.limit;
+      if (+commCenter.nasosi.limit === +commCenter.nasosi.count) {
+        _rowsPerPage = -1;
+      }
+      setRowsPerPage(_rowsPerPage);
+      const offset = +commCenter.nasosi.offset;
+      setPage(Math.floor(offset / +commCenter.nasosi.limit));
+    };
+    setPageLimit();
+  }, [
+    commCenter.nasosi.limit,
+    commCenter.nasosi.offset,
+    commCenter.nasosi.count,
+  ]);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
-    setPage(newPage);
+    const newLocationSearch = `?page=${newPage}&limit=${rowsPerPage}`;
+    history.push(`${location.pathname}${newLocationSearch}`);
   };
 
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    let newLimit = parseInt(event.target.value, 10);
+    if (newLimit < 0) {
+      setRowsPerPage(parseInt(event.target.value, 10));
+      newLimit = commCenter.nasosi.count;
+    }
+    const newLocationSearch = `?page=0&limit=${newLimit}`;
+    history.push(`${location.pathname}${newLocationSearch}`);
   };
 
   const handleAddDialogOpen = () => {
@@ -130,9 +145,13 @@ export default function NasosiTables() {
     setOpenWorning(false);
     if (action === "submit") {
       dataService
-        .deleteData(`nasosi_journals_data/${parameters.id}?token=${user.token}`)
+        .deleteData(`nasosi/${parameters.id}?token=${user.token}`)
         .then((result) => {
-          dispatch(deleteJournalData(commCenter, "nasosi", parameters.id));
+          const fetchCommCenterUrl = `commCenters/commCenterByPath/${
+            params.commCenterPath
+          }?offset=${+commCenter.nasosi.offset}&limit=${+commCenter.nasosi
+            .limit}&nasosi=true`;
+          dispatch(getCurrentCommCenter(fetchCommCenterUrl, commCenter));
         })
         .catch((err) => console.log({ err }));
     }
@@ -173,9 +192,13 @@ export default function NasosiTables() {
     if (note) putBody.note = note;
     putBody.commCenterId = commCenter.id;
     dataService
-      .putData(`nasosi_journals_data/${paramsId}`, putBody)
+      .putData(`nasosi/${paramsId}`, putBody)
       .then((result) => {
-        dispatch(editJournalData(commCenter, "nasosi", result.data));
+        const fetchCommCenterUrl = `commCenters/commCenterByPath/${
+          params.commCenterPath
+        }?offset=${+commCenter.nasosi.offset}&limit=${+commCenter.nasosi
+          .limit}&nasosi=true`;
+        dispatch(getCurrentCommCenter(fetchCommCenterUrl, commCenter));
         setOpenEditDialog(false);
       })
       .catch((err) => console.log({ err }));
@@ -209,7 +232,7 @@ export default function NasosiTables() {
       time = currentTime;
     }
     dataService
-      .postData("nasosi_journals_data", {
+      .postData("nasosi", {
         date,
         time,
         line,
@@ -221,7 +244,11 @@ export default function NasosiTables() {
         token: user.token,
       })
       .then((result) => {
-        dispatch(addJournalData(commCenter, "nasosi", result.data));
+        const fetchCommCenterUrl = `commCenters/commCenterByPath/${
+          params.commCenterPath
+        }?offset=${+commCenter.nasosi.offset}&limit=${+commCenter.nasosi
+          .limit}&nasosi=true`;
+        dispatch(getCurrentCommCenter(fetchCommCenterUrl, commCenter));
         setOpenAddDialog(false);
       })
       .catch((err) => console.log({ err }));
@@ -297,11 +324,10 @@ export default function NasosiTables() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {commCenter.nasosi_journal_data
-              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((row, index) => (
+            {commCenter.nasosi.rows.map((row, index) => {
+              return (
                 <TableRow
-                  key={index}
+                  key={row.id}
                   hover
                   role="checkbox"
                   tabIndex={-1}
@@ -359,14 +385,15 @@ export default function NasosiTables() {
                     </IconButton>
                   </TableCell>
                 </TableRow>
-              ))}
+              );
+            })}
           </TableBody>
           <TableFooter>
             <TableRow>
               <TablePagination
-                rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                rowsPerPageOptions={rowsPerPageOptions}
                 colSpan={3}
-                count={commCenter.nasosi_journal_data.length}
+                count={+commCenter.nasosi.count}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{

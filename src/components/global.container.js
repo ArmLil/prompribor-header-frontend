@@ -29,7 +29,7 @@ class GlobalContainer extends Component {
     };
 
     history.listen((location) => {
-      props.dispatch(clearMessage()); // clear message when changing location
+      if (this.props.message) props.dispatch(clearMessage()); // clear message when changing location
     });
   }
 
@@ -37,37 +37,8 @@ class GlobalContainer extends Component {
     this.props.dispatch(logout());
   }
 
-  // {showModeratorBoard && (
-  //   <li className="nav-item">
-  //     <Link to={"/mod"} className="nav-link">
-  //       Moderator Board
-  //     </Link>
-  //   </li>
-  // )}
-  //
-  // {showAdminBoard && (
-  //   <li className="nav-item">
-  //     <Link to={"/admin"} className="nav-link">
-  //       Admin Board
-  //     </Link>
-  //   </li>
-  // )}
-  //
-  // {user && (
-  //   <li className="nav-item">
-  //     <Link to={"/user"} className="nav-link">
-  //       User
-  //     </Link>
-  //   </li>
-  // )}
-
-  // <Route path="/admin" component={BoardAdmin} />
-  // <Route path="/user" component={BoardUser} />
-  // <Route path="/mod" component={BoardModerator} />
-
   render() {
     const { user, bodyPhone } = this.props;
-    console.log({ user, bodyPhone });
     const PrivateRoute = ({
       comp: Component, // use comp prop
       ...rest

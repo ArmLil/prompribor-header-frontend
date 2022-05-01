@@ -7,11 +7,11 @@ import {
 
 const initialState = {
   item: {
-    controllers: [],
-    nasosi_journal_data: [],
-    donesenii_journal_data: [],
-    avarii_journal_data: [],
-    fuel_journal_data: [],
+    path: "",
+    nasosi: { rows: [], count: 0, limit: 5, offset: 0 },
+    avarii: { rows: [], count: 0, limit: 5, offset: 0 },
+    donesenii: { rows: [], count: 0, limit: 5, offset: 0 },
+    fuel: { rows: [], count: 0, limit: 5, offset: 0 },
   },
   loading: false,
   error: null,
@@ -26,28 +26,29 @@ export default function currentCommCenterReducer(state = initialState, action) {
         error: null,
       };
     case FETCH_CURRENT_COMMCENTER_SUCCESS:
-      return {
-        ...state,
-        loading: false,
+      return Object.assign({}, state, {
         item: action.payload,
-      };
+        loading: false,
+      });
+
     case FETCH_CURRENT_COMMCENTER_FAIL:
       return {
         ...state,
         loading: false,
         error: action.payload,
         item: {
-          controllers: [],
-          nasosi_journal_data: [],
-          donesenii_journal_data: [],
-          avarii_journal_data: [],
-          fuel_journal_data: [],
+          path: "",
+          nasosi: { rows: [], count: 0, limit: 5, offset: 0 },
+          avarii: { rows: [], count: 0, limit: 5, offset: 0 },
+          donesenii: { rows: [], count: 0, limit: 5, offset: 0 },
+          fuel: { rows: [], count: 0, limit: 5, offset: 0 },
         },
       };
     case UPDATE_CURRENT_COMMCENTER:
-      return Object.assign({}, state, {
+      let updated_commCenter = Object.assign({}, state, {
         item: action.payload,
       });
+      return updated_commCenter;
 
     default:
       return state;
