@@ -14,6 +14,7 @@ import isNaturalNumber from "../../../helpers/isNaturalNumber";
 
 import { connect } from "react-redux";
 import { getCurrentCommCenter } from "../../../actions/currentCommCenter";
+import { setCurrentJournal } from "../../../actions/currentJournal";
 
 const theme = createTheme(
   {
@@ -73,22 +74,31 @@ class Journals extends Component {
     };
   }
   componentDidMount() {
-    console.log("componentDidMount");
+    console.log("componentDidMount", this.props.match.params.journalName);
+    const {
+      dispatchGetCommCenter,
+      currentCommCenter,
+      global_currentJournal,
+      dispatchSetCurrentJournal,
+    } = this.props;
+    console.log({ global_currentJournal });
+    dispatchSetCurrentJournal(this.props.match.params.journalName);
 
-    const { dispatchGetCommCenter, currentCommCenter } = this.props;
     const { location } = this.props.history;
     const urlCommCenterPath = this.props.match.params.commCenterPath;
     const { currentJournal } = this.state;
+
     const searchParams = new URLSearchParams(this.props.location.search);
     let queryPage = +searchParams.get("page");
     let queryLimit = +searchParams.get("limit");
     let queryOffset = 0;
+
     if (!validatePage(queryPage) || !validateLimit(queryLimit)) {
       queryLimit = currentCommCenter[currentJournal].limit;
       queryOffset = currentCommCenter[currentJournal].offset;
       queryPage = Math.floor(queryOffset / queryLimit);
       const newLocationSearch = `?page=${queryPage}&limit=${queryLimit}`;
-      this.props.history.replace(`${location.pathname}${newLocationSearch}`);
+      this.props.history.push(`${location.pathname}${newLocationSearch}`);
     } else {
       queryOffset = queryLimit * queryPage;
     }
@@ -142,10 +152,16 @@ class Journals extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     console.log("componentDidUpdate");
+
     const { location } = this.props.history;
-    const { dispatchGetCommCenter } = this.props;
-    const currentCommCenter = this.props.currentCommCenter;
+    const {
+      dispatchGetCommCenter,
+      dispatchSetCurrentJournal,
+      currentCommCenter,
+      global_currentJournal,
+    } = this.props;
     const { currentJournal } = this.state;
+    console.log({ global_currentJournal, currentJournal });
 
     const { journalName, commCenterPath } = this.props.match.params;
 
@@ -159,7 +175,7 @@ class Journals extends Component {
       queryOffset = currentCommCenter[currentJournal].offset;
       queryPage = Math.floor(queryOffset / queryLimit);
       const newLocationSearch = `?page=${queryPage}&limit=${queryLimit}`;
-      this.props.history.replace(`${location.pathname}${newLocationSearch}`);
+      this.props.history.push(`${location.pathname}${newLocationSearch}`);
     } else {
       queryOffset = queryLimit * queryPage;
     }
@@ -171,9 +187,14 @@ class Journals extends Component {
         queryPage,
         queryLimit,
         queryOffset,
+        global_currentJournal,
       },
       currentCommCenter[currentJournal].count
     );
+
+    if (currentJournal !== global_currentJournal) {
+      dispatchSetCurrentJournal(currentJournal);
+    }
 
     let fetchCommCenterUrl = `commCenters/commCenterByPath/${commCenterPath}?offset=${queryOffset}&limit=${queryLimit}&${currentJournal}=true`;
     if (
@@ -192,7 +213,7 @@ class Journals extends Component {
       queryPage = Math.floor(queryOffset / queryLimit);
       const newLocationSearch = `?page=${queryPage}&limit=${queryLimit}`;
       const newLocationPath = `/main/journals/${commCenterPath}/${currentJournal}`;
-      this.props.history.replace(`${newLocationPath}${newLocationSearch}`);
+      this.props.history.push(`${newLocationPath}${newLocationSearch}`);
     } else if (
       location.search !== prevProps.location.search &&
       !this.props.loading
@@ -261,15 +282,20 @@ const mapDispatchToProps = (dispatch) => ({
   dispatchGetCommCenter: (url, reduserCommcenter) => {
     dispatch(getCurrentCommCenter(url, reduserCommcenter));
   },
+  dispatchSetCurrentJournal: (journal) => {
+    dispatch(setCurrentJournal(journal));
+  },
 });
 
 function mapStateToProps(state) {
   const currentCommCenter = state.currentCommCenterReducer.item;
+  const global_currentJournal = state.currentJournalReducer.item;
   const { error, loading } = state.currentCommCenterReducer;
   return {
     currentCommCenter,
     error,
     loading,
+    global_currentJournal,
   };
 }
 export default connect(

@@ -107,7 +107,7 @@ class GlobalContainer extends Component {
             <Route exact path="/register" component={Register} />
             <Route exact path="/profile" component={Profile} />
 
-            <PrivateRoute path="/main" comp={Main} />
+            <PrivateRoute path="/main" component={Main} />
           </Switch>
         </div>
       </Router>

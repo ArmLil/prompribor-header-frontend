@@ -5,6 +5,7 @@ import mapCommCentersReducer from "./mapCommCenters";
 import commCentersReducer from "./commCenters";
 import commCenterMonitoringReducer from "./commCenterMonitoring";
 import currentCommCenterReducer from "./currentCommCenter";
+import currentJournalReducer from "./currentJournal";
 
 export default combineReducers({
   authReducer,
@@ -13,4 +14,5 @@ export default combineReducers({
   commCentersReducer,
   commCenterMonitoringReducer,
   currentCommCenterReducer,
+  currentJournalReducer,
 });

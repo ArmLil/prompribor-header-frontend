@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { Link, useRouteMatch } from "react-router-dom";
+import { matchPath } from "react-router";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -11,6 +12,7 @@ import ExpandLess from "@material-ui/icons/ExpandLess";
 import ExpandMore from "@material-ui/icons/ExpandMore";
 import DvrOutlinedIcon from "@material-ui/icons/DvrOutlined";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,15 +33,12 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export default function NestedList({ commCenters }) {
-  let { path } = useRouteMatch();
-  let journalName = window.location.pathname.split("/").slice(-1)[0];
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-
+  const journalName = useSelector((state) => state.currentJournalReducer.item);
   const handleClick = () => {
     setOpen(!open);
   };
-
   return (
     <List
       component="nav"
@@ -59,9 +58,7 @@ export default function NestedList({ commCenters }) {
             ? commCenters.map((comm) => (
                 <Link
                   key={comm.path}
-                  to={`${path}/journals/${comm.path}/${
-                    journalName || "avarii"
-                  }`}
+                  to={`/main/journals/${comm.path}/${journalName}`}
                   className={classes.link}
                 >
                   <ListItem button className={classes.nested}>
