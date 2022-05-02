@@ -98,33 +98,6 @@ export default function LeftBar({ commCenters }) {
 
   const user = useSelector((state) => state.authReducer.user);
 
-  // <List>
-  //   <Link to={"/main/controllers"} className={classes.link}>
-  //     <ListItem button key="Контролеры">
-  //       <ListItemIcon>
-  //         <DeviceHubIcon />
-  //       </ListItemIcon>
-  //       <ListItemText primary="Контролеры" />
-  //     </ListItem>
-  //   </Link>
-  //   <Link to={"/main/registers"} className={classes.link}>
-  //     <ListItem button key="Регистры">
-  //       <ListItemIcon>
-  //         <ListAltOutlinedIcon />
-  //       </ListItemIcon>
-  //       <ListItemText primary="Регистры" />
-  //     </ListItem>
-  //   </Link>
-  //   <Link to={"/main/comm-centers"} className={classes.link}>
-  //     <ListItem button key="Коммуникационные центры">
-  //       <ListItemIcon>
-  //         <DnsOutlinedIcon />
-  //       </ListItemIcon>
-  //       <ListItemText primary="Коммуникационные центры" />
-  //     </ListItem>
-  //   </Link>
-  // </List>
-
   return (
     <div className={classes.root}>
       <Drawer

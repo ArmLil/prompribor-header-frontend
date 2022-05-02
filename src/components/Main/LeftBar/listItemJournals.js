@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
-import { Link, useRouteMatch, useParams } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -29,18 +29,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
-// <ListItem button className={classes.nested}>
-//   <ListItemIcon>
-//     <InboxIcon />
-//   </ListItemIcon>
-//
-//   <ListItemText primary="Starred" />
-// </ListItem>
 
 export default function NestedList({ commCenters }) {
   let { path } = useRouteMatch();
-  const { journalName } = useParams();
-
+  let journalName = window.location.pathname.split("/").slice(-1)[0];
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 

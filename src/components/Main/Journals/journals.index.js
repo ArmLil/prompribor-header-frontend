@@ -49,7 +49,7 @@ const validatePage = (number) => {
 };
 const validateLimit = (number) => {
   let result = false;
-  if (isNaturalNumber(number) && number < 10000) result = true;
+  if ([5, 10, 25].includes(number)) result = true;
   return result;
 };
 
@@ -92,7 +92,7 @@ class Journals extends Component {
     } else {
       queryOffset = queryLimit * queryPage;
     }
-
+    console.log({ queryPage, queryLimit, queryOffset });
     const fetchCommCenterUrl = `commCenters/commCenterByPath/${urlCommCenterPath}?offset=${queryOffset}&limit=${queryLimit}&${currentJournal}=true`;
     dispatchGetCommCenter(fetchCommCenterUrl, currentCommCenter);
 
@@ -142,7 +142,7 @@ class Journals extends Component {
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     console.log("componentDidUpdate");
-    const { location } = this.props;
+    const { location } = this.props.history;
     const { dispatchGetCommCenter } = this.props;
     const currentCommCenter = this.props.currentCommCenter;
     const { currentJournal } = this.state;
@@ -193,8 +193,10 @@ class Journals extends Component {
       const newLocationSearch = `?page=${queryPage}&limit=${queryLimit}`;
       const newLocationPath = `/main/journals/${commCenterPath}/${currentJournal}`;
       this.props.history.replace(`${newLocationPath}${newLocationSearch}`);
-    }
-    if (location.search !== prevProps.location.search && !this.props.loading) {
+    } else if (
+      location.search !== prevProps.location.search &&
+      !this.props.loading
+    ) {
       console.log("================> if update search");
       dispatchGetCommCenter(fetchCommCenterUrl, currentCommCenter);
     }
