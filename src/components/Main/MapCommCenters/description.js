@@ -1,8 +1,5 @@
 import fuelMarker from "../../../images/fuelMarker.png";
-import explosions from "../../../images/explosions.png";
-// import sklad from "../../../images/sklad1.jpg";
-import sklad from "../../../images/sklad1.png";
-import most from "../../../images/most.jpg";
+import psg from "../../../images/psg.png";
 import RemoveSharpIcon from "@material-ui/icons/RemoveSharp";
 
 // Classes used by Leaflet to position controls
@@ -44,39 +41,15 @@ function Content() {
       </div>
       <div style={{ alignSelf: "flex-start" }}>
         <img
-          src={explosions}
-          alt=""
-          style={{
-            width: "15px",
-            margin: "5px",
-          }}
-        />
-        - взрыв на мосту
-      </div>
-      <div style={{ alignSelf: "flex-start", marginBottom: 2 }}>
-        <img
-          src={most}
-          alt=""
-          style={{
-            width: "20px",
-            margin: "5px",
-          }}
-        />
-        - мосты
-      </div>
-      <div style={{ alignSelf: "flex-start" }}>
-        <img
-          src={sklad}
+          src={psg}
           alt=""
           style={{
             width: "30px",
             margin: "5px",
-            marginBottom: "0px",
           }}
         />
-        - склад горючего
+        - ПСГ
       </div>
-
       <div style={{ alignSelf: "flex-start" }}>
         <RemoveSharpIcon
           style={{

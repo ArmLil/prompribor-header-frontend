@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 // import MarkerClusterGroup from "react-leaflet-markercluster";
 import ExtMarker from "react-leaflet-enhanced-marker";
 // import PersonPinCircleOutlinedIcon from "@material-ui/icons/PersonPinCircleOutlined";
@@ -6,16 +6,11 @@ import ExtMarker from "react-leaflet-enhanced-marker";
 import "leaflet/dist/leaflet.css";
 
 import fuelMarker from "../../../images/fuelMarker.png";
-import explosions from "../../../images/explosions.png";
-import bureya from "../../../images/bureya.png";
-import sklad from "../../../images/sklad1.png";
-import triangle1 from "../../../images/triangle1.png";
-import triangle2 from "../../../images/triangle2.png";
-
+import psg from "../../../images/psg.png";
 import ParamsTable from "./paramsTable";
 import Description from "./description";
 // import car from "../../../images/car.jpeg";
-// import L, { LatLng, latLngBounds, FeatureGroup } from "leaflet";
+
 import { latLngBounds } from "leaflet";
 import {
   MapContainer,
@@ -25,110 +20,29 @@ import {
   // Marker,
   Tooltip,
 } from "react-leaflet";
-
 import { api } from "../../../api";
 export const API_URL = `http://${api.host}:${api.port}`;
 // const IMAGES_URL = `${API_URL}/images/{s}.tile.openstreetmap.org.{z}.{x}.{y}.png`;
 const IMAGES_URL = `${API_URL}/Tiles/{z}/{x}/{y}.png`;
-function BureyaSign() {
+
+function PSG() {
   return (
     <div>
       <img
-        src={bureya}
+        src={psg}
         alt=""
         style={{
-          width: "100px",
-          marginTop: "15px",
-          transform: "rotate(0deg)",
-          opacity: 0.9,
-        }}
-      />
-      <div
-        style={{
-          position: "relative",
-          top: 2,
-          left: 1,
-          width: 90,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            opasity: 1,
-            fontWeight: "bolder",
-            backgroundColor: "white",
-            justifyContent: "center",
-            padding: 0,
-            borderRadius: "10%",
-          }}
-        >
-          <p
-            style={{
-              margin: 0,
-              fontWeight: "bolder",
-              fontSize: 14,
-              color: "black",
-            }}
-          >
-            КДП
-          </p>
-          <p
-            style={{
-              fontStyle: "italic",
-              fontSize: 12,
-              margin: 0,
-              marginLeft: 5,
-              position: "relative",
-              top: 3,
-              fontWeight: "bold",
-              color: "black",
-            }}
-          >
-            тпр-1
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-function SkladSign() {
-  return (
-    <div>
-      <img
-        src={sklad}
-        alt=""
-        style={{
-          width: "145px",
-          marginTop: "15px",
+          width: "80px",
+          // marginTop: "15px",
           transform: "rotate(-0deg)",
           opacity: 1,
         }}
       />
-      <div
-        style={{
-          position: "relative",
-          top: 0,
-          left: 1,
-          width: 90,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            opasity: 1,
-            fontWeight: "bolder",
-            backgroundColor: "white",
-            justifyContent: "center",
-            width: "143px",
-            height: 13,
-          }}
-        ></div>
-      </div>
     </div>
   );
 }
-const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
-  console.log({ history }, { commCenters }, { mapPolylinePoints }, { bridge });
+const Map = ({ commCenters, history, mapPolylinePoints }) => {
+  console.log({ history }, { commCenters }, { mapPolylinePoints });
   const places = [];
   const polyline = [];
 
@@ -144,18 +58,28 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
     places.push(Object.assign({}, item, { position: [item.lat, item.lon] }));
     // polyline.push([item.lat, item.lon]);
   });
-  const defaultPosition: LatLngExpression = [55.755826, 37.6173]; // Moscow position
+  const defaultPosition: LatLngExpression = [56.29676, 42.68312]; // index 175 position
   // const showPreview = (place) => {
   //   return place.toString();
   // };
-  let changeViewMarkers = [
-    { lat: Number(places[0].lat) - 0.006, lon: Number(places[0].lon) - 0.04 },
-    {
-      lat: Number(places[places.length - 1].lat) - 0.001,
-      lon: Number(places[places.length - 1].lon) + 0.02,
-    },
-  ];
-  changeViewMarkers = changeViewMarkers.concat(places);
+
+  let changeViewMarkers = [];
+  useEffect(() => {
+    const updateViewMarkers = () => {
+      mapPolylinePoints.forEach((point, i) => {
+        changeViewMarkers.push({ lat: point.lat, lon: point.lon });
+      });
+      changeViewMarkers = changeViewMarkers.concat(places);
+    };
+    updateViewMarkers();
+  }, []);
+
+  setTimeout(() => {
+    let list = document.getElementsByClassName("leaflet-tooltip");
+    for (var item of list) {
+      item.style.padding = "1px";
+    }
+  }, 0);
 
   function ChangeView({ center, markers }: IChangeView) {
     const map = useMap();
@@ -167,13 +91,12 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
     return null;
   }
 
-  console.log("render");
   return (
     <div>
       Автоматизированная система мониторинга сборно-разборного трубопровода
       <MapContainer
         center={defaultPosition}
-        zoom={8}
+        zoom={10}
         className="map__container"
         style={{ height: "80vh", zIndex: 3 }}
         doubleClickZoom={true}
@@ -203,13 +126,12 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
               </div>
             );
           };
-          let tooltipOffset = [0, -12];
+          let tooltipOffset = [2, -12];
+          let direction = "top";
 
-          if (place.path === "GNS5") {
-            tooltipOffset = [9, -12];
-          }
-          if (place.path === "GNS6") {
-            tooltipOffset = [-4, -12];
+          if (place.path === "NS-1") {
+            tooltipOffset = [-10, 10];
+            direction = "bottom";
           }
           return (
             <ExtMarker
@@ -218,14 +140,13 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
               icon={<ParamsTable commCenter={place} />}
               eventHandlers={{
                 click: () => {
-                  console.log("second");
                   // showPreview(place);
                   history.push(`/main/monitoring/${place.path}`);
                 },
               }}
             >
               <Tooltip
-                direction={"top"}
+                direction={direction}
                 offset={tooltipOffset}
                 opacity={1}
                 permanent
@@ -251,7 +172,6 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
             }
             eventHandlers={{
               click: () => {
-                console.log({ place });
                 // showPreview(place);
                 history.push(`/main/journals/${place.path}`);
               },
@@ -259,122 +179,12 @@ const Map = ({ commCenters, history, mapPolylinePoints, bridge }) => {
           ></ExtMarker>
         ))}
 
-        {bridge.map((typeArray, index) => {
-          typeArray.sort(function (a, b) {
-            return a.index - b.index;
-          });
-          let coords = [];
-          typeArray.forEach((item, i) => {
-            coords.push([item.lat, item.lon]);
-          });
-          let color = "black";
-          if (typeArray[0].type.charAt(0) === "2") {
-            color = "green";
-          }
-
-          return (
-            <Polyline
-              key={index}
-              pathOptions={{
-                color: color,
-                weight: 3,
-                lineCap: "butt",
-                opacity: 0.8,
-              }}
-              positions={coords}
-            />
-          );
-        })}
         <ExtMarker
-          key={"fire"}
-          position={[56.18648, 42.85888]}
-          icon={
-            <img
-              src={explosions}
-              alt=""
-              style={{
-                width: "40px",
-                marginTop: "15px",
-              }}
-            />
-          }
-        />
-        <ExtMarker
-          key={"sklad"}
-          position={[56.19097, 42.85788]}
-          icon={<SkladSign />}
+          key={"psg"}
+          position={[56.30179, 42.68798]}
+          icon={<PSG />}
         ></ExtMarker>
 
-        <ExtMarker
-          key="bureya sign"
-          position={[56.18607, 42.87419]}
-          icon={<BureyaSign />}
-        ></ExtMarker>
-
-        <ExtMarker
-          key={"NS-5"}
-          position={[56.18538, 42.87239]}
-          icon={
-            <img
-              src={triangle2}
-              alt=""
-              style={{
-                width: "30px",
-                marginTop: "15px",
-                transform: "rotate(0deg)",
-                opacity: 1,
-              }}
-            />
-          }
-        />
-        <ExtMarker
-          key={"NS-1"}
-          position={[56.18397, 42.89947]}
-          icon={
-            <img
-              src={triangle1}
-              alt=""
-              style={{
-                width: "30px",
-                marginTop: "15px",
-                transform: "rotate(0deg)",
-                opacity: 1,
-              }}
-            />
-          }
-        />
-        <ExtMarker
-          key={"NS-3"}
-          position={[56.18961, 42.88659]}
-          icon={
-            <img
-              src={triangle1}
-              alt=""
-              style={{
-                width: "30px",
-                marginTop: "15px",
-                transform: "rotate(0deg)",
-                opacity: 1,
-              }}
-            />
-          }
-        />
-        <ExtMarker
-          key={"NS-7"}
-          position={[56.19018, 42.85516]}
-          icon={
-            <img
-              src={triangle1}
-              alt=""
-              style={{
-                width: "30px",
-                marginTop: "15px",
-                transform: "rotate(0deg)",
-                opacity: 1,
-              }}
-            />
-          }
-        />
         <Polyline
           pathOptions={{
             color: "green",

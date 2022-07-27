@@ -116,13 +116,21 @@ export default function ParamsTable(data) {
       width: "18px",
     });
   }
+  let fuelDisplay = "none";
+  let nasosiDisplay = "none";
+  commCenter.controllers.forEach((contr, i) => {
+    if (contr.type === "fuel") fuelDisplay = "inherit";
+    if (contr.type === "nasosi") nasosiDisplay = "inherit";
+  });
   let fuelStyle = Object.assign({}, {}, tableStyle, {
     height: "100px",
     backgroundColor: "#fbcbb4c4",
+    display: fuelDisplay,
   });
   let nasosiStyle = Object.assign({}, tableStyle, {
     height: "52px",
     backgroundColor: "#f4d9909c",
+    display: nasosiDisplay,
   });
   let pStyle = {
     padding: 0,

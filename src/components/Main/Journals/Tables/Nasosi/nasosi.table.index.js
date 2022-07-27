@@ -299,10 +299,6 @@ export default function NasosiTables() {
                 <p className={classes.p}>Время</p>
                 <p className={classes.p}>(ч. мин.)</p>
               </TableCell>
-              <TableCell className={classes.headerCell}>
-                <p className={classes.p}>Линия</p>
-                <p className={classes.p}>ПМТП</p>
-              </TableCell>
               <TableCell align="center" className={classes.headerCell}>
                 <p className={classes.p}>Рвх. (Мпа)</p>
               </TableCell>
@@ -338,9 +334,6 @@ export default function NasosiTables() {
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
                     {row.time}
-                  </TableCell>
-                  <TableCell align="center" className={classes.rowCell}>
-                    {row.line}
                   </TableCell>
                   <TableCell align="center" className={classes.rowCell}>
                     {row.P_in}

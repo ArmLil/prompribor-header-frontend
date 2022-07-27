@@ -10,7 +10,12 @@ import { socket, SocketContext } from "./socket_api";
 
 export default function App() {
   const dispatch = useDispatch();
-  const commCenters = useSelector((state) => state.commCentersReducer.items);
+  const currentCommCenter = useSelector(
+    (state) => state.currentCommCenterReducer.item
+  );
+  const currentJournal = useSelector(
+    (state) => state.currentJournalReducer.item
+  );
 
   useEffect(() => {
     const logoutHandler = () => {
@@ -28,14 +33,15 @@ export default function App() {
   });
 
   useEffect(() => {
+    // if (commCenters.length === 0)
     const updateCommCentersFuelData = (data) => {
       console.log("fuel socket");
-      dispatch(addJournalData(commCenters, data.commCenterPath, "fuel", data));
+      dispatch(addJournalData(currentCommCenter, currentJournal, "fuel", data));
     };
     const updateCommCentersNasosiData = (data) => {
-      console.log("nasosi socket");
+      console.log("nasosi socket", data);
       dispatch(
-        addJournalData(commCenters, data.commCenterPath, "nasosi", data)
+        addJournalData(currentCommCenter, currentJournal, "nasosi", data)
       );
     };
 
@@ -45,7 +51,7 @@ export default function App() {
       socket.off("fuel_data", updateCommCentersFuelData);
       socket.off("nasosi_data", updateCommCentersNasosiData);
     };
-  }, [commCenters, dispatch]);
+  }, [currentCommCenter, currentJournal, dispatch]);
 
   return (
     <SocketContext.Provider value={socket}>

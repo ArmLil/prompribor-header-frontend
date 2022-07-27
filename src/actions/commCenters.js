@@ -4,7 +4,8 @@ import {
   FETCH_COMMCENTERS_FAIL,
   UPDATE_COMMCENTERS,
 } from "./types";
-
+import dataService from "../services/data.service";
+import { updateCurrentCommCenter } from "./currentCommCenter";
 export const fetchCommCentersBegin = () => ({
   type: FETCH_COMMCENTERS_BEGIN,
 });
@@ -24,132 +25,44 @@ export const updateCommCenters = (payload) => ({
   payload,
 });
 
+export const getCommCenters = (url) => (dispatch) => {
+  console.log(url);
+  dispatch(fetchCommCentersBegin());
+  return dataService.getData(url).then(
+    (response) => {
+      dispatch(fetchCommCentersSuccess(response.data));
+      return Promise.resolve();
+    },
+    (error) => {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+
+      dispatch(fetchCommCentersFail(message));
+      // return Promise.reject();
+    }
+  );
+};
+
 export const addJournalData = (
-  commCenters,
-  commCenterPath,
+  currentCommCenter,
+  currentJournal,
   journalName,
   journalData
 ) => (dispatch) => {
-  let newCommCenters = [];
-  commCenters.forEach((commCenter, i) => {
-    if (commCenter.path && commCenter.path === commCenterPath) {
-      let newCommCenter = Object.assign({}, commCenter);
-      if (journalName === "avarii") {
-        newCommCenter.avarii_journal_data.push(journalData);
-      }
-      if (journalName === "donesenii") {
-        newCommCenter.donesenii_journal_data.push(journalData);
-      }
-      if (journalName === "nasosi") {
-        newCommCenter.nasosi_journal_data.push(journalData);
-      }
-      if (journalName === "fuel") {
-        newCommCenter.fuel_journal_data.push(journalData);
-      }
-      newCommCenters.push(newCommCenter);
-    } else {
-      newCommCenters.push(commCenter);
-    }
-  });
-  dispatch(updateCommCenters(newCommCenters));
-};
-
-export const editJournalData = (
-  commCenters,
-  commCenterPath,
-  journalName,
-  journalData
-) => (dispatch) => {
-  let newCommCenters = [];
-  commCenters.forEach((commCenter, i) => {
-    if (commCenter.path && commCenter.path === commCenterPath) {
-      let newCommCenter = Object.assign({}, commCenter);
-      if (journalName === "avarii") {
-        let newAvarii_journal_data = newCommCenter.avarii_journal_data.map(
-          (row, i) => {
-            if (row.id === journalData.id) {
-              return journalData;
-            } else return row;
-          }
-        );
-        newCommCenter.avarii_journal_data = newAvarii_journal_data;
-      }
-      if (journalName === "donesenii") {
-        let newDonesenii_journal_data = newCommCenter.donesenii_journal_data.map(
-          (row, i) => {
-            if (row.id === journalData.id) {
-              return journalData;
-            } else return row;
-          }
-        );
-        newCommCenter.donesenii_journal_data = newDonesenii_journal_data;
-      }
-      if (journalName === "nasosi") {
-        let newNasosi_journal_data = newCommCenter.nasosi_journal_data.map(
-          (row, i) => {
-            if (row.id === journalData.id) {
-              return journalData;
-            } else return row;
-          }
-        );
-        newCommCenter.nasosi_journal_data = newNasosi_journal_data;
-      }
-      if (journalName === "fuel") {
-        let newFuel_journal_data = newCommCenter.fuel_journal_data.map(
-          (row, i) => {
-            if (row.id === journalData.id) {
-              return journalData;
-            } else return row;
-          }
-        );
-        newCommCenter.fuel_journal_data = newFuel_journal_data;
-      }
-      newCommCenters.push(newCommCenter);
-    } else {
-      newCommCenters.push(commCenter);
-    }
-  });
-  dispatch(updateCommCenters(newCommCenters));
-};
-
-export const deleteJournalData = (
-  commCenters,
-  commCenterPath,
-  journalName,
-  dataId
-) => (dispatch) => {
-  let newCommCenters = [];
-  commCenters.forEach((commCenter, i) => {
-    if (commCenter.path && commCenter.path === commCenterPath) {
-      let newCommCenter = Object.assign({}, commCenter);
-      if (journalName === "avarii") {
-        let newAvarii_journal_data = newCommCenter.avarii_journal_data.filter(
-          (row, i) => row.id !== dataId
-        );
-        newCommCenter.avarii_journal_data = newAvarii_journal_data;
-      }
-      if (journalName === "donesenii") {
-        let newDonesenii_journal_data = newCommCenter.donesenii_journal_data.filter(
-          (row, i) => row.id !== dataId
-        );
-        newCommCenter.donesenii_journal_data = newDonesenii_journal_data;
-      }
-      if (journalName === "nasosi") {
-        let newNasosi_journal_data = newCommCenter.nasosi_journal_data.filter(
-          (row, i) => row.id !== dataId
-        );
-        newCommCenter.nasosi_journal_data = newNasosi_journal_data;
-      }
-      if (journalName === "fuel") {
-        let newFuel_journal_data = newCommCenter.fuel_journal_data.filter(
-          (row, i) => row.id !== dataId
-        );
-        newCommCenter.fuel_journal_data = newFuel_journal_data;
-      }
-      newCommCenters.push(newCommCenter);
-    } else {
-      newCommCenters.push(commCenter);
-    }
-  });
-  dispatch(updateCommCenters(newCommCenters));
+  const searchParams = new URLSearchParams(window.location.search);
+  let queryLimit = +searchParams.get("limit");
+  if (
+    currentJournal === journalName &&
+    journalData.commCenterId === currentCommCenter.id &&
+    window.location.pathname.includes("journals") &&
+    currentCommCenter[journalName].rows.length < queryLimit
+  ) {
+    let newCommCenter = Object.assign({}, currentCommCenter);
+    newCommCenter[journalName].rows.push(journalData);
+    dispatch(updateCurrentCommCenter(newCommCenter));
+  }
 };
