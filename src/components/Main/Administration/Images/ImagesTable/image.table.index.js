@@ -14,14 +14,13 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableFooter from "@material-ui/core/TableFooter";
 import dataService from "../../../../../services/data.service";
-import { getMapCommCenters } from "../../../../../actions/mapCommCenters";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import AddDialog from "./pipeline.addDialog";
-import EditDialog from "./pipeline.editDialog";
-import TablePaginationActions from "../tablePaginationActions";
-import WorningDialog from "../WorningDialog";
+import AddDialog from "./image.addDialog";
+import EditDialog from "./image.editDialog";
+import TablePaginationActions from "../../../tablePaginationActions";
+import WorningDialog from "../../../WorningDialog";
 
 const useStyles = makeStyles({
   container: {
@@ -83,20 +82,17 @@ const useStyles = makeStyles({
   },
 });
 
-export default function PipelineTable() {
+export default function ImageTable() {
   const classes = useStyles();
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
-  const [pipelineParams, setPipelineParams] = React.useState({});
+  const [imageParams, setImageParams] = React.useState({});
   const [openWorning, setOpenWorning] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [images, setImages] = React.useState([]);
 
   const dispatch = useDispatch();
-
-  const mapPolylinePoints = useSelector(
-    (state) => state.mapCommCentersReducer.mapPolylinePoints
-  );
 
   const user = useSelector((state) => state.authReducer.user);
 
@@ -119,14 +115,8 @@ export default function PipelineTable() {
   };
 
   const handleDeleteWorningOpen = (row) => {
-    if (row.type === "commCenter") {
-      alert(
-        "Для удаления Насосных Станций переходите в раздел Администрирование --> Насосные станции"
-      );
-      return;
-    }
     setOpenWorning(true);
-    setPipelineParams(Object.assign({}, row, { token: user.token }));
+    setImageParams(Object.assign({}, row, { token: user.token }));
   };
 
   const handleDeleteWorningClose = (action, parameters) => {
@@ -135,15 +125,14 @@ export default function PipelineTable() {
     if (action === "submit") {
       console.log("delete submit");
       dataService
-        .deleteData(`mapPolylinePoints/${parameters.id}?token=${user.token}`)
+        .deleteData(`images/${parameters.id}?token=${user.token}`)
         .then((result) => {
-          dispatch(getMapCommCenters("mapCommCenters")).catch((err) => {
-            console.log({ err });
+          dataService.getData(`images?token=${user.token}`).then((result) => {
+            console.log({ result });
           });
         })
         .catch((err) => {
           let error = err;
-          console.log(err.response);
           if (err.response && err.response.data) {
             error = err.response.data.message;
           }
@@ -154,14 +143,7 @@ export default function PipelineTable() {
   };
 
   const handleEditDialogOpen = (row) => {
-    if (row.type === "commCenter") {
-      console.log("if edit click");
-      alert(
-        "Для редактирования Насосных Станций переходите в раздел Администрирование --> Насосные станции"
-      );
-      return;
-    }
-    setPipelineParams(Object.assign({}, row, { token: user.token }));
+    setImageParams(Object.assign({}, row, { token: user.token }));
     setOpenEditDialog(true);
   };
 
@@ -182,12 +164,13 @@ export default function PipelineTable() {
       <EditDialog
         handleEditDialogClose={handleEditDialogClose}
         openEditDialog={openEditDialog}
-        pipelineParams={pipelineParams}
+        imageParams={imageParams}
       />
       <WorningDialog
         openWorning={openWorning}
-        parameters={pipelineParams}
+        parameters={imageParams}
         handleClose={handleDeleteWorningClose}
+        text="Вы действительно хотите удалить изображение?"
       />
       <TableContainer className={classes.container}>
         <Tooltip title="Создать новый элемент">
@@ -213,33 +196,14 @@ export default function PipelineTable() {
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Индекс</p>
+                <p className={classes.p}>Изоброжение</p>
               </TableCell>
               <TableCell
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Широта</p>
+                <p className={classes.p}>Наименование</p>
               </TableCell>
-              <TableCell
-                className={classes.headerCell}
-                style={{ padding: "4px" }}
-              >
-                <p className={classes.p}>Долгота</p>
-              </TableCell>
-              <TableCell
-                className={classes.headerCell}
-                style={{ padding: "4px" }}
-              >
-                <p className={classes.p}>Тип</p>
-              </TableCell>
-              <TableCell
-                className={classes.headerCell}
-                style={{ padding: "4px" }}
-              >
-                <p className={classes.p}>Описание</p>
-              </TableCell>
-
               <TableCell className={classes.headerCellEdit}>
                 <p className={classes.p}>Редакт.</p>
               </TableCell>
@@ -249,12 +213,10 @@ export default function PipelineTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {mapPolylinePoints
+            {images
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-              .map((point, index) => {
+              .map((img, index) => {
                 let backgroundColor = "white";
-                if (point.type === "commCenter") backgroundColor = "#f8e1e2";
-
                 return (
                   <TableRow
                     key={index}
@@ -265,23 +227,11 @@ export default function PipelineTable() {
                     style={{ backgroundColor }}
                   >
                     <TableCell align="center" className={classes.rowCell}>
-                      {point.index}
+                      {img.url}
                     </TableCell>
                     <TableCell align="center" className={classes.rowCell}>
-                      {point.lat}
+                      {img.name}
                     </TableCell>
-                    <TableCell align="center" className={classes.rowCell}>
-                      {point.lon}
-                    </TableCell>
-                    <TableCell align="center" className={classes.rowCell}>
-                      {point.type === "commCenter"
-                        ? "Насосная Станция"
-                        : "Промежуточная точка"}
-                    </TableCell>
-                    <TableCell align="center" className={classes.rowCell}>
-                      {point.description}
-                    </TableCell>
-
                     <TableCell
                       align="center"
                       className={classes.rowEditDeleteCell}
@@ -292,7 +242,7 @@ export default function PipelineTable() {
                         color="primary"
                         className={classes.iconButton}
                         onClick={() => {
-                          handleEditDialogOpen(point);
+                          handleEditDialogOpen(img);
                         }}
                       >
                         <EditOutlinedIcon />
@@ -307,7 +257,7 @@ export default function PipelineTable() {
                         aria-label="delete"
                         color="secondary"
                         className={classes.iconButton}
-                        onClick={() => handleDeleteWorningOpen(point)}
+                        onClick={() => handleDeleteWorningOpen(img)}
                       >
                         <DeleteForeverOutlinedIcon />
                       </IconButton>
@@ -321,7 +271,7 @@ export default function PipelineTable() {
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={3}
-                count={mapPolylinePoints.length}
+                count={images.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{
