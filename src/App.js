@@ -7,6 +7,7 @@ import GlobalContainer from "./components/global.container";
 import { addJournalData } from "./actions/commCenters";
 import { logout } from "./actions/auth";
 import { socket, SocketContext } from "./socket_api";
+import "./settings/axios";
 
 export default function App() {
   const dispatch = useDispatch();

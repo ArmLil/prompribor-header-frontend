@@ -6,6 +6,7 @@ import commCentersReducer from "./commCenters";
 import commCenterMonitoringReducer from "./commCenterMonitoring";
 import currentCommCenterReducer from "./currentCommCenter";
 import currentJournalReducer from "./currentJournal";
+import alertReducer from "./alert";
 
 export default combineReducers({
   authReducer,
@@ -15,4 +16,5 @@ export default combineReducers({
   commCenterMonitoringReducer,
   currentCommCenterReducer,
   currentJournalReducer,
+  alertReducer,
 });

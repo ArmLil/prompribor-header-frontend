@@ -92,8 +92,6 @@ export default function ImageTable() {
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [images, setImages] = React.useState([]);
 
-  const dispatch = useDispatch();
-
   const user = useSelector((state) => state.authReducer.user);
 
   const handleChangePage = (
@@ -202,7 +200,7 @@ export default function ImageTable() {
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Наименование</p>
+                <p className={classes.p}>Краткое название</p>
               </TableCell>
               <TableCell className={classes.headerCellEdit}>
                 <p className={classes.p}>Редакт.</p>

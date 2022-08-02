@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Router, Switch, Route, Link, Redirect } from "react-router-dom";
-
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import Login from "./login.component";
 import Register from "./register.component";
 import Home from "./home.component";
@@ -16,6 +17,10 @@ import { logout } from "../actions/auth";
 import { clearMessage } from "../actions/message";
 
 import { history } from "../helpers/history";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 class GlobalContainer extends Component {
   constructor(props) {
@@ -38,7 +43,7 @@ class GlobalContainer extends Component {
   }
 
   render() {
-    const { user, bodyPhone } = this.props;
+    const { user, bodyPhone, show, text, status } = this.props;
     const PrivateRoute = ({
       comp: Component, // use comp prop
       ...rest
@@ -109,6 +114,11 @@ class GlobalContainer extends Component {
 
             <PrivateRoute path="/main" component={Main} />
           </Switch>
+          <Snackbar open={show} autoHideDuration={5000}>
+            <Alert severity={status} sx={{ width: "100%" }}>
+              {text}
+            </Alert>
+          </Snackbar>
         </div>
       </Router>
     );
@@ -117,9 +127,13 @@ class GlobalContainer extends Component {
 
 function mapStateToProps(state) {
   const { user, bodyPhone } = state.authReducer;
+  const { show, text, status } = state.alertReducer;
   return {
     user,
     bodyPhone,
+    show,
+    text,
+    status,
   };
 }
 

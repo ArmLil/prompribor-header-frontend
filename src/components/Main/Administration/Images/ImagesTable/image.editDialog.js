@@ -11,7 +11,6 @@ import Draggable from "react-draggable";
 import { useDispatch } from "react-redux";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { getMapCommCenters } from "../../../../../actions/mapCommCenters";
-import { validateLatLon } from "../../../../../helpers/validateLatLon";
 
 import dataService from "../../../../../services/data.service";
 
@@ -50,8 +49,6 @@ export default function FormDialog({
   const [name_error, setName_error] = React.useState(false);
 
   const [name_helperText, setName_helperText] = React.useState("");
-
-  const dispatch = useDispatch();
 
   React.useEffect(() => {
     const setParams = () => {

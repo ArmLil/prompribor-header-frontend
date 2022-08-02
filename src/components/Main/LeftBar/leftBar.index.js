@@ -149,7 +149,7 @@ export default function LeftBar({ commCenters }) {
           <ListItemJournals commCenters={commCenters} />
         </List>
         <Divider />
-        {user.isAdmin && <ListItemAdmin commCenters={commCenters} />}
+        {user && user.isAdmin && <ListItemAdmin commCenters={commCenters} />}
       </Drawer>
     </div>
   );
