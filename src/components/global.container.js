@@ -38,7 +38,7 @@ class GlobalContainer extends Component {
     });
   }
 
-  logOut() {
+  logOut(e) {
     this.props.dispatch(logout());
   }
 
@@ -90,9 +90,9 @@ class GlobalContainer extends Component {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <a href="/login" className="nav-link" onClick={this.logOut}>
+                  <Link to="/login" className="nav-link" onClick={this.logOut}>
                     Выйти
-                  </a>
+                  </Link>
                 </li>
               </div>
             ) : (

@@ -69,7 +69,7 @@ export default function FormDialog({
   const [name_error, setName_error] = React.useState(false);
 
   const [name_helperText, setName_helperText] = React.useState("");
-  const [img_helperText, setImg_helperText] = React.useState("");
+  const [img_helperTextStyle, setImg_helperTextStyle] = React.useState("");
 
   const handleChangeImgFile = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log("handleChangeImgFile", event.target);
@@ -92,7 +92,7 @@ export default function FormDialog({
     setImg_error(false);
 
     setName_helperText("");
-    setImg_helperText("");
+    setImg_helperTextStyle("");
     handleAddDialogClose();
   };
 
@@ -106,24 +106,24 @@ export default function FormDialog({
     }
     if (imgFile === "") {
       setImg_error(true);
-      setImg_helperText("необходимо выбрать изоброжение");
+      setImg_helperTextStyle("red");
       close = false;
     }
-    const formData = new FormData();
+    if (close) {
+      const formData = new FormData();
 
-    // Update the formData object
-    formData.append("myFile", imgFile, imgFile.name);
+      // Update the formData object
+      formData.append("myFile", imgFile, imgFile.name);
 
-    // Details of the uploaded file
-    console.log(imgFile);
+      // Details of the uploaded file
+      console.log(imgFile);
 
-    // Request made to the backend api
-    // Send formData object
-    dataService
-      .postData(`upload-image?token=${user.token}`, formData)
-      .then((response) => {
-        console.log({ response });
-        if (close) {
+      // Request made to the backend api
+      // Send formData object
+      dataService
+        .postData(`upload-image?token=${user.token}`, formData)
+        .then((response) => {
+          console.log({ response });
           dataService
             .postData(`images?token=${user.token}`, {
               name,
@@ -132,9 +132,6 @@ export default function FormDialog({
             })
             .then(() => {
               handleOnClose();
-              // dispatch(getMapCommCenters("mapCommCenters")).catch((err) =>
-              //   console.log(err)
-              // );
               dataService.getData("images").then((response) => {
                 console.log("get ", response);
               });
@@ -143,8 +140,8 @@ export default function FormDialog({
               let error = err;
               console.log(err.response);
             });
-        }
-      });
+        });
+    }
   };
   return (
     <div>
@@ -192,7 +189,10 @@ export default function FormDialog({
               />
               <PhotoCamera />
             </IconButton>
-            <p className={classes.buttonText}>
+            <p
+              className={classes.buttonText}
+              style={{ color: img_helperTextStyle }}
+            >
               {" "}
               {imgFile.name || "Выберите файл..."}
             </p>
