@@ -73,7 +73,6 @@ export default function FormDialog({
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    console.log({ stationParams }, Object.keys(stationParams).length);
     const setParams = () => {
       if (stationParams.path) setPath(stationParams.path);
       if (stationParams.lon) setLon(stationParams.lon);

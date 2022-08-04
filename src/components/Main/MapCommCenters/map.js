@@ -42,7 +42,7 @@ function PSG() {
   );
 }
 const Map = ({ commCenters, history, mapPolylinePoints }) => {
-  console.log({ history }, { commCenters }, { mapPolylinePoints });
+  // console.log({ history }, { commCenters }, { mapPolylinePoints });
   const places = [];
   const polyline = [];
 

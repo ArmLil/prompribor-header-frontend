@@ -8,9 +8,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Paper, { PaperProps } from "@material-ui/core/Paper";
 import Draggable from "react-draggable";
-import { useDispatch } from "react-redux";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { getMapCommCenters } from "../../../../../actions/mapCommCenters";
 
 import dataService from "../../../../../services/data.service";
 
@@ -44,7 +42,6 @@ export default function FormDialog({
 }) {
   const classes = useStyles();
   const [name, setName] = React.useState("");
-  const [initialImageParams, setInitialImageParams] = React.useState({});
 
   const [name_error, setName_error] = React.useState(false);
 
@@ -53,7 +50,6 @@ export default function FormDialog({
   React.useEffect(() => {
     const setParams = () => {
       if (imageParams.name) setName(imageParams.name);
-      setInitialImageParams(imageParams);
     };
     if (Object.keys(imageParams).length > 0) {
       setParams();
@@ -84,23 +80,10 @@ export default function FormDialog({
       dataService
         .putData(`images/${imageParams.id}`, {
           name,
-          token: imageParams.token,
         })
-        .then(() => {
-          handleOnClose();
-          // dispatch(getMapCommCenters("mapCommCenters")).catch((err) =>
-          //   console.log({ err })
-          // );
-        })
+        .then(() => handleOnClose())
         .catch((err) => {
-          let error = err;
-          console.log(err.response);
-          if (err.response && err.response.data.message) {
-            error = err.response.data.message;
-            alert(error);
-          } else {
-            alert(error);
-          }
+          console.log({ err });
         });
     }
   };

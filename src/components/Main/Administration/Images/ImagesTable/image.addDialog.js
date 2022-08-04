@@ -55,17 +55,12 @@ function PaperComponent(props: PaperProps) {
   );
 }
 
-export default function FormDialog({
-  openAddDialog,
-  user,
-  handleAddDialogClose,
-}) {
+export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
   const classes = useStyles();
   const [imgFile, setImgFile] = React.useState("");
   const [imgUrl, setImgUrl] = React.useState("");
   const [name, setName] = React.useState("");
 
-  const [img_error, setImg_error] = React.useState(false);
   const [name_error, setName_error] = React.useState(false);
 
   const [name_helperText, setName_helperText] = React.useState("");
@@ -76,7 +71,6 @@ export default function FormDialog({
     if (event.target.files && event.target.files[0]) {
       setImgFile(event.target.files[0]);
       setImgUrl(URL.createObjectURL(event.target.files[0]));
-      setImg_error(false);
     }
   };
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +83,6 @@ export default function FormDialog({
     setImgFile("");
 
     setName_error(false);
-    setImg_error(false);
 
     setName_helperText("");
     setImg_helperTextStyle("");
@@ -105,7 +98,6 @@ export default function FormDialog({
       close = false;
     }
     if (imgFile === "") {
-      setImg_error(true);
       setImg_helperTextStyle("red");
       close = false;
     }
@@ -116,31 +108,26 @@ export default function FormDialog({
       formData.append("myFile", imgFile, imgFile.name);
 
       // Details of the uploaded file
-      console.log(imgFile);
+      // console.log(imgFile);
 
       // Request made to the backend api
       // Send formData object
-      dataService
-        .postData(`upload-image?token=${user.token}`, formData)
-        .then((response) => {
-          console.log({ response });
-          dataService
-            .postData(`images?token=${user.token}`, {
-              name,
-              imgUrl: response.data.img.imgUrl,
-              token: user.token,
-            })
-            .then(() => {
-              handleOnClose();
-              dataService.getData("images").then((response) => {
-                console.log("get ", response);
-              });
-            })
-            .catch((err) => {
-              let error = err;
-              console.log(err.response);
-            });
-        });
+      dataService.postData("upload-image", formData).then((response) => {
+        dataService
+          .postData("images", {
+            name,
+            imgUrl: response.data.img.imgUrl,
+          })
+          .then(() => {
+            handleOnClose();
+          })
+          .catch((err) => {
+            if (err.response.status === 422) {
+              setName_error(true);
+              setName_helperText(err.response.data);
+            }
+          });
+      });
     }
   };
   return (

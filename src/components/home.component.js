@@ -40,7 +40,7 @@ class Home extends Component {
   render() {
     const { rootStyle } = this.state;
     return (
-      <div className={rootStyle} style={{ height: "91vh" }}>
+      <div className={rootStyle}>
         <div className="container" style={{ opacity: "0.9" }}>
           <header
             className="jumbotron"

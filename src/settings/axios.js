@@ -5,32 +5,39 @@ import store from "../store";
 const { dispatch } = store;
 axios.defaults.headers["content-type"] = "application/json";
 // axios.defaults.withCredentials = true;
-
 // axios.defaults.baseURL = "/api/v1/";
-const user = JSON.parse(localStorage.getItem("user"));
-if (user) {
-  const token = user.token;
-  console.log(token);
-  axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-} else {
-  if (window.location.pathname !== "/login") {
-    dispatch(showAlert({ status: "warning", text: "Вы не автаризованы!" }));
-    window.location.replace("/login");
+
+// request interceptor
+axios.interceptors.request.use(
+  function (config) {
+    // Do something before request is sent
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      const token = user.token;
+      config.headers.common["Authorization"] = `Bearer ${token}`;
+      axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    } else {
+      if (
+        window.location.pathname !== "/login" &&
+        window.location.pathname !== "/"
+      ) {
+        dispatch(showAlert({ status: "warning", text: "Вы не автаризованы!" }));
+        window.location.replace("/login");
+      }
+    }
+    return config;
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error);
   }
-}
-// console.log(jwtDecode(token));
+);
 
 axios.interceptors.response.use(null, (error) => {
-  console.error("axios error================>", error.response.status);
+  if (error.response.status === 422) return Promise.reject(error);
   let errorMessage = "Ошибка при запросе к серверу!";
-  if (error.response) {
-    if (error.response.status === 403) {
-      localStorage.removeItem("user");
-      window.location.replace("/login");
-    }
-    if (error.response.data.message) {
-      errorMessage = error.response.data.message;
-    }
+  if (error.response && error.response.data.message) {
+    errorMessage = error.response.data.message;
     dispatch(
       showAlert({
         status: "error",
@@ -41,7 +48,7 @@ axios.interceptors.response.use(null, (error) => {
     dispatch(
       showAlert({
         status: "error",
-        text: "Нет ответа от сервера",
+        text: `${error}`,
       })
     );
   } else {

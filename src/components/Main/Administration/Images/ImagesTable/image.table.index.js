@@ -15,7 +15,7 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableFooter from "@material-ui/core/TableFooter";
 import dataService from "../../../../../services/data.service";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
 import AddDialog from "./image.addDialog";
 import EditDialog from "./image.editDialog";
@@ -80,6 +80,11 @@ const useStyles = makeStyles({
     alignItems: "center",
     justifyContent: "center",
   },
+  img: {
+    width: "70px",
+    objectFit: "contain",
+    margin: "10px",
+  },
 });
 
 export default function ImageTable() {
@@ -93,6 +98,15 @@ export default function ImageTable() {
   const [images, setImages] = React.useState([]);
 
   const user = useSelector((state) => state.authReducer.user);
+
+  React.useEffect(() => {
+    const getImages = () => {
+      dataService.getData("images").then((response) => {
+        setImages(response.data || []);
+      });
+    };
+    getImages();
+  }, []);
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -114,42 +128,42 @@ export default function ImageTable() {
 
   const handleDeleteWorningOpen = (row) => {
     setOpenWorning(true);
-    setImageParams(Object.assign({}, row, { token: user.token }));
+    setImageParams(Object.assign({}, row));
   };
 
   const handleDeleteWorningClose = (action, parameters) => {
-    console.log({ parameters });
     setOpenWorning(false);
     if (action === "submit") {
-      console.log("delete submit");
       dataService
-        .deleteData(`images/${parameters.id}?token=${user.token}`)
+        .deleteData(`images/${parameters.id}`)
         .then((result) => {
-          dataService.getData(`images?token=${user.token}`).then((result) => {
+          dataService.getData("images").then((result) => {
             console.log({ result });
+            setImages(result.data);
           });
         })
         .catch((err) => {
-          let error = err;
-          if (err.response && err.response.data) {
-            error = err.response.data.message;
-          }
-          alert(error);
           console.log({ err });
         });
     }
   };
 
   const handleEditDialogOpen = (row) => {
-    setImageParams(Object.assign({}, row, { token: user.token }));
+    setImageParams(Object.assign({}, row));
     setOpenEditDialog(true);
   };
 
   const handleAddDialogClose = () => {
-    setOpenAddDialog(false);
+    dataService.getData("images").then((response) => {
+      setImages(response.data || []);
+      setOpenAddDialog(false);
+    });
   };
-  const handleEditDialogClose = (parameters) => {
-    setOpenEditDialog(false);
+  const handleEditDialogClose = () => {
+    dataService.getData("images").then((response) => {
+      setImages(response.data || []);
+      setOpenEditDialog(false);
+    });
   };
 
   return (
@@ -157,7 +171,6 @@ export default function ImageTable() {
       <AddDialog
         openAddDialog={openAddDialog}
         handleAddDialogClose={handleAddDialogClose}
-        user={user}
       />
       <EditDialog
         handleEditDialogClose={handleEditDialogClose}
@@ -202,6 +215,12 @@ export default function ImageTable() {
               >
                 <p className={classes.p}>Краткое название</p>
               </TableCell>
+              <TableCell
+                className={classes.headerCell}
+                style={{ padding: "4px" }}
+              >
+                <p className={classes.p}>Расширение</p>
+              </TableCell>
               <TableCell className={classes.headerCellEdit}>
                 <p className={classes.p}>Редакт.</p>
               </TableCell>
@@ -225,10 +244,17 @@ export default function ImageTable() {
                     style={{ backgroundColor }}
                   >
                     <TableCell align="center" className={classes.rowCell}>
-                      {img.url}
+                      <img
+                        className={classes.img}
+                        src={img.imgUrl}
+                        alt={"нет изобр."}
+                      />
                     </TableCell>
                     <TableCell align="center" className={classes.rowCell}>
                       {img.name}
+                    </TableCell>
+                    <TableCell align="center" className={classes.rowCell}>
+                      {img.ext}
                     </TableCell>
                     <TableCell
                       align="center"

@@ -11,7 +11,7 @@ class Profile extends Component {
     }
 
     return (
-      <div className="bodyPhone pt-3" style={{ height: "91vh" }}>
+      <div className="bodyPhone pt-3">
         <div className="container ">
           <header className="jumbotron container" style={{ opacity: "0.88" }}>
             <h4 className="mb-4">

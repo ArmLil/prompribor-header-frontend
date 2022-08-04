@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 import "../node_modules/font-awesome/css/font-awesome.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
@@ -17,6 +19,11 @@ export default function App() {
   const currentJournal = useSelector(
     (state) => state.currentJournalReducer.item
   );
+  const alertState = useSelector((state) => state.alertReducer);
+  const { show, text, status } = alertState;
+  const Alert = React.forwardRef(function Alert(props, ref) {
+    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+  });
 
   useEffect(() => {
     const logoutHandler = () => {
@@ -57,6 +64,11 @@ export default function App() {
   return (
     <SocketContext.Provider value={socket}>
       <GlobalContainer />
+      <Snackbar open={show} autoHideDuration={5000}>
+        <Alert severity={status} sx={{ width: "100%" }}>
+          {text}
+        </Alert>
+      </Snackbar>
     </SocketContext.Provider>
   );
 }
