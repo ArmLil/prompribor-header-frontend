@@ -17,8 +17,8 @@ import dataService from "../../../../../services/data.service";
 
 import { useSelector } from "react-redux";
 
-import AddDialog from "./image.addDialog";
-import EditDialog from "./image.editDialog";
+import AddDialog from "./mapImage.addDialog";
+import EditDialog from "./mapImage.editDialog";
 import TablePaginationActions from "../../../tablePaginationActions";
 import WorningDialog from "../../../WorningDialog";
 
@@ -91,19 +91,22 @@ export default function ImageTable() {
   const classes = useStyles();
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
   const [openEditDialog, setOpenEditDialog] = React.useState(false);
-  const [imageParams, setImageParams] = React.useState({});
+  const [mapImageParams, setMapImageParams] = React.useState({});
   const [openWorning, setOpenWorning] = React.useState(false);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [images, setImages] = React.useState([]);
+  const [mapImages, setMapImages] = React.useState([]);
 
   const user = useSelector((state) => state.authReducer.user);
 
   React.useEffect(() => {
     const getImages = () => {
-      dataService.getData("images").then((response) => {
-        setImages(response.data || []);
-      });
+      dataService
+        .getData("mapImages")
+        .then((response) => {
+          setMapImages(response.data || []);
+        })
+        .catch(console.error);
     };
     getImages();
   }, []);
@@ -128,18 +131,18 @@ export default function ImageTable() {
 
   const handleDeleteWorningOpen = (row) => {
     setOpenWorning(true);
-    setImageParams(Object.assign({}, row));
+    setMapImageParams(Object.assign({}, row));
   };
 
   const handleDeleteWorningClose = (action, parameters) => {
     setOpenWorning(false);
     if (action === "submit") {
       dataService
-        .deleteData(`images/${parameters.id}`)
+        .deleteData(`mapImages/${parameters.id}`)
         .then((result) => {
-          dataService.getData("images").then((result) => {
+          dataService.getData("mapImages").then((result) => {
             console.log({ result });
-            setImages(result.data);
+            setMapImages(result.data);
           });
         })
         .catch((err) => {
@@ -149,14 +152,14 @@ export default function ImageTable() {
   };
 
   const handleEditDialogOpen = (row) => {
-    setImageParams(Object.assign({}, row));
+    setMapImageParams(Object.assign({}, row));
     setOpenEditDialog(true);
   };
 
   const handleAddDialogClose = (type) => {
     if (type && type === "submit") {
-      dataService.getData("images").then((response) => {
-        setImages(response.data || []);
+      dataService.getData("mapImages").then((response) => {
+        setMapImages(response.data || []);
         setOpenAddDialog(false);
       });
     } else {
@@ -165,7 +168,7 @@ export default function ImageTable() {
   };
   const handleEditDialogClose = () => {
     dataService.getData("images").then((response) => {
-      setImages(response.data || []);
+      setMapImages(response.data || []);
       setOpenEditDialog(false);
     });
   };
@@ -179,13 +182,13 @@ export default function ImageTable() {
       <EditDialog
         handleEditDialogClose={handleEditDialogClose}
         openEditDialog={openEditDialog}
-        imageParams={imageParams}
+        mapImageParams={mapImageParams}
       />
       <WorningDialog
         openWorning={openWorning}
-        parameters={imageParams}
+        parameters={mapImageParams}
         handleClose={handleDeleteWorningClose}
-        text="Вы действительно хотите удалить изображение?"
+        text="Вы действительно хотите удалить изображение на карте?"
       />
       <TableContainer className={classes.container}>
         <Tooltip title="Создать новый элемент">
@@ -217,13 +220,34 @@ export default function ImageTable() {
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Краткое название</p>
+                <p className={classes.p}>Описание</p>
               </TableCell>
               <TableCell
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Расширение</p>
+                <p className={classes.p}>Описание на карте / Позиция</p>
+              </TableCell>
+              <TableCell
+                className={classes.headerCell}
+                style={{ padding: "4px" }}
+              >
+                <p className={classes.p}>Широта</p>
+              </TableCell>
+              <TableCell
+                className={classes.headerCell}
+                style={{ padding: "4px" }}
+              >
+                <p className={classes.p}>Долгота</p>
+              </TableCell>
+              <TableCell className={classes.headerCellEdit}>
+                <p className={classes.p}>Ширина</p>
+              </TableCell>
+              <TableCell className={classes.headerCellEdit}>
+                <p className={classes.p}>Длина</p>
+              </TableCell>
+              <TableCell className={classes.headerCellEdit}>
+                <p className={classes.p}>Повернуть/угол</p>
               </TableCell>
               <TableCell className={classes.headerCellEdit}>
                 <p className={classes.p}>Редакт.</p>
@@ -234,7 +258,7 @@ export default function ImageTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {images
+            {mapImages
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((img, index) => {
                 let backgroundColor = "white";
@@ -253,12 +277,28 @@ export default function ImageTable() {
                         src={img.imgUrl}
                         alt={"нет изобр."}
                       />
+                      {img.name}, {img.ext}
                     </TableCell>
                     <TableCell align="center" className={classes.rowCell}>
-                      {img.name}
+                      {img.description}
                     </TableCell>
                     <TableCell align="center" className={classes.rowCell}>
-                      {img.ext}
+                      {img.position}
+                    </TableCell>
+                    <TableCell align="center" className={classes.rowCell}>
+                      {img.lon}
+                    </TableCell>
+                    <TableCell align="center" className={classes.rowCell}>
+                      {img.lat}
+                    </TableCell>
+                    <TableCell align="center" className={classes.rowCell}>
+                      {img.width}
+                    </TableCell>
+                    <TableCell align="center" className={classes.rowCell}>
+                      {img.length}
+                    </TableCell>
+                    <TableCell align="center" className={classes.rowCell}>
+                      {img.rotate}
                     </TableCell>
                     <TableCell
                       align="center"
@@ -299,7 +339,7 @@ export default function ImageTable() {
               <TablePagination
                 rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                 colSpan={3}
-                count={images.length}
+                count={mapImages.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 SelectProps={{

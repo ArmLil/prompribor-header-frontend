@@ -77,7 +77,7 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
     setName(event.target.value);
   };
 
-  const handleOnClose = () => {
+  const handleOnClose = (type) => {
     setName("");
     setImgUrl("");
     setImgFile("");
@@ -86,7 +86,7 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
 
     setName_helperText("");
     setImg_helperTextStyle("");
-    handleAddDialogClose();
+    handleAddDialogClose(type);
   };
 
   const handleSubmit = () => {
@@ -119,7 +119,7 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
             imgUrl: response.data.img.imgUrl,
           })
           .then(() => {
-            handleOnClose();
+            handleOnClose("submit");
           })
           .catch((err) => {
             if (err.response.status === 422) {

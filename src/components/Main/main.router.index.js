@@ -9,6 +9,7 @@ import Users from "./Administration/Users/users.index";
 import Stations from "./Administration/Stations/stations.index";
 import Pipeline from "./Administration/Pipeline/pipeline.index";
 import Images from "./Administration/Images/images.index";
+import MapImages from "./Administration/MapImages/mapImages.index";
 import Registers from "./Administration/Registers";
 import LeftBar from "./LeftBar/leftBar.index";
 import Loader from "../Loader";
@@ -87,6 +88,7 @@ class Main extends Component {
             <Route exact path="/main/admin/stations" component={Stations} />
             <Route exact path="/main/admin/pipeline" component={Pipeline} />
             <Route exact path="/main/admin/images" component={Images} />
+            <Route exact path="/main/admin/mapImages" component={MapImages} />
           </Switch>
         </div>
       </div>

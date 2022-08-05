@@ -140,7 +140,7 @@ export default function FormDialog({
       close = false;
     } else if (name.length < 3) {
       setName_error(true);
-      setName_helperText("должно содержать не менее трёх символов");
+      setName_helperText("поле должно содержать не менее трёх символов");
       close = false;
     }
 
