@@ -66,7 +66,7 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
   const [descPosition, setDescPosition] = React.useState("none");
   const [lat, setLat] = React.useState("");
   const [lon, setLon] = React.useState("");
-  const [width, setWidth] = React.useState("");
+  const [width, setWidth] = React.useState("100");
   const [length, setLength] = React.useState("");
   const [rotate, setRotate] = React.useState(0);
 
@@ -124,7 +124,7 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
 
   const imgOptions = images.map((img) => {
     return {
-      value: img.id,
+      value: img,
       // label: `${img.name} ${img.ext}`,
       label: <OptionImg img={img} />,
     };
@@ -217,6 +217,9 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
       setDescription_error(true);
       setDescription_helperText("Описание слишком длинное");
       close = false;
+    }
+    if (description.length === 0) {
+      setDescPosition("none");
     }
     if (lon === "") {
       setLon_error(true);
@@ -318,6 +321,7 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
             label="Описание"
             style={{ padding: 8, marginBottom: 10 }}
             margin="dense"
+            multiline
             error={description_error}
             helperText={description_helperText}
           />
@@ -339,7 +343,7 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
               onChange={handleChangeDescPosition}
               style={{ width: "53.5ch", marginLeft: 8 }}
             >
-              <option value={null}>не отобразить</option>
+              <option value="none">не отобразить</option>
               <option value="top">верх</option>
               <option value="bottom">вниз</option>
               <option value="right">право</option>
