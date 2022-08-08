@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
       "& .MuiTextField-root": {
         width: "55ch",
         backgroundColor: "#fdf9f7",
+        minWidth: "none",
       },
     },
 
@@ -136,6 +137,8 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
       //   return "This field is being focused";
       // }
       // Выберите изоброжение
+      if (images.length === 0)
+        return "Для выбора изображения для начала создайте из в разделе <<Изображения>>";
       return "Выберите изоброжение";
     }, []);
 
@@ -262,7 +265,7 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
     if (close) {
       dataService
         .postData("mapImages", {
-          imgId: image.id,
+          imageId: image.id,
           description,
           descPosition,
           lon,
@@ -300,7 +303,7 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
             variant="standard"
             sx={{
               m: 1,
-              minWidth: "55ch",
+              width: "55ch",
               backgroundColor: "#fdf9f7",
               marginLeft: 0,
             }}
@@ -335,13 +338,13 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
             }}
           >
             <NativeSelect
+              style={{ width: "53.5ch", marginLeft: 8 }}
               value={descPosition}
               inputProps={{
                 name: "descPosition",
                 id: "uncontrolled-native",
               }}
               onChange={handleChangeDescPosition}
-              style={{ width: "53.5ch", marginLeft: 8 }}
             >
               <option value="none">не отобразить</option>
               <option value="top">верх</option>
@@ -382,6 +385,7 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
           <TextField
             id="width"
             value={width}
+            defaultValue="100"
             onChange={handleChangeWidth}
             label="Ширина(px)"
             style={{ padding: 8 }}

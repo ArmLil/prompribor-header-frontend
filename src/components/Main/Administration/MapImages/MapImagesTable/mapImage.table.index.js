@@ -87,6 +87,39 @@ const useStyles = makeStyles({
   },
 });
 
+const renamePosition = (position) => {
+  let result = "";
+  switch (position) {
+    case "top":
+      result = "верх";
+      break;
+    case "top-left":
+      result = "верх-лево";
+      break;
+    case "top-right":
+      result = "верх-право";
+      break;
+    case "bottom":
+      result = "вниз";
+      break;
+    case "bottom-left":
+      result = "вниз-лево";
+      break;
+    case "bottom-right":
+      result = "вниз-право";
+      break;
+    case "left":
+      result = "лево";
+      break;
+    case "right":
+      result = "право";
+      break;
+    default:
+      result = "не отобразить";
+  }
+  return result;
+};
+
 export default function ImageTable() {
   const classes = useStyles();
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
@@ -274,16 +307,16 @@ export default function ImageTable() {
                     <TableCell align="center" className={classes.rowCell}>
                       <img
                         className={classes.img}
-                        src={img.imgUrl}
+                        src={img.image.imgUrl}
                         alt={"нет изобр."}
                       />
-                      {img.name}, {img.ext}
+                      {img.image.name}, {img.image.ext}
                     </TableCell>
                     <TableCell align="center" className={classes.rowCell}>
                       {img.description}
                     </TableCell>
                     <TableCell align="center" className={classes.rowCell}>
-                      {img.position}
+                      {renamePosition(img.descPosition)}
                     </TableCell>
                     <TableCell align="center" className={classes.rowCell}>
                       {img.lon}
