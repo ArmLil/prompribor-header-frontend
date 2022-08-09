@@ -16,7 +16,6 @@ import TableFooter from "@material-ui/core/TableFooter";
 import dataService from "../../../../../services/data.service";
 
 import { useSelector } from "react-redux";
-
 import AddDialog from "./image.addDialog";
 import EditDialog from "./image.editDialog";
 import TablePaginationActions from "../../../tablePaginationActions";
@@ -138,7 +137,6 @@ export default function ImageTable() {
         .deleteData(`images/${parameters.id}`)
         .then((result) => {
           dataService.getData("images").then((result) => {
-            console.log({ result });
             setImages(result.data);
           });
         })
@@ -223,6 +221,12 @@ export default function ImageTable() {
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
+                <p className={classes.p}>Название файла</p>
+              </TableCell>
+              <TableCell
+                className={classes.headerCell}
+                style={{ padding: "4px" }}
+              >
                 <p className={classes.p}>Расширение</p>
               </TableCell>
               <TableCell className={classes.headerCellEdit}>
@@ -256,6 +260,9 @@ export default function ImageTable() {
                     </TableCell>
                     <TableCell align="center" className={classes.rowCell}>
                       {img.name}
+                    </TableCell>
+                    <TableCell align="center" className={classes.rowCell}>
+                      {img.file_name}
                     </TableCell>
                     <TableCell align="center" className={classes.rowCell}>
                       {img.ext}

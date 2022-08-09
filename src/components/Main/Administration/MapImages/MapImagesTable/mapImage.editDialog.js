@@ -188,13 +188,13 @@ export default function FormDialog({
     setLength("");
     setRotate("");
 
-    setImage_error("");
-    setDescription_error("");
-    setLon_error("");
-    setLat_error("");
-    setWidth_error("");
-    setLength_error("");
-    setRotate_error("");
+    setImage_error(false);
+    setDescription_error(false);
+    setLon_error(false);
+    setLat_error(false);
+    setWidth_error(false);
+    setLength_error(false);
+    setRotate_error(false);
 
     setDescription_helperText("");
     setLon_helperText("");

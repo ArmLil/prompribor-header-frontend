@@ -14,8 +14,9 @@ import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableFooter from "@material-ui/core/TableFooter";
 import dataService from "../../../../../services/data.service";
+import { getMapCommCenters } from "../../../../../actions/mapCommCenters";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import AddDialog from "./mapImage.addDialog";
 import EditDialog from "./mapImage.editDialog";
@@ -131,6 +132,7 @@ export default function ImageTable() {
   const [mapImages, setMapImages] = React.useState([]);
 
   const user = useSelector((state) => state.authReducer.user);
+  const dispatch = useDispatch();
 
   React.useEffect(() => {
     const getImages = () => {
@@ -176,6 +178,7 @@ export default function ImageTable() {
           dataService.getData("mapImages").then((result) => {
             console.log({ result });
             setMapImages(result.data);
+            dispatch(getMapCommCenters("mapCommCenters"));
           });
         })
         .catch((err) => {
@@ -194,6 +197,7 @@ export default function ImageTable() {
       dataService.getData("mapImages").then((response) => {
         setMapImages(response.data || []);
         setOpenAddDialog(false);
+        dispatch(getMapCommCenters("mapCommCenters"));
       });
     } else {
       setOpenAddDialog(false);
@@ -203,6 +207,7 @@ export default function ImageTable() {
     dataService.getData("mapImages").then((response) => {
       setMapImages(response.data || []);
       setOpenEditDialog(false);
+      dispatch(getMapCommCenters("mapCommCenters"));
     });
   };
 
@@ -322,10 +327,10 @@ export default function ImageTable() {
                       {renamePosition(img.descPosition)}
                     </TableCell>
                     <TableCell align="center" className={classes.rowCell}>
-                      {img.lon}
+                      {img.lat}
                     </TableCell>
                     <TableCell align="center" className={classes.rowCell}>
-                      {img.lat}
+                      {img.lon}
                     </TableCell>
                     <TableCell align="center" className={classes.rowCell}>
                       {img.width}

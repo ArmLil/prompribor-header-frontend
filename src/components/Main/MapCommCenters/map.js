@@ -41,7 +41,7 @@ function PSG() {
     </div>
   );
 }
-const Map = ({ commCenters, history, mapPolylinePoints }) => {
+const Map = ({ commCenters, history, mapPolylinePoints, images }) => {
   // console.log({ history }, { commCenters }, { mapPolylinePoints });
   const places = [];
   const polyline = [];
@@ -176,6 +176,23 @@ const Map = ({ commCenters, history, mapPolylinePoints }) => {
                 history.push(`/main/journals/${place.path}`);
               },
             }}
+          ></ExtMarker>
+        ))}
+        {images.map((img) => (
+          <ExtMarker
+            key={img.id}
+            position={[img.lat, img.lon]}
+            icon={
+              <img
+                alt=""
+                src={img.image.imgUrl}
+                style={{
+                  width: +img.width,
+                  length: +img.length,
+                  transform: `rotate(${img.rotate}deg)`,
+                }}
+              />
+            }
           ></ExtMarker>
         ))}
 

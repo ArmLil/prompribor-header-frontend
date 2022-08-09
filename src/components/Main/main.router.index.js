@@ -12,7 +12,6 @@ import Images from "./Administration/Images/images.index";
 import MapImages from "./Administration/MapImages/mapImages.index";
 import Registers from "./Administration/Registers";
 import LeftBar from "./LeftBar/leftBar.index";
-import Loader from "../Loader";
 
 import { connect } from "react-redux";
 import { getMapCommCenters } from "../../actions/mapCommCenters";
@@ -39,7 +38,7 @@ class Main extends Component {
     }
   }
   render() {
-    const { classes, mapCommCenters, error, loading } = this.props;
+    const { classes, mapCommCenters, error } = this.props;
     mapCommCenters.sort(function (a, b) {
       return a.index - b.index;
     });
@@ -49,9 +48,6 @@ class Main extends Component {
       return <div>Error! {error}</div>;
     }
 
-    if (loading || mapCommCenters.length === 0) {
-      return <Loader />;
-    }
     return (
       <div className={classes.root}>
         <LeftBar commCenters={mapCommCenters} />

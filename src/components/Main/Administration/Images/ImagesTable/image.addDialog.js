@@ -62,19 +62,28 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
   const [name, setName] = React.useState("");
 
   const [name_error, setName_error] = React.useState(false);
-
   const [name_helperText, setName_helperText] = React.useState("");
+
+  const [img_helperText, setImg_helperText] = React.useState("");
   const [img_helperTextStyle, setImg_helperTextStyle] = React.useState("");
 
   const handleChangeImgFile = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log("handleChangeImgFile", event.target);
     if (event.target.files && event.target.files[0]) {
+      if (!event.target.files[0].type.includes("image")) {
+        setImg_helperTextStyle("red");
+        setImg_helperText("Выбранный файл не является изображением.");
+        return;
+      } else {
+        setImg_helperTextStyle("");
+        setImg_helperText("");
+      }
       setImgFile(event.target.files[0]);
       setImgUrl(URL.createObjectURL(event.target.files[0]));
     }
   };
   const handleChangeName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);
+    setName_error(false);
   };
 
   const handleOnClose = (type) => {
@@ -86,6 +95,7 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
 
     setName_helperText("");
     setImg_helperTextStyle("");
+    setImg_helperText("");
     handleAddDialogClose(type);
   };
 
@@ -101,9 +111,9 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
       setImg_helperTextStyle("red");
       close = false;
     }
+    console.log(imgFile);
     if (close) {
       const formData = new FormData();
-
       // Update the formData object
       formData.append("myFile", imgFile, imgFile.name);
 
@@ -117,6 +127,7 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
           .postData("images", {
             name,
             imgUrl: response.data.img.imgUrl,
+            file_name: response.data.img.name,
           })
           .then(() => {
             handleOnClose("submit");
@@ -180,11 +191,16 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
               className={classes.buttonText}
               style={{ color: img_helperTextStyle }}
             >
-              {" "}
-              {imgFile.name || "Выберите файл..."}
+              {imgFile.name || ""}
             </p>
             <img className={classes.img} src={imgUrl} alt={""} />
           </div>
+          <p
+            className={classes.buttonText}
+            style={{ color: img_helperTextStyle }}
+          >
+            {img_helperText || "Выберите файл..."}
+          </p>
         </DialogContent>
         <DialogActions>
           <Button

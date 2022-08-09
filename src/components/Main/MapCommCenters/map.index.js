@@ -39,14 +39,15 @@ export default function MapCommCenters(props) {
   const mapPolylinePoints = useSelector(
     (state) => state.mapCommCentersReducer.mapPolylinePoints
   );
+  const images = useSelector((state) => {
+    console.log(state.mapCommCentersReducer);
+    return state.mapCommCentersReducer.images;
+  });
   const classes = useStyles();
   const history = useHistory();
 
   useEffect(() => {
     const updateCommCenterListener = (data) => {
-      console.log("socket on updateMapCommCenters");
-      console.log(data);
-
       dispatch(updateMapCommCentersBySocket(data));
     };
     socket.on("updateMapCommCenters", updateCommCenterListener);
@@ -54,6 +55,10 @@ export default function MapCommCenters(props) {
       socket.off("updateMapCommCenters", updateCommCenterListener);
     };
   }, [mapCommCenters, dispatch]);
+
+  useEffect(() => {
+    console.log("useEffect");
+  }, []);
 
   if (error) {
     return <div>Error! {error}</div>;
@@ -78,6 +83,7 @@ export default function MapCommCenters(props) {
               history={history}
               mapPolylinePoints={mapPolylinePoints}
               bridge={bridge}
+              images={images}
               style={{ zIndex: 1 }}
             />
           </Paper>
