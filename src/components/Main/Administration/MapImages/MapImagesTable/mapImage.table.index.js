@@ -200,7 +200,7 @@ export default function ImageTable() {
     }
   };
   const handleEditDialogClose = () => {
-    dataService.getData("images").then((response) => {
+    dataService.getData("mapImages").then((response) => {
       setMapImages(response.data || []);
       setOpenEditDialog(false);
     });
@@ -280,7 +280,10 @@ export default function ImageTable() {
                 <p className={classes.p}>Длина</p>
               </TableCell>
               <TableCell className={classes.headerCellEdit}>
-                <p className={classes.p}>Повернуть/угол</p>
+                <p className={classes.p}>
+                  Повернуть /
+                  <br /> градус угла [-180;+180]) 
+                </p>
               </TableCell>
               <TableCell className={classes.headerCellEdit}>
                 <p className={classes.p}>Редакт.</p>

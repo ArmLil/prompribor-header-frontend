@@ -80,13 +80,13 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
   const [rotate_error, setRotate_error] = React.useState(false);
 
   const [description_helperText, setDescription_helperText] = React.useState(
-    false
+    ""
   );
-  const [lat_helperText, setLat_helperText] = React.useState(false);
-  const [lon_helperText, setLon_helperText] = React.useState(false);
-  const [width_helperText, setWidth_helperText] = React.useState(false);
-  const [length_helperText, setLength_helperText] = React.useState(false);
-  const [rotate_helperText, setRotate_helperText] = React.useState(false);
+  const [lat_helperText, setLat_helperText] = React.useState("");
+  const [lon_helperText, setLon_helperText] = React.useState("");
+  const [width_helperText, setWidth_helperText] = React.useState("");
+  const [length_helperText, setLength_helperText] = React.useState("");
+  const [rotate_helperText, setRotate_helperText] = React.useState("");
 
   React.useEffect(() => {
     const getImages = () => {
@@ -187,17 +187,17 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
     setDescPosition("none");
     setLon("");
     setLat("");
-    setWidth("");
+    setWidth(100);
     setLength("");
-    setRotate("");
+    setRotate(0);
 
-    setImage_error("");
-    setDescription_error("");
-    setLon_error("");
-    setLat_error("");
-    setWidth_error("");
-    setLength_error("");
-    setRotate_error("");
+    setImage_error(false);
+    setDescription_error(false);
+    setLon_error(false);
+    setLat_error(false);
+    setWidth_error(false);
+    setLength_error(false);
+    setRotate_error(false);
 
     setDescription_helperText("");
     setLon_helperText("");
@@ -385,7 +385,6 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
           <TextField
             id="width"
             value={width}
-            defaultValue="100"
             onChange={handleChangeWidth}
             label="Ширина(px)"
             style={{ padding: 8 }}
@@ -399,7 +398,6 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
             value={length}
             onChange={handleChangeLength}
             label="Длина(px)"
-            required
             helperText={length_helperText}
             error={length_error}
             style={{ padding: 8 }}
@@ -411,7 +409,6 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
             onChange={handleChangeRotate}
             multiline
             label="Повернуть/градус угла [-180;+180])"
-            required
             helperText={rotate_helperText}
             error={rotate_error}
             style={{ padding: 8 }}
