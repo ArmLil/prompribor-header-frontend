@@ -26,7 +26,6 @@ export const updateCommCenters = (payload) => ({
 });
 
 export const getCommCenters = (url) => (dispatch) => {
-  console.log(url);
   dispatch(fetchCommCentersBegin());
   return dataService.getData(url).then(
     (response) => {

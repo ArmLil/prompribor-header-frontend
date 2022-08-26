@@ -130,10 +130,8 @@ export default function PipelineTable() {
   };
 
   const handleDeleteWorningClose = (action, parameters) => {
-    console.log({ parameters });
     setOpenWorning(false);
     if (action === "submit") {
-      console.log("delete submit");
       dataService
         .deleteData(`mapPolylinePoints/${parameters.id}?token=${user.token}`)
         .then((result) => {
@@ -155,7 +153,6 @@ export default function PipelineTable() {
 
   const handleEditDialogOpen = (row) => {
     if (row.type === "commCenter") {
-      console.log("if edit click");
       alert(
         "Для редактирования Насосных Станций переходите в раздел Администрирование --> Насосные станции"
       );

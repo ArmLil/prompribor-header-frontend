@@ -30,27 +30,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-// <div className={classes.title}>
-//   <Box className={classes.subTitle} style={{ fontSize: 14 }}>
-//     Статус -
-//   </Box>
-//
-//   {commCenter.status === "offline" ? (
-//     <Box style={{ fontSize: 14 }}>офлайн</Box>
-//   ) : (
-//     <Box style={{ fontSize: 14 }}>онлайн</Box>
-//   )}
-//   <Box>
-//     <StopRoundedIcon
-//       style={{
-//         color:
-//           commCenter.status === "offline" ? "#d50000" : "#64dd17",
-//         margin: 0,
-//       }}
-//     />
-//   </Box>
-// </div>
-
 export default function Title({ commCenter }) {
   const classes = useStyles();
   return (

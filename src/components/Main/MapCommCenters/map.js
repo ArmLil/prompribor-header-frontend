@@ -1,15 +1,11 @@
 import React, { useEffect } from "react";
-// import MarkerClusterGroup from "react-leaflet-markercluster";
 import ExtMarker from "react-leaflet-enhanced-marker";
-// import PersonPinCircleOutlinedIcon from "@material-ui/icons/PersonPinCircleOutlined";
 
 import "leaflet/dist/leaflet.css";
 
 import fuelMarker from "../../../images/fuelMarker.png";
-import psg from "../../../images/psg.png";
 import ParamsTable from "./paramsTable";
 import Description from "./description";
-// import car from "../../../images/car.jpeg";
 
 import { latLngBounds } from "leaflet";
 import {
@@ -25,17 +21,17 @@ export const API_URL = `http://${api.host}:${api.port}`;
 // const IMAGES_URL = `${API_URL}/images/{s}.tile.openstreetmap.org.{z}.{x}.{y}.png`;
 const IMAGES_URL = `${API_URL}/Tiles/{z}/{x}/{y}.png`;
 
-function PSG() {
+function Img({ img }) {
   return (
     <div>
       <img
-        src={psg}
+        src={img.image.imgUrl}
         alt=""
         style={{
-          width: "80px",
-          // marginTop: "15px",
-          transform: "rotate(-0deg)",
-          opacity: 1,
+          width: `${img.width}px`,
+          length: `${img.length}px`,
+          transform: `rotate(${img.rotate}deg)`,
+          opacity: 0.99,
         }}
       />
     </div>
@@ -56,7 +52,6 @@ const Map = ({ commCenters, history, mapPolylinePoints, images }) => {
 
   commCenters.forEach((item, i) => {
     places.push(Object.assign({}, item, { position: [item.lat, item.lon] }));
-    // polyline.push([item.lat, item.lon]);
   });
   const defaultPosition: LatLngExpression = [56.29676, 42.68312]; // index 175 position
   // const showPreview = (place) => {
@@ -182,25 +177,9 @@ const Map = ({ commCenters, history, mapPolylinePoints, images }) => {
           <ExtMarker
             key={img.id}
             position={[img.lat, img.lon]}
-            icon={
-              <img
-                alt=""
-                src={img.image.imgUrl}
-                style={{
-                  width: +img.width,
-                  length: +img.length,
-                  transform: `rotate(${img.rotate}deg)`,
-                }}
-              />
-            }
+            icon={<Img img={img} />}
           ></ExtMarker>
         ))}
-
-        <ExtMarker
-          key={"psg"}
-          position={[56.30179, 42.68798]}
-          icon={<PSG />}
-        ></ExtMarker>
 
         <Polyline
           pathOptions={{

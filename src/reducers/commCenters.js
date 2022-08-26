@@ -33,7 +33,6 @@ export default function commCentersReducer(state = initialState, action) {
         items: [],
       };
     case UPDATE_COMMCENTERS:
-      console.log(action, action.payload);
       return {
         ...state,
         items: action.payload,

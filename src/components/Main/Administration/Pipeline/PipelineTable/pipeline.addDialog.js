@@ -131,7 +131,6 @@ export default function FormDialog({
     }
 
     if (close) {
-      console.log({ index, lat, lon, description });
       dataService
         .postData(`mapPolylinePoints?token=${user.token}`, {
           index,

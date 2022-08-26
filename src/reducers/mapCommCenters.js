@@ -42,7 +42,6 @@ export default function mapCommCentersReducer(state = initialState, action) {
         images: [],
       };
     case UPDATE_MAP_COMMCENTERS:
-      console.log(action, action.payload);
       return {
         ...state,
         items: action.payload,

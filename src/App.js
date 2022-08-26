@@ -43,11 +43,9 @@ export default function App() {
   useEffect(() => {
     // if (commCenters.length === 0)
     const updateCommCentersFuelData = (data) => {
-      console.log("fuel socket");
       dispatch(addJournalData(currentCommCenter, currentJournal, "fuel", data));
     };
     const updateCommCentersNasosiData = (data) => {
-      console.log("nasosi socket", data);
       dispatch(
         addJournalData(currentCommCenter, currentJournal, "nasosi", data)
       );

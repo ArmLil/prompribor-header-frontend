@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import UserService from "../services/user.service";
-// import { LoremIpsum } from "react-lorem-ipsum";
 
 class Home extends Component {
   constructor(props) {

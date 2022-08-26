@@ -88,39 +88,6 @@ const useStyles = makeStyles({
   },
 });
 
-const renamePosition = (position) => {
-  let result = "";
-  switch (position) {
-    case "top":
-      result = "верх";
-      break;
-    case "top-left":
-      result = "верх-лево";
-      break;
-    case "top-right":
-      result = "верх-право";
-      break;
-    case "bottom":
-      result = "вниз";
-      break;
-    case "bottom-left":
-      result = "вниз-лево";
-      break;
-    case "bottom-right":
-      result = "вниз-право";
-      break;
-    case "left":
-      result = "лево";
-      break;
-    case "right":
-      result = "право";
-      break;
-    default:
-      result = "не отобразить";
-  }
-  return result;
-};
-
 export default function ImageTable() {
   const classes = useStyles();
   const [openAddDialog, setOpenAddDialog] = React.useState(false);
@@ -176,7 +143,6 @@ export default function ImageTable() {
         .deleteData(`mapImages/${parameters.id}`)
         .then((result) => {
           dataService.getData("mapImages").then((result) => {
-            console.log({ result });
             setMapImages(result.data);
             dispatch(getMapCommCenters("mapCommCenters"));
           });
@@ -264,12 +230,6 @@ export default function ImageTable() {
                 className={classes.headerCell}
                 style={{ padding: "4px" }}
               >
-                <p className={classes.p}>Описание на карте / Позиция</p>
-              </TableCell>
-              <TableCell
-                className={classes.headerCell}
-                style={{ padding: "4px" }}
-              >
                 <p className={classes.p}>Широта</p>
               </TableCell>
               <TableCell
@@ -322,9 +282,6 @@ export default function ImageTable() {
                     </TableCell>
                     <TableCell align="center" className={classes.rowCell}>
                       {img.description}
-                    </TableCell>
-                    <TableCell align="center" className={classes.rowCell}>
-                      {renamePosition(img.descPosition)}
                     </TableCell>
                     <TableCell align="center" className={classes.rowCell}>
                       {img.lat}

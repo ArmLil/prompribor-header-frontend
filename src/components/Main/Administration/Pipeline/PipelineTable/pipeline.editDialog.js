@@ -104,8 +104,6 @@ export default function FormDialog({
   };
 
   const handleSubmit = (id) => {
-    console.log("handleSubmit...");
-    console.log({ index, lat, lon, description });
     let close = true;
 
     if (lat === "") {
@@ -144,7 +142,6 @@ export default function FormDialog({
       );
       close = false;
     }
-    console.log({ index, lat, lon }, initialPipelineParams);
     if (
       index !== initialPipelineParams.index &&
       (lat !== initialPipelineParams.lat || lon !== initialPipelineParams.lon)
@@ -155,7 +152,6 @@ export default function FormDialog({
       );
       close = false;
     }
-    console.log({ close });
     if (close) {
       dataService
         .putData(`mapPolylinePoints/${pipelineParams.id}`, {

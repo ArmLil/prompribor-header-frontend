@@ -9,7 +9,6 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import FormControl from "@mui/material/FormControl";
 import FormHelperText from "@mui/material/FormHelperText";
-import NativeSelect from "@mui/material/NativeSelect";
 import Paper, { PaperProps } from "@material-ui/core/Paper";
 import Draggable from "react-draggable";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
@@ -64,7 +63,6 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
 
   const [image, setImage] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [descPosition, setDescPosition] = React.useState("none");
   const [lat, setLat] = React.useState("");
   const [lon, setLon] = React.useState("");
   const [width, setWidth] = React.useState("100");
@@ -155,11 +153,6 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
     setDescription(event.target.value);
     setDescription_error(false);
   };
-  const handleChangeDescPosition = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setDescPosition(event.target.value);
-  };
   const handleChangeLon = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLon(event.target.value);
     setLon_error(false);
@@ -184,7 +177,6 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
   const handleOnClose = (type) => {
     setImage("");
     setDescription("");
-    setDescPosition("none");
     setLon("");
     setLat("");
     setWidth(100);
@@ -220,9 +212,6 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
       setDescription_error(true);
       setDescription_helperText("Описание слишком длинное");
       close = false;
-    }
-    if (description.length === 0) {
-      setDescPosition("none");
     }
     if (lon === "") {
       setLon_error(true);
@@ -267,7 +256,6 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
         .postData("mapImages", {
           imageId: image.id,
           description,
-          descPosition,
           lon,
           lat,
           width,
@@ -328,36 +316,6 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
             error={description_error}
             helperText={description_helperText}
           />
-          <FormControl
-            variant="standard"
-            sx={{
-              m: 1,
-              minWidth: "55ch",
-              backgroundColor: "#fdf9f7",
-              marginLeft: 0,
-            }}
-          >
-            <NativeSelect
-              style={{ width: "53.5ch", marginLeft: 8 }}
-              value={descPosition}
-              inputProps={{
-                name: "descPosition",
-                id: "uncontrolled-native",
-              }}
-              onChange={handleChangeDescPosition}
-            >
-              <option value="none">не отобразить</option>
-              <option value="top">верх</option>
-              <option value="bottom">вниз</option>
-              <option value="right">право</option>
-              <option value="left">лево</option>
-              <option value="top-right">верх-право</option>
-              <option value="top-left">верх-лево</option>
-              <option value="bottom-right">вниз-право</option>
-              <option value="bottom-left">вниз-лево</option>
-            </NativeSelect>
-            <FormHelperText>Позиция описании на карте</FormHelperText>
-          </FormControl>
           <TextField
             id="lat"
             value={lat}

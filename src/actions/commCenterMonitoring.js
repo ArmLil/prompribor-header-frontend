@@ -29,7 +29,6 @@ export const getCommCenterMonitoring = (url) => (dispatch) => {
   dispatch(fetchCommCenterMonitoringBegin());
   return dataService.getData(url).then(
     (response) => {
-      console.log({ response });
       dispatch(fetchCommCenterMonitoringSuccess(response.data));
       return Promise.resolve();
     },
@@ -42,7 +41,6 @@ export const getCommCenterMonitoring = (url) => (dispatch) => {
         error.toString();
 
       dispatch(fetchCommCenterMonitoringFail(message));
-      // return Promise.reject();
     }
   );
 };
@@ -75,7 +73,6 @@ export const updateSocketProgrammStatus = (
   commCenterMonitoring,
   controller
 ) => (dispatch) => {
-  console.log({ commCenterMonitoring, controller });
   let newCommCenterMonitoring = Object.assign({}, commCenterMonitoring);
   let _controllers = [];
   newCommCenterMonitoring.controllers.forEach((contr, i) => {
@@ -92,7 +89,6 @@ export const updateSocketControllerStatus = (
   commCenterMonitoring,
   controller
 ) => (dispatch) => {
-  console.log({ commCenterMonitoring, controller });
   let newCommCenterMonitoring = Object.assign({}, commCenterMonitoring);
   let _controllers = [];
   newCommCenterMonitoring.controllers.forEach((contr, i) => {

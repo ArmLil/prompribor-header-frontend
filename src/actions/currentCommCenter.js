@@ -37,7 +37,6 @@ export const getCurrentCommCenter = (url, reduserCommcenter) => (dispatch) => {
       dispatch(fetchCurrentCommCenterSuccess(newCommCenter));
     })
     .catch((error) => {
-      console.log({ error });
       const message =
         (error.response &&
           error.response.data &&

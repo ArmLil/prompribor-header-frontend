@@ -54,7 +54,6 @@ class Monitoring extends Component {
     this.state = {};
   }
   componentDidMount() {
-    console.log(this.props.match.params);
     const commCenterPath = this.props.match.params.commCenterPath;
     const { dispatchGetCommCenterMonitoring } = this.props;
     const getControllerUrl = `commCenterControllersRegs/${commCenterPath}`;
@@ -110,7 +109,6 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 function mapStateToProps(state) {
-  // console.log("state.monitoring", state);
   const commCenterMonitoring = state.commCenterMonitoringReducer.item;
   const { error, loading } = state.commCenterMonitoringReducer;
 

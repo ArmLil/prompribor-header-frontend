@@ -74,14 +74,12 @@ class Journals extends Component {
     };
   }
   componentDidMount() {
-    console.log("componentDidMount", this.props.match.params.journalName);
     const {
       dispatchGetCommCenter,
       currentCommCenter,
       global_currentJournal,
       dispatchSetCurrentJournal,
     } = this.props;
-    console.log({ global_currentJournal });
     dispatchSetCurrentJournal(this.props.match.params.journalName);
 
     const { location } = this.props.history;
@@ -102,7 +100,6 @@ class Journals extends Component {
     } else {
       queryOffset = queryLimit * queryPage;
     }
-    console.log({ queryPage, queryLimit, queryOffset });
     const fetchCommCenterUrl = `commCenters/commCenterByPath/${urlCommCenterPath}?offset=${queryOffset}&limit=${queryLimit}&${currentJournal}=true`;
     dispatchGetCommCenter(fetchCommCenterUrl, currentCommCenter);
 
@@ -151,8 +148,6 @@ class Journals extends Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    console.log("componentDidUpdate");
-
     const { location } = this.props.history;
     const {
       dispatchGetCommCenter,
@@ -161,7 +156,6 @@ class Journals extends Component {
       global_currentJournal,
     } = this.props;
     const { currentJournal } = this.state;
-    console.log({ global_currentJournal, currentJournal });
 
     const { journalName, commCenterPath } = this.props.match.params;
 
@@ -179,18 +173,6 @@ class Journals extends Component {
     } else {
       queryOffset = queryLimit * queryPage;
     }
-    console.log(
-      {
-        journalName,
-        commCenterPath,
-        currentJournal,
-        queryPage,
-        queryLimit,
-        queryOffset,
-        global_currentJournal,
-      },
-      currentCommCenter[currentJournal].count
-    );
 
     if (currentJournal !== global_currentJournal) {
       dispatchSetCurrentJournal(currentJournal);
@@ -201,13 +183,11 @@ class Journals extends Component {
       location.pathname !== prevProps.location.pathname &&
       !this.props.loading
     ) {
-      console.log("================> if update path");
       queryLimit = currentCommCenter[currentJournal].limit;
       queryOffset = currentCommCenter[currentJournal].offset;
       fetchCommCenterUrl = `commCenters/commCenterByPath/${commCenterPath}?offset=${queryOffset}&limit=${queryLimit}&${currentJournal}=true`;
       dispatchGetCommCenter(fetchCommCenterUrl, currentCommCenter);
     } else if (journalName !== currentJournal && !this.props.loading) {
-      console.log("================> if update journalName");
       queryLimit = currentCommCenter[currentJournal].limit;
       queryOffset = currentCommCenter[currentJournal].offset;
       queryPage = Math.floor(queryOffset / queryLimit);
@@ -218,7 +198,6 @@ class Journals extends Component {
       location.search !== prevProps.location.search &&
       !this.props.loading
     ) {
-      console.log("================> if update search");
       dispatchGetCommCenter(fetchCommCenterUrl, currentCommCenter);
     }
     if (
@@ -226,7 +205,6 @@ class Journals extends Component {
       +currentCommCenter[currentJournal].count < +queryPage * +queryLimit &&
       !this.props.loading
     ) {
-      console.log("================> if update page to 0");
       this.props.history.replace(
         `${location.pathname}?page=0&limit=${queryLimit}`
       );
@@ -234,7 +212,6 @@ class Journals extends Component {
   }
 
   render() {
-    console.log("render");
     const { classes, error, currentCommCenter } = this.props;
     if (error) {
       return (

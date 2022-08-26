@@ -40,7 +40,6 @@ export default function MapCommCenters(props) {
     (state) => state.mapCommCentersReducer.mapPolylinePoints
   );
   const images = useSelector((state) => {
-    console.log(state.mapCommCentersReducer);
     return state.mapCommCentersReducer.images;
   });
   const classes = useStyles();
@@ -56,10 +55,6 @@ export default function MapCommCenters(props) {
     };
   }, [mapCommCenters, dispatch]);
 
-  useEffect(() => {
-    console.log("useEffect");
-  }, []);
-
   if (error) {
     return <div>Error! {error}</div>;
   }
@@ -68,11 +63,6 @@ export default function MapCommCenters(props) {
     return <Loader />;
   }
 
-  // <Grid item xs={10}>
-  //   <Paper className={classes.paper}>
-  //     <CommCentersTable commCenters={commCenters} />
-  //   </Paper>
-  // </Grid>
   return (
     <div style={{ margin: 20 }}>
       <Grid container spacing={2}>

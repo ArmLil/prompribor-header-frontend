@@ -68,7 +68,6 @@ export default function FormDialog({
   };
 
   const handleSubmit = (id) => {
-    console.log("handleSubmit...");
     let close = true;
 
     if (name === "") {

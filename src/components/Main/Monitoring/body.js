@@ -60,8 +60,6 @@ export default function Controllers({ controllers }) {
   useEffect(() => {
     //registerControllerValue
     const updateControllerListener = (data) => {
-      console.log("socket on registerControllerValue");
-
       dispatch(updateCommCenterMonitoringBySocket(commCenterMonitoring, data));
     };
     socket.on("registerControllerValue", updateControllerListener);
@@ -72,8 +70,6 @@ export default function Controllers({ controllers }) {
 
   useEffect(() => {
     const updateControllerProgrammStatus = (data) => {
-      console.log("socket on programmStatusChanged");
-
       dispatch(updateSocketProgrammStatus(commCenterMonitoring, data));
     };
     socket.on("programmStatusChanged", updateControllerProgrammStatus);
@@ -84,8 +80,6 @@ export default function Controllers({ controllers }) {
 
   useEffect(() => {
     const updateControllerStatus = (data) => {
-      console.log("socket on updateSocketControllerStatus");
-
       dispatch(updateSocketControllerStatus(commCenterMonitoring, data));
     };
     socket.on("controllerStatusChanged", updateControllerStatus);

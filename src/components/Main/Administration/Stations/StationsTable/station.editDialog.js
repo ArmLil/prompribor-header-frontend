@@ -136,8 +136,6 @@ export default function FormDialog({
   };
 
   const handleSubmit = (id) => {
-    console.log("handleSubmit...");
-    console.log({ path, name, index, lat, lon, tablePosition, description });
     let close = true;
     if (path === "") {
       setPath_error(true);
@@ -165,7 +163,6 @@ export default function FormDialog({
       setLat_helperText("поле обязательно для заполнения");
       close = false;
     }
-    console.log(!validateLatLon(lat));
     if (!validateLatLon(lat)) {
       setLat_error(true);
       setLat_helperText("неправильный формат широты (пример 42.88517)");
@@ -193,7 +190,6 @@ export default function FormDialog({
       );
       close = false;
     }
-    console.log({ index, lat, lon }, initialStationParams);
     if (
       index !== initialStationParams.index &&
       (lat !== initialStationParams.lat || lon !== initialStationParams.lon)
@@ -204,7 +200,6 @@ export default function FormDialog({
       );
       close = false;
     }
-    console.log({ close });
     if (close) {
       dataService
         .putData(`commCenters/${stationParams.id}`, {

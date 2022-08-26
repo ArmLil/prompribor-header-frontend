@@ -111,7 +111,6 @@ export default function FormDialog({ openAddDialog, handleAddDialogClose }) {
       setImg_helperTextStyle("red");
       close = false;
     }
-    console.log(imgFile);
     if (close) {
       const formData = new FormData();
       // Update the formData object

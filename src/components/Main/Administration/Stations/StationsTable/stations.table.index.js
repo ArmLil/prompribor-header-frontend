@@ -157,10 +157,8 @@ export default function UserTable() {
   };
 
   const handleDeleteWorningClose = (action, parameters) => {
-    console.log({ parameters });
     setOpenWorning(false);
     if (action === "submit") {
-      console.log("delete submit");
       dataService
         .deleteData(`commCenters/${parameters.id}?token=${user.token}`)
         .then((result) => {

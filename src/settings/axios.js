@@ -58,6 +58,5 @@ axios.interceptors.response.use(null, (error) => {
     });
   }
 
-  console.error("Axios error", { error });
   return Promise.reject(error);
 });
