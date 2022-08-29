@@ -77,7 +77,6 @@ class Journals extends Component {
     const {
       dispatchGetCommCenter,
       currentCommCenter,
-      global_currentJournal,
       dispatchSetCurrentJournal,
     } = this.props;
     dispatchSetCurrentJournal(this.props.match.params.journalName);
